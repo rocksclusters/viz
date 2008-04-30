@@ -1,0 +1,445 @@
+<!--
+$Id: manual.sgml,v 1.4 2007/10/09 21:37:45 mjk Exp $
+
+@Copyright@
+@Copyright@
+
+$Log: manual.sgml,v $
+Revision 1.4  2007/10/09 21:37:45  mjk
+*** empty log message ***
+
+Revision 1.3  2007/08/10 23:44:13  bruno
+doc touch ups
+
+Revision 1.2  2006/08/16 01:14:35  bruno
+draft of viz docs
+
+Revision 1.1  2006/08/15 19:11:26  mjk
+starting new manual
+
+-->
+
+<chapter>
+
+<section>
+
+<title>Installing</title>
+
+<para>
+This section describes how to install the frontend and tile nodes for
+a visualization cluster.
+</para>
+
+<orderedlist>
+
+<listitem>
+	<para>
+	After the frontend is installed and booted, you'll see an
+	X-based login screen:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+
+</listitem>
+
+<listitem>
+	<para>
+	Login as 'root'.
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	After logging in, you'll see an xterm.
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Now, configure the frontend's X server by running the following command
+	in the xterm:
+	</para>
+
+	<screen>
+	# system-config-display
+	</screen>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step1" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Select the monitor type:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step2" scale=50>
+		</imageobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step3" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Set resolution and colors:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step4" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Display dialog:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step5" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Change the display driver from "vesa" to "nvidia".
+	Edit the file <computeroutput>/etc/X11/xorg.conf</computeroutput>:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step6" scale=50>
+		</imageobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step7" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+
+	<para>
+	Change the line:
+	<para>
+
+	<screen>
+	Driver "vesa"
+	</screen>
+
+	<para>
+	to:
+	</para>
+
+	<screen>
+	Driver "vesa"
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Then reboot your frontend:
+	</para>
+
+	<screen>
+	# init 6
+	</screen>
+</listitem>
+
+</orderedlist>
+
+
+<section>
+<title> Install Tile Nodes </title>
+
+<para>
+After the frontend reboots, login as root and execute:
+</para>
+
+<screen>
+# insert-ethers
+</screen>
+
+<para>
+Select 'Tile' as the appliance type and boot the tile node on the bottom
+left (the bottom node in the first column).
+</para>
+
+<para>
+After all the tiles in the first column are installed, exit 'insert-ethers'
+by hitting the 'F10' key.
+Then, restart insert-ethers with the flag:
+</para>
+
+<screen>
+# insert-ethers --cabinet=1
+</screen>
+
+<para>
+Now install the bottom node in the second column.
+</para>
+
+<para>
+Repeat the above process for each node in each column.
+</para>
+
+<para>
+After all the tile nodes have been installed, you'll need to configure 
+a file the describes your videowall.
+</para>
+
+
+<orderedlist>
+
+<listitem>
+	<para>
+	Create an initial tilelayout.xml file:
+	</para>
+
+<screen>
+# rocks list viz layout > /tmp/tilelayout.xml
+</screen>
+
+</listitem>
+
+<listitem>
+	<para>
+	Edit /tmp/tilelayout.xml and make sure you supply a 'defaults'
+	section at the top of the file.
+	</para>
+
+<screen>
+&lt;wall&gt;
+	&lt;defaults card="1" hres="1920" vres="1200"
+		hborder="75" vborder="75"/&gt;
+
+	&lt;col&gt;
+		&lt;display host="tile-0-0"/&gt;
+		&lt;display host="tile-0-1"/&gt;
+		&lt;display host="tile-0-2"/&gt;
+		&lt;display host="tile-0-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-1-0"/&gt;
+		&lt;display host="tile-1-1"/&gt;
+		&lt;display host="tile-1-2"/&gt;
+		&lt;display host="tile-1-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-2-0"/&gt;
+		&lt;display host="tile-2-1"/&gt;
+		&lt;display host="tile-2-2"/&gt;
+		&lt;display host="tile-2-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-3-0"/&gt;
+		&lt;display host="tile-3-1"/&gt;
+		&lt;display host="tile-3-2"/&gt;
+		&lt;display host="tile-3-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-4-0"/&gt;
+		&lt;display host="tile-4-1"/&gt;
+		&lt;display host="tile-4-2"/&gt;
+		&lt;display host="tile-4-3"/&gt;
+	&lt;/col&gt;
+&lt;/wall&gt;
+</screen>
+
+	<para>
+	'hres' and 'vres' describe the horizontal and vertical resolution
+	of the tile nodes' screens.
+	'hborder', and 'vborder' are the pixel counts behind the display 
+	bezels, and are used to hide the bezels when in hidebezel mode.
+	The above values work well with Dell 2405FPW displays.
+	</para>
+
+</listitem>
+
+</orderedlist>
+
+</section>
+
+
+<section>
+<title> Standard Configuration </title>
+
+<para>
+Standard configuration is where one tile node drives one tile display.
+If your tile nodes will drive more than one display, see the next the next
+section.
+</para>
+
+<listitem>
+	<para>
+	Then reboot your frontend:
+	</para>
+
+	<screen>
+	# init 6
+	</screen>
+</listitem>
+
+</orderedlist>
+
+</section>
+
+
+<section>
+<title> Twinview Configuration </title>
+
+<para>
+Twinview support is when a single nVidia card can support two displays,
+that is, one tile node drives two displays.
+This section describes how you configure your viz cluster when your tile nodes
+are in twinview mode.
+</para>
+
+<orderedlist>
+
+<listitem>
+	<para>
+	First, copy a template from /opt/viz/lib/tilelayout/examples.
+	</para>
+
+	<screen>
+	# ls /opt/viz/lib/tilelayout/examples/
+	vizagra.xml  zurich.xml
+
+	# cp /opt/viz/lib/tilelayout/examples/vizagra.xml /tmp/tilelayout.xml
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	The file <computeroutput>vizagra.xml</computeroutput> is a twinview
+	configuration with 5 columns of 4 tiles each.
+	</para>
+
+	<para>
+	Here is the relevant portion of /tmp/tilelayout.xml:
+	</para>
+
+	<screen>
+	&lt;wall&gt;
+		&lt;defaults card="1" hres="1920" vres="1200" hborder="0.8" vborder="0.8" ppi="100"/&gt;
+
+		&lt;col&gt;
+			&lt;display host="tile-0-0"/&gt;
+			&lt;display host="tile-0-0"/&gt;
+			&lt;display host="tile-0-1"/&gt;
+			&lt;display host="tile-0-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-1-0"/&gt;
+			&lt;display host="tile-1-0"/&gt;
+			&lt;display host="tile-1-1"/&gt;
+			&lt;display host="tile-1-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-2-0"/&gt;
+			&lt;display host="tile-2-0"/&gt;
+			&lt;display host="tile-2-1"/&gt;
+			&lt;display host="tile-2-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-3-0"/&gt;
+			&lt;display host="tile-3-0"/&gt;
+			&lt;display host="tile-3-1"/&gt;
+			&lt;display host="tile-3-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-4-0"/&gt;
+			&lt;display host="tile-4-0"/&gt;
+			&lt;display host="tile-4-1"/&gt;
+			&lt;display host="tile-4-1"/&gt;
+		&lt;/col&gt;
+	&lt;/wall&gt;
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	After you update your tilelayout XML, now apply it to the database:
+	</para>
+
+	<screen>
+	# /opt/viz/sbin/tilelayout /tmp/tilelayout.xml
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Finally, reconfigure your tiles:
+	</para>
+
+	<screen>
+	# rocks sync viz
+	</screen>
+
+	<para>
+	This will generate xorg.conf files for each tile node,
+	copy them to the tile nodes, then reboot the tile nodes.
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	After the tiles reboot, your viz cluster should look something like:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step5" scale=50>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+</section>
+
+
+</section>
+
+</chapter>

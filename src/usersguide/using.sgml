@@ -1,0 +1,20 @@
+<!-- 
+$Id: using.sgml,v 1.5 2006/09/21 03:21:02 mjk Exp $
+
+@Copyright@
+@Copyright@
+
+$Log: using.sgml,v $
+Revision 1.5  2006/09/21 03:21:02  mjk
+cleanup manual
+
+-->
+
+<chapter>
+
+<title>Using</title>
+
+&source_sage;
+&source_dmx;
+
+</chapter>

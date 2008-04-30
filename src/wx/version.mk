@@ -1,0 +1,4 @@
+NAME = wx
+VERSION = 2.8.7.1
+RELEASE = 1
+

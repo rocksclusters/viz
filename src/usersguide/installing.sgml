@@ -1,0 +1,525 @@
+<!--
+$Id: installing.sgml,v 1.14 2007/08/31 23:06:25 mjk Exp $
+
+@Copyright@
+@Copyright@
+
+$Log: installing.sgml,v $
+Revision 1.14  2007/08/31 23:06:25  mjk
+command line
+
+Revision 1.13  2007/08/10 23:44:13  bruno
+doc touch ups
+
+Revision 1.12  2006/09/21 03:21:02  mjk
+cleanup manual
+
+Revision 1.11  2006/09/11 18:16:24  mjk
+*** empty log message ***
+
+Revision 1.2  2006/08/16 01:14:35  bruno
+draft of viz docs
+
+Revision 1.1  2006/08/15 19:11:26  mjk
+starting new manual
+
+-->
+
+<chapter>
+
+<title>Installing</title>
+
+&source_roll-installing-standard;
+&source_roll-installing-not-onthefly;
+
+<section>
+
+<title>Configuring the Frontend</title>
+
+<orderedlist>
+
+<listitem>
+	<para>
+	After the frontend is installed and booted, you'll see an
+	X-based login screen, as shown below.  Login as 'root' using 
+	the password you supplied during the frontend  installation.
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata fileref="images/frontend-login.png" scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+
+</listitem>
+
+<listitem>
+	<para>
+	After logging in, you'll see an xterm and by prompted to configure
+	the root account's SSH key.  Type return to accept the default value
+	for the location of the key (/root/.ssh/id_rsa), next enter the
+	passphrase you wish to use for the root SSH key.
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-logged-in.png" scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Now, configure the frontend's X server by running the following command
+	in the xterm:
+	</para>
+
+	<screen>
+	# system-config-display
+	</screen>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-system-config-display.png" 
+			scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Select the monitor type:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step2.png" scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Set resolution and colors:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step4.png" scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	After setting the resolution and the color bit depth, you can 
+	exit the GUI by clicking 'OK'.  This will display another window 
+	(shown below) warning you that the display settings have been 
+	changed.  Click 'OK' again to complete the display configuration step.
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/frontend-step5.png" scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	Change the display driver from "vesa" to "nvidia".
+	Edit the file <computeroutput>/etc/X11/xorg.conf</computeroutput>:
+	</para>
+
+	<para>
+	<mediaobject>
+		<imageobject>
+		<imagedata
+			fileref="images/edit-xorg-conf.png" scale=30>
+		</imageobject>
+	</mediaobject>
+	</para>
+
+	<para>
+	Change the line:
+	</para>
+
+	<screen>
+	Driver "vesa"
+	</screen>
+
+	<para>
+	to:
+	</para>
+
+	<screen>
+	Driver "nvidia"
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Then reboot your frontend:
+	</para>
+
+	<screen>
+	# init 6
+	</screen>
+</listitem>
+
+</orderedlist>
+
+</section>
+
+<section>
+<title>Configuring the Wall</title>
+
+<section>
+<title>Install the Tile Nodes</title>
+
+<para>
+After the frontend reboots, login as root and execute:
+</para>
+
+<screen>
+# insert-ethers
+</screen>
+
+<para>
+Select 'Tile' as the appliance type and boot the tile node on the bottom
+left (the bottom node in the first column).  Once a node has completed the installation and reboot it will attempt to start an X11 session but will
+fail.  This is completely normal, at this time you should see the following
+warning message on all you install nodes.
+</para>
+
+
+<para><mediaobject>
+	<imageobject>
+		<imagedata fileref="images/resized-xserver-cannot-start.png">
+	</imageobject>
+</mediaobject></para>
+
+<para>
+After all the tiles in the first column are installed, exit 'insert-ethers'
+by hitting the 'F10' key.
+Then, restart insert-ethers with the flag:
+</para>
+
+<screen>
+# insert-ethers --cabinet=1
+</screen>
+
+<para>
+Now install the bottom node in the second column.
+</para>
+
+<para>
+Repeat the above process for each node in each column.  Once all the nodes have
+been installed your wall should look like the following.
+</para>
+
+<para><mediaobject>
+	<imageobject>
+		<imagedata fileref="images/resized-5-of-5-done.png">
+	</imageobject>
+</mediaobject></para>
+
+
+<para>
+After all the tile nodes have been installed, you'll need to configure 
+a file the describes your videowall.  If your wall is built for one Tile node
+for each LCD Display follow the instruction in the next section.  Otherwise 
+to the subsequent section to configure your wall in TwinView mode.
+</para>
+
+</section>
+
+<section>
+
+<title>Configure the Wall (one node per display)</title>
+
+<para>
+In this step you will create an XML file that describe the physical layout
+of your wall.  The syntax is very simple and the XML itself maps to the 
+dimensions of the wall.  Each <emphasis>col</emphasis> tag describes a vertical
+column of the wall, with the nodes listed bottom to top.  The very first
+<emphasis>col</emphasis> section lists the Tile nodes comprising the far left
+side of the wall, and from there the next section moves to the right.
+</para>
+
+<para>
+The <emphasis>defaults</emphasis> tag lists the resolution of each display,
+where the resolutions is assumed to be identical on all machines.  The
+<emphasis>hres</emphasis> and <emphasis>vres</emphasis> attributes describe 
+the horizontal and vertical resolution of the tile nodes' screens and the
+<emphasis>hborder</emphasis>, <emphasis>vborder</emphasis>, and 
+<emphasis>ppi</emphasis> (pixels per inch) are parameters used to hide 
+display mullions when using SAGE.  The values in the below example work well
+with Dell 2405FPW displays.
+</para>
+	
+<orderedlist>
+
+<listitem>
+	<para>
+	Create an initial tilelayout.xml file:
+	</para>
+
+<screen>
+# rocks list viz layout > /tmp/tilelayout.xml
+</screen>
+
+</listitem>
+
+
+<listitem>
+	<para>
+	Edit /tmp/tilelayout.xml and make sure you supply a 'defaults'
+	section at the top of the file.
+	</para>
+
+<screen>
+&lt;wall&gt;
+	&lt;defaults card="1" hres="1920" vres="1200"
+		hborder="0.8" vborder="0.8" ppi="100"/&gt;
+
+	&lt;col&gt;
+		&lt;display host="tile-0-0"/&gt;
+		&lt;display host="tile-0-1"/&gt;
+		&lt;display host="tile-0-2"/&gt;
+		&lt;display host="tile-0-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-1-0"/&gt;
+		&lt;display host="tile-1-1"/&gt;
+		&lt;display host="tile-1-2"/&gt;
+		&lt;display host="tile-1-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-2-0"/&gt;
+		&lt;display host="tile-2-1"/&gt;
+		&lt;display host="tile-2-2"/&gt;
+		&lt;display host="tile-2-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-3-0"/&gt;
+		&lt;display host="tile-3-1"/&gt;
+		&lt;display host="tile-3-2"/&gt;
+		&lt;display host="tile-3-3"/&gt;
+	&lt;/col&gt;
+	&lt;col&gt;
+		&lt;display host="tile-4-0"/&gt;
+		&lt;display host="tile-4-1"/&gt;
+		&lt;display host="tile-4-2"/&gt;
+		&lt;display host="tile-4-3"/&gt;
+	&lt;/col&gt;
+&lt;/wall&gt;
+</screen>
+
+</listitem>
+
+<listitem>
+	<para>
+	After you update your tilelayout XML, now apply it to the database:
+	</para>
+
+	<screen>
+	# rocks create viz layout /tmp/tilelayout.xml
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Then reboot your frontend:
+	</para>
+
+	<screen>
+	# init 6
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Finally, reconfigure your tiles:
+	</para>
+
+	<screen>
+	# rocks sync viz
+	</screen>
+
+	<para>
+	This will generate xorg.conf files for each tile node,
+	copy them to the tile nodes, then reboot the tile nodes.  Once the
+	Tile nodes reboot your wall should look like the following picture.
+	Note that each display is labeled according the connected Tile
+	node.
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+		<imagedata fileref="images/resized-non-twinview-ready.png">
+		</imageobject>
+		<caption><para>
+		Completed installation for a standard visualization wall.
+		</para></caption>
+	</mediaobject>
+	
+</listitem>
+
+</orderedlist>
+
+</section>
+
+<section>
+
+<title>Configure the Wall (two nodes per display - TwinView)</title>
+
+<para>
+TwinView support is when a single nVidia card can support two displays,
+that is, one tile node drives two displays. This section describes how 
+you configure your viz cluster when your Tile nodes are in TwinView mode.
+For details on the XML syntax please see the above section.  The difference
+in the TwinView configuration is each Tile node is listed in twice in the XML.
+</para>
+
+<warning><para>
+When connecting a single video card to two display you must connect the
+primary video connector to the LCD above (or to the left) of the secondary
+connector.
+</para></warning>
+
+<orderedlist>
+
+<listitem>
+	<para>
+	First, copy a template from /opt/viz/lib/tilelayout/examples.
+	</para>
+
+	<screen>
+	# ls /opt/viz/lib/tilelayout/examples/
+	vizagra.xml  zurich.xml
+
+	# cp /opt/viz/lib/tilelayout/examples/vizagra.xml /tmp/tilelayout.xml
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	The file <computeroutput>vizagra.xml</computeroutput> is a TwinView
+	configuration with 5 columns of 4 tiles each.
+	</para>
+
+	<para>
+	Here is the relevant portion of /tmp/tilelayout.xml:
+	</para>
+
+	<screen>
+	&lt;wall&gt;
+		&lt;defaults card="1" hres="1920" vres="1200" hborder="0.8" vborder="0.8" ppi="100"/&gt;
+
+		&lt;col&gt;
+			&lt;display host="tile-0-0"/&gt;
+			&lt;display host="tile-0-0"/&gt;
+			&lt;display host="tile-0-1"/&gt;
+			&lt;display host="tile-0-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-1-0"/&gt;
+			&lt;display host="tile-1-0"/&gt;
+			&lt;display host="tile-1-1"/&gt;
+			&lt;display host="tile-1-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-2-0"/&gt;
+			&lt;display host="tile-2-0"/&gt;
+			&lt;display host="tile-2-1"/&gt;
+			&lt;display host="tile-2-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-3-0"/&gt;
+			&lt;display host="tile-3-0"/&gt;
+			&lt;display host="tile-3-1"/&gt;
+			&lt;display host="tile-3-1"/&gt;
+		&lt;/col&gt;
+		&lt;col&gt;
+			&lt;display host="tile-4-0"/&gt;
+			&lt;display host="tile-4-0"/&gt;
+			&lt;display host="tile-4-1"/&gt;
+			&lt;display host="tile-4-1"/&gt;
+		&lt;/col&gt;
+	&lt;/wall&gt;
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	After you update your tilelayout XML, now apply it to the database:
+	</para>
+
+	<screen>
+	# rocks create viz layout /tmp/tilelayout.xml
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Then reboot your frontend:
+	</para>
+
+	<screen>
+	# init 6
+	</screen>
+</listitem>
+
+<listitem>
+	<para>
+	Finally, reconfigure your tiles:
+	</para>
+
+	<screen>
+	# rocks sync viz
+	</screen>
+
+	<para>
+	This will generate xorg.conf files for each tile node,
+	copy them to the tile nodes, then reboot the tile nodes.  Once the
+	Tile nodes reboot your wall should look like the following picture.
+	Note that each display is labeled according the connected Tile
+	node.
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+		<imagedata fileref="images/resized-twinview-ready.png">
+		</imageobject>
+		<caption><para>
+		Completed installation for a TwinView visualization wall.
+		</para></caption>
+	</mediaobject>
+
+</listitem>
+
+</orderedlist>
+
+</section>
+
+</section>
+
+</chapter>

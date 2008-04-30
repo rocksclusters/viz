@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+	<description>
+	Patch the nVidia driver to make it work in dom0
+	</description>
+
+	<copyright>
+	Copyright (c) 2000 - 2008 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.0 www.rocksclusters.org
+	</copyright>
+
+	<changelog>
+	$Log: viz-nvidia-xen.xml,v $
+	Revision 1.2  2008/03/06 23:41:59  mjk
+	copyright storm on
+	
+	Revision 1.1  2008/01/16 17:16:50  bruno
+	the nVidia driver needs to be patched in order to work on xen dom0
+	
+	</changelog>
+
+
+<package>nvidia-xen</package>
+
+
+<post>
+
+<file name="/opt/viz/drivers/nvidia/install-driver" perms="755">
+<![CDATA[
+#!/bin/bash
+if [ -e /usr/src/linux-2.6 ]
+then
+    ln -s /usr/src/linux-2.6 /usr/src/linux
+elif [ -e /usr/src/linux-2.4 ]
+then
+    ln -s /usr/src/linux-2.4 /usr/src/linux
+fi
+
+/opt/viz/drivers/nvidia/NVIDIA*run --no-network -x > /dev/null 2>&1
+
+cd NVIDIA*/usr/src/nv 
+zcat /opt/viz/drivers/nvidia/nvidia_xenpatch.gz | \
+	patch --forward -p4 --quiet > /dev/null 2>&1
+
+make SYSSRC=/usr/src/linux module > /dev/null 2>&1
+
+install -D -o root -g root -m 0644 nvidia.ko \
+	/lib/modules/`uname -r`/video/nvidia.ko 
+
+depmod -a
+
+cd ../../../
+./nvidia-installer --no-kernel-module -s > /dev/null 2>&1
+]]>
+</file>
+
+</post>
+
+
+</kickstart>
+

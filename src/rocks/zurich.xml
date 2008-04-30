@@ -1,0 +1,44 @@
+<!-- $Id: zurich.xml,v 1.1 2006/06/26 19:54:04 mjk Exp $ -->
+
+<!--
+
+	Kim's 3x5 Viz Wall using twinview on all but upper right hand
+	node.
+
+	$Log: zurich.xml,v $
+	Revision 1.1  2006/06/26 19:54:04  mjk
+	kimviz
+	
+-->
+
+<wall>
+
+
+	<defaults card="1" hborder="0.8" vborder="0.8" ppi="100"/>
+
+	<col>
+		<display host="tile-0-0"/>
+		<display host="tile-0-0"/>
+		<display host="tile-0-1"/>
+	</col>
+	<col>
+		<display host="tile-1-0"/>
+		<display host="tile-1-0"/>
+		<display host="tile-0-1"/>
+	</col>
+	<col>
+		<display host="tile-2-0"/>
+		<display host="tile-2-0"/>
+		<display host="tile-2-1"/>
+	</col>
+	<col>
+		<display host="tile-3-0"/>
+		<display host="tile-3-0"/>
+		<display host="tile-2-1"/>
+	</col>
+	<col>
+		<display host="tile-4-0"/>
+		<display host="tile-4-0"/>
+		<display host="tile-4-1"/>
+	</col>
+</wall>

@@ -1,0 +1,4 @@
+NAME = glew
+VERSION = 1.4.0
+RELEASE = 1
+

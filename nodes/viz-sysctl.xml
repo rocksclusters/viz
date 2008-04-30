@@ -1,0 +1,67 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+	<description>
+	Increase network buffers
+	</description>
+
+	<copyright>
+	Copyright (c) 2000 - 2008 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.0 www.rocksclusters.org
+	</copyright>
+
+	<changelog>
+	$Log: viz-sysctl.xml,v $
+	Revision 1.5  2008/03/06 23:41:59  mjk
+	copyright storm on
+	
+	Revision 1.4  2007/08/23 18:38:04  mjk
+	Cleanup sysctl
+	Drop SAGE and MagicCarpet
+	
+	Revision 1.3  2007/08/02 19:39:19  mjk
+	fix sysctl.conf patching
+	
+	Revision 1.2  2007/07/31 23:32:39  mjk
+	*** empty log message ***
+	
+	Revision 1.1  2007/07/27 17:30:21  mjk
+	checkpoint
+	
+	</changelog>
+
+<post>
+
+<!--
+	- touch the sysctl.conf file to record changes in RCS
+	- create the awk script
+	- patch the file
+	- touch the file again
+-->
+
+<file name="/etc/sysctl.conf"/>
+<file name="/tmp/sysctl.awk">
+/net\.core\.rmem_max/		{ next; }   
+/net\.core\.wmem_max/		{ next; }   
+/net\.ipv4\.tcp_rmem/		{ next; }  
+/net\.ipv4\.tcp_wmem/		{ next; }  
+/net\.ipv4\.route\.flush/	{ next; }  
+/net\.core\.rmem_max/		{ next; }
+{ print; }
+END {
+	print "net.core.rmem_max = 16777216"; 
+	print "net.core.wmem_max = 16777216"; 
+	print "net.ipv4.tcp_rmem = 4096 87380 16777216"; 
+	print "net.ipv4.tcp_wmem = 4096 16384 16777216";
+	print "net.ipv4.route.flush = 1";
+}
+</file>
+awk -f /tmp/sysctl.awk /etc/sysctl.conf &gt; /tmp/sysctl.conf
+cp /tmp/sysctl.conf /etc/sysctl.conf
+rm /tmp/sysctl.awk /tmp/sysctl.conf
+
+</post>
+
+</kickstart>

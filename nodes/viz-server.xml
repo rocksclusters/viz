@@ -1,0 +1,275 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+	<description>
+	Visualization Cluster Frontend support
+	</description>
+
+	<copyright>
+	Copyright (c) 2000 - 2008 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.0 www.rocksclusters.org
+	</copyright>
+
+	<changelog>
+	$Log: viz-server.xml,v $
+	Revision 1.44  2008/03/06 23:41:59  mjk
+	copyright storm on
+	
+	Revision 1.43  2008/01/18 22:17:13  bruno
+	dmx patched to handle a max of 32 screens
+	
+	Revision 1.42  2008/01/15 21:20:05  bruno
+	for now, use Xdmx from xorg
+	
+	Revision 1.41  2007/12/17 22:26:17  bruno
+	updated SDL and SDL_ttf for V
+	
+	Revision 1.40  2007/10/30 22:30:06  mjk
+	- fix xconfig file on the frontend
+	
+	Revision 1.39  2007/09/19 11:32:38  mjk
+	*** empty log message ***
+	
+	Revision 1.38  2007/08/03 21:37:23  mjk
+	- Added ComputeTile appliance
+	- Refresh SAGE from HEAD of SVN
+	
+	Revision 1.37  2007/07/11 00:13:05  mjk
+	- update boostrapping
+	- /opt/rocks for non-viz stuff
+	- /opt/viz for viz only stuff
+	- support for doom
+	
+	Revision 1.36  2007/07/11 00:10:31  mjk
+	add commands
+	
+	Revision 1.35  2007/06/23 04:04:02  mjk
+	mars hill copyright
+	
+	Revision 1.34  2007/05/11 23:56:02  bruno
+	'rocks add appliance' retooled for latest rocks command line
+	
+	Revision 1.33  2007/04/12 19:48:06  bruno
+	added command line: 'rocks add/list/remove appliance'
+	
+	updated base, hpc, pvfs2 and viz rolls to use new command line.
+	
+	Revision 1.32  2006/11/16 15:37:24  mjk
+	VTK package is now called vtk
+	vtk installed on tile nodes and server node
+	
+	Revision 1.31  2006/09/15 19:54:18  mjk
+	added plugin
+	
+	Revision 1.30  2006/09/11 22:50:22  mjk
+	monkey face copyright
+	
+	Revision 1.29  2006/08/10 00:12:04  mjk
+	4.2 copyright
+	
+	Revision 1.28  2006/07/27 19:46:53  bruno
+	first pass at the viz extensions to the restore roll
+	
+	Revision 1.27  2006/07/25 23:43:04  mjk
+	working on vlc
+	
+	Revision 1.26  2006/06/30 12:05:49  bruno
+	removed the viz screen
+	
+	Revision 1.25  2006/06/29 19:35:26  mjk
+	removed symlink to xorg.conf
+	
+	Revision 1.24  2006/06/19 23:09:05  mjk
+	*** empty log message ***
+	
+	Revision 1.23  2006/06/01 03:45:03  bruno
+	use our dmx, not redhat's
+	
+	Revision 1.22  2006/03/06 22:36:41  mjk
+	back out of hack for beta
+	
+	Revision 1.21  2006/03/05 20:40:39  mjk
+	hardcode to 4.1, remove for release
+	
+	Revision 1.20  2006/03/02 04:33:43  mjk
+	more sage madness
+	
+	Revision 1.19  2006/03/02 00:43:40  mjk
+	added screen to installclass
+	
+	Revision 1.18  2006/02/16 02:02:10  mjk
+	everything is a viz-tile
+	
+	Revision 1.17  2006/02/15 01:19:36  mjk
+	added FlightGear
+	
+	Revision 1.16  2006/02/14 23:58:54  mjk
+	*** empty log message ***
+	
+	Revision 1.15  2006/02/14 21:46:39  mjk
+	use dmx from centos
+	
+	Revision 1.14  2006/01/27 20:36:47  bruno
+	moved curses and ncurses-devel into base roll
+	
+	ncurses-devel is needed to correct build foundation-python
+	
+	Revision 1.13  2006/01/11 22:55:06  mjk
+	autologin viz on frontend also
+	
+	Revision 1.12  2006/01/11 02:28:54  mjk
+	sage works
+	
+	Revision 1.11  2006/01/10 15:41:20  mjk
+	*** empty log message ***
+	
+	Revision 1.10  2006/01/04 00:50:43  mjk
+	*** empty log message ***
+	
+	Revision 1.9  2005/10/18 20:20:12  bruno
+	install the roll users guide on the frontend
+	
+	Revision 1.8  2005/10/18 05:50:03  bruno
+	updates for rocks 4.1
+	
+	Revision 1.7  2005/10/12 18:11:10  mjk
+	final copyright for 4.1
+	
+	Revision 1.6  2005/09/16 01:04:49  mjk
+	updated copyright
+	
+	Revision 1.5  2005/07/13 01:22:03  mjk
+	more foundation changes
+	
+	Revision 1.4  2005/06/28 22:34:46  mjk
+	add quanta from evl
+	
+	Revision 1.3  2005/05/24 21:24:01  mjk
+	update copyright, release is not any closer
+	
+	Revision 1.2  2005/04/20 17:08:15  bruno
+	tweaks for RHEL 4
+	
+	Revision 1.1  2005/03/04 01:49:47  mjk
+	*** empty log message ***
+	
+	Revision 1.13  2005/02/24 01:35:14  mjk
+	- remove vtk/cmake for opteron
+	- added wxBase
+	
+	Revision 1.12  2004/09/11 05:41:53  mjk
+	added sdl node
+	
+	Revision 1.11  2004/09/11 05:25:05  mjk
+	moved stuff into viz-rocks
+	
+	Revision 1.10  2004/09/10 20:43:00  mjk
+	use x config from master
+	
+	Revision 1.9  2004/09/09 22:26:30  mjk
+	wx
+	
+	Revision 1.8  2004/09/09 21:35:54  mjk
+	added SDL_image
+	
+	Revision 1.7  2004/09/09 21:01:28  mjk
+	added SDL devel stuff and ttf support
+	
+	Revision 1.6  2004/09/08 20:31:48  mjk
+	moved more common stuff into the master
+	
+	Revision 1.5  2004/09/08 20:09:31  mjk
+	added rocks-viz, moved stuff from common to master node
+	
+	Revision 1.4  2004/09/03 17:31:41  mjk
+	still learning
+	
+	Revision 1.3  2004/09/02 21:40:46  mjk
+	add frontend to graph
+	
+	Revision 1.2  2004/07/16 17:57:15  mjk
+	*** empty log message ***
+	
+	Revision 1.1  2004/07/14 22:24:57  mjk
+	new graph
+	
+	Revision 1.1  2004/01/14 20:47:09  mjk
+	*** empty log message ***
+	
+	</changelog>
+
+	<package>curl</package>
+	<package>curl-devel</package>
+	<package>libidn</package>
+	<package>libidn-devel</package>
+	<package>rocks-command-viz</package>
+<!-- Keep off the roll until docs are correct
+	<package>roll-viz-usersguide</package>
+-->
+	<package>viz-dbreport</package>
+	<package>viz-insert-ethers</package>
+	<package>joystick</package>
+	<package>joy2key</package>
+	<package>rollercoaster</package>
+	<package>doomlegacy</package>
+	<package>rocks-movies</package>
+
+	<package>FlightGear</package>
+	<package>fgfs-base</package>
+	<package>openal</package>
+	<package>freealut</package>
+	<package>plib</package>
+	<package>SimGear</package>
+
+	<package>xorg-x11-server-Xdmx</package>
+	<package>libdmx</package>
+	<package>libdmx-devel</package>
+
+	<package>ImageMagick</package>
+	<package>ImageMagick-devel</package>
+	<package>ImageMagick-c++</package>
+	<package>ImageMagick-c++-devel</package>
+	<package>ImageMagick-perl</package>
+
+
+	<!-- we need these packages to build the roll -->
+	<package arch="i386">cmake</package>
+	<package>glib-devel</package>
+	<package>freeglut-devel</package>
+	<package>libtiff-devel</package>
+	<package>readline-devel</package>
+	<package>bison</package>
+	<package>flex</package>
+        <package>readline-devel</package>
+        <package>libxkbfile-devel</package>
+        <package>mesa-source</package>
+
+        <!-- subversion needs the following (SAGE needs SVN) -->
+
+        <package>subversion</package>
+        <package>neon</package>
+        <package>swig</package>
+        <package>guile</package>
+        <package>umb-scheme</package>
+
+	<!-- files used to create the viz part of the restore roll -->
+        <package>viz-restore</package>
+	
+
+<post>
+
+/opt/rocks/bin/rocks add appliance tile \
+	membership=Tile node=viz-tile
+
+/opt/rocks/bin/rocks add var Viz HideBezels false
+
+</post>
+
+<post>
+ln -s /usr/bin/Xdmx /opt/viz/bin/Xdmx
+</post>
+
+
+</kickstart>

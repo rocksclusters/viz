@@ -1,0 +1,53 @@
+<!--
+$Id: preface.sgml,v 1.4 2006/09/11 18:16:24 mjk Exp $
+
+@Copyright@
+@Copyright@
+
+$Log: preface.sgml,v $
+Revision 1.4  2006/09/11 18:16:24  mjk
+*** empty log message ***
+
+Revision 1.3  2006/08/15 19:11:26  mjk
+starting new manual
+
+-->
+
+<preface>
+<title>Preface</title>
+
+
+<para>
+The Viz Roll is used to build scientific visualization clusters with Rocks.  
+Traditional Rocks-based compute clusters consist of a single Frontend 
+machine and several back end Compute machines.  However, a Rocks-based 
+visualization cluster is composed of Tile machines instead of Compute 
+machines.  A Tile machine must have an nVidia graphics card and may drive 
+one or two LCD monitors (or projectors).  The major visualization-middleware 
+components are <ulink url="http://dmx.sourceforge.net/">DMX</ulink>,
+<ulink url="http://chromium.sourceforge.net/">Chromium</ulink> and 
+<ulink url="http://www.evl.uic.edu/cavern/sage/">SAGE</ulink>.
+</para>
+
+<para>
+DMX is part of the XFree86 project and has origins in the Xinerama
+code used to create a single X11 root window that spans across two 
+physical monitors.  DMX extends this to create a single root window (desktop)
+that spans across a rectangular wall of monitors or projectors.  Although
+DMX can display OpenGL applications, it is recommended that Chromium 
+should be used with DMX for all OpenGL code.  This Roll supports the
+used of DMX with and without Chromium support.
+</para>
+
+<para>
+SAGE (Scalable Adaptive Graphics Environment) is developed by the Cavern
+Group at the Electronic Visualization Laboratory (EVL) at the Univeristy
+of Illinois Chicago (UIC).  SAGE can display both OpenGL and raw pixel
+blasting applications at full speed on large-scale tile displays.  
+Applications must be written specifically for the SAGE environment, unlike
+DMX and Chromium.  However, applications such as the SAGE version of
+mplayer can play HD qualities movies over a 60 tile wall at full speed,
+which is not possible using DMX (or Chromium).
+</para>
+
+</preface>

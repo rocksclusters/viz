@@ -1,0 +1,51 @@
+<!-- $Id: vizagra.xml,v 1.2 2006/08/10 18:21:01 mjk Exp $ -->
+<!--
+
+	4x5 Viz Wall 6th Floor CalIT2, everything in 
+	TwinView/Below configuration.
+
+	$Log: vizagra.xml,v $
+	Revision 1.2  2006/08/10 18:21:01  mjk
+	added hres/vres defaults
+	
+	Revision 1.1  2006/06/29 19:56:46  mjk
+	added viz-reconfig
+	
+
+-->
+
+<wall>
+
+	<defaults card="1" hres="1920" vres="1200" hborder="0.8" vborder="0.8" ppi="100"/>
+
+	<col>
+		<display host="tile-0-0"/>
+		<display host="tile-0-0"/>
+		<display host="tile-0-1"/>
+		<display host="tile-0-1"/>
+	</col>
+	<col>
+		<display host="tile-1-0"/>
+		<display host="tile-1-0"/>
+		<display host="tile-1-1"/>
+		<display host="tile-1-1"/>
+	</col>
+	<col>
+		<display host="tile-2-0"/>
+		<display host="tile-2-0"/>
+		<display host="tile-2-1"/>
+		<display host="tile-2-1"/>
+	</col>
+	<col>
+		<display host="tile-3-0"/>
+		<display host="tile-3-0"/>
+		<display host="tile-3-1"/>
+		<display host="tile-3-1"/>
+	</col>
+	<col>
+		<display host="tile-4-0"/>
+		<display host="tile-4-0"/>
+		<display host="tile-4-1"/>
+		<display host="tile-4-1"/>
+	</col>
+</wall>

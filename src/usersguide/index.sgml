@@ -1,0 +1,74 @@
+<!-- 
+$Id: index.sgml,v 1.6 2007/07/06 18:38:10 mjk Exp $
+
+@Copyright@
+@Copyright@
+
+$Log: index.sgml,v $
+Revision 1.6  2007/07/06 18:38:10  mjk
+4.3 Command Line cleanup
+
+Revision 1.5  2006/09/21 03:21:02  mjk
+cleanup manual
+
+Revision 1.4  2006/09/15 00:55:12  mjk
+builds again
+
+Revision 1.3  2006/09/14 21:56:58  mjk
+cleanup
+
+Revision 1.2  2006/09/11 18:16:24  mjk
+*** empty log message ***
+
+Revision 1.1  2006/08/15 19:11:26  mjk
+starting new manual
+
+-->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+	<!ENTITY % entities SYSTEM "entities.sgml">
+	%entities;
+]>
+<book>
+
+<bookinfo>
+
+	<title>Viz Roll: Users Guide</title>
+
+	<subtitle>
+		<inlinemediaobject>
+			<imageobject>
+				<imagedata fileref="images/resized-eye.png"
+					scale=50>
+			</imageobject>
+		</inlinemediaobject>
+	</subtitle>
+
+	<edition>Version &document_version;</edition>
+	<pubdate>&document_pubdate;</pubdate>
+	<copyright id="copyright" xreflabel="copyright">
+		<year>&document_year;</year>
+		<holder>&document_copyright;</holder>	
+	</copyright>
+
+	<releaseinfo>
+		<ulink url="roll-viz-usersguide.pdf">(PDF version)</ulink>
+	</releaseinfo>
+
+	<legalnotice>
+		<para>
+		This document is subject to the Rocks License 
+		(see <xref linkend="rocks-copyright">).
+		</para>
+	</legalnotice>
+
+</bookinfo>
+
+&source_preface;
+&source_roll-overview;
+&source_installing;
+&source_using;
+&source_roll-commands;
+&source_appendix;
+
+</book>

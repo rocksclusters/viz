@@ -1,0 +1,4 @@
+NAME = mpeg2dec
+VERSION = 0.4.1
+RELEASE = 1
+

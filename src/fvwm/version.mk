@@ -1,0 +1,4 @@
+NAME = fvwm
+VERSION = 2.4.19
+RELEASE = 1
+

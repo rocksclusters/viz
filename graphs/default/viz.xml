@@ -1,0 +1,125 @@
+<?xml version="1.0" standalone="no"?>
+
+<graph>
+
+
+	<description>
+	Visualization Graphic Enhancement Module
+
+	How to build a visualization cluster with Rocks.
+
+	</description>
+
+
+	<copyright>
+	Copyright (c) 2000 - 2008 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.0 www.rocksclusters.org
+	</copyright>
+
+
+	<changelog>
+	$Log: viz.xml,v $
+	Revision 1.22  2008/03/06 23:41:59  mjk
+	copyright storm on
+	
+	Revision 1.21  2008/01/16 17:16:50  bruno
+	the nVidia driver needs to be patched in order to work on xen dom0
+	
+	Revision 1.20  2008/01/14 22:20:10  bruno
+	more for V
+	
+	Revision 1.19  2007/10/03 22:20:40  mjk
+	*** empty log message ***
+	
+	Revision 1.18  2007/09/19 11:35:08  mjk
+	more swiss changes
+	
+	Revision 1.17  2007/08/03 21:37:23  mjk
+	- Added ComputeTile appliance
+	- Refresh SAGE from HEAD of SVN
+	
+	Revision 1.16  2007/07/27 17:30:21  mjk
+	checkpoint
+	
+	Revision 1.15  2007/06/23 04:04:02  mjk
+	mars hill copyright
+	
+	Revision 1.14  2006/09/11 22:50:22  mjk
+	monkey face copyright
+	
+	Revision 1.13  2006/08/10 00:12:04  mjk
+	4.2 copyright
+	
+	Revision 1.12  2006/02/16 02:07:46  mjk
+	*** empty log message ***
+	
+	Revision 1.11  2006/01/11 02:28:53  mjk
+	sage works
+	
+	Revision 1.10  2006/01/10 17:51:35  phil
+	link in creation of viz databases
+	
+	Revision 1.9  2006/01/10 15:41:20  mjk
+	*** empty log message ***
+	
+	Revision 1.8  2005/10/12 18:11:09  mjk
+	final copyright for 4.1
+	
+	Revision 1.7  2005/09/16 01:04:49  mjk
+	updated copyright
+	
+	Revision 1.6  2005/05/24 21:24:00  mjk
+	update copyright, release is not any closer
+	
+	Revision 1.5  2005/03/04 01:40:13  mjk
+	massive graph cleanup
+	
+	Revision 1.4  2004/09/11 05:41:52  mjk
+	added sdl node
+	
+	Revision 1.3  2004/09/02 21:40:46  mjk
+	add frontend to graph
+	
+	Revision 1.2  2004/07/15 05:42:01  mjk
+	*** empty log message ***
+	
+	Revision 1.1  2004/07/14 22:24:56  mjk
+	new graph
+	
+	Revision 1.1  2004/01/14 20:47:09  mjk
+	*** empty log message ***
+	
+	</changelog>
+
+	<order head="database-data">
+		<tail>viz-db</tail>
+	</order>
+
+	<edge from="server" to="viz-server"/>
+
+	<edge from="viz-server">
+		<to>viz-base</to>
+		<to>viz-db</to>
+	</edge>
+
+	<edge from="viz-client">
+		<to>viz-base</to>
+	</edge>
+
+	<edge from="viz-base">
+		<to>viz-sysctl</to>
+		<to>viz-sdl</to>
+		<to>viz-sage</to>
+	</edge>
+
+	<edge from="viz-tile">
+		<to>viz-client</to>
+		<to>client</to>
+		<to>x11</to>
+	</edge>
+
+	<edge from="xen-base">
+		<to>viz-nvidia-xen</to>
+	</edge>
+	
+</graph>
