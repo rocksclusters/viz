@@ -1,0 +1,4 @@
+TARNAME = pa_stable
+NAME = portaudio
+VERSION = 19
+RELEASE = 20071207
