@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.1 2008/05/28 00:29:26 mjk Exp $
+# $Id: Makefile,v 1.2 2008/05/28 00:36:04 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.2  2008/05/28 00:36:04  mjk
+# builds
+#
 # Revision 1.1  2008/05/28 00:29:26  mjk
 # portaudio
 #
@@ -66,9 +69,9 @@ ROCKSROOT	= ../../../../..
 include Rules.mk
 
 build::
-	gunzip -c $(TARNAME)_$(VERSION)_$(RELEASE).tar.gz | tar -x
+	gunzip -c $(TARNAME)_v$(VERSION)_$(RELEASE).tar.gz | tar -x
 	(							\
-		cd $(NAME)-$(VERSION);				\
+		cd $(NAME);					\
 		./configure --prefix=$(PKGROOT);		\
 		make;						\
 	)
@@ -77,9 +80,9 @@ build::
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
 	(							\
-		cd $(NAME)-$(VERSION);				\
+		cd $(NAME);					\
 		make prefix=$(ROOT)/$(PKGROOT) install;		\
 	)
 
 clean::
-	rm -rf $(NAME)-$(VERSION)
+	rm -rf $(NAME)
