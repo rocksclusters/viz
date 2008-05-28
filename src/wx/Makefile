@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.17 2008/03/06 23:42:03 mjk Exp $
+# $Id: Makefile,v 1.18 2008/05/28 01:08:07 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.18  2008/05/28 01:08:07  mjk
+# python code now included in rpm
+#
 # Revision 1.17  2008/03/06 23:42:03  mjk
 # copyright storm on
 #
@@ -113,7 +116,6 @@ build:
 			--with-libtiff=builtin			\
 			--with-zlib=builtin;			\
 		make;						\
-		make -C contrib/src/animate;			\
 		make -C contrib/src/gizmos;			\
 		make -C contrib/src/stc;			\
 		cd ../wxPython;					\
@@ -126,15 +128,14 @@ build:
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
 	mkdir -p $(ROOT)/etc/ld.so.conf.d
-	echo /lib >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo /lib64 >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo /usr/lib >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo /usr/lib64 >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
+	echo /lib           >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
+	echo /lib64         >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
+	echo /usr/lib       >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
+	echo /usr/lib64     >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
 	echo $(PKGROOT)/lib >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
 	(							\
 		cd wxPython-src-$(VERSION)/bld;			\
 		make prefix=$(ROOT)/$(PKGROOT) install;		\
-		make prefix=$(ROOT)/$(PKGROOT) -C contrib/src/animate install;\
 		make prefix=$(ROOT)/$(PKGROOT) -C contrib/src/gizmos  install;\
 		make prefix=$(ROOT)/$(PKGROOT) -C contrib/src/stc     install;\
 	)
@@ -150,7 +151,7 @@ install::
 		cd wxPython-src-$(VERSION)/wxPython;		\
 		$(PY.PATH) setup.py				\
 		WX_CONFIG="$(ROOT)/$(PKGROOT)/bin/wx-config --prefix=$(ROOT)/$(PKGROOT)"\
-		install;					\
+		install --root=$(ROOT);				\
 	)
 
 clean::
