@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.16 2008/05/27 17:42:52 mjk Exp $
+# $Id: Makefile,v 1.17 2008/05/29 20:45:01 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.17  2008/05/29 20:45:01  mjk
+# rocks specific fork of sage (no idea why)
+#
 # Revision 1.16  2008/05/27 17:42:52  mjk
 # luc has landed
 #
@@ -93,7 +96,7 @@ ROCKSROOT	= ../../../../..
 include Rules.mk
 
 refresh: clean
-	$(SVN) checkout svn://cube.evl.uic.edu/$(SVNNAME)
+	svn checkout svn://cube.evl.uic.edu/dev/$(SVNNAME)
 	-find $(SVNNAME) -name .svn -exec rm -rf {} \;
 	tar -czf $(SVNNAME).tar.gz $(SVNNAME)
 	rm -rf $(SVNNAME)
