@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: x86_64.mk,v 1.16 2008/03/06 23:42:01 mjk Exp $
+# $Id: x86_64.mk,v 1.17 2008/05/31 02:57:37 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,11 @@
 # @Copyright@
 #
 # $Log: x86_64.mk,v $
+# Revision 1.17  2008/05/31 02:57:37  mjk
+# - SAGE is back and works (mostly)
+# - DMX building from source (in progress)
+# - Updated nvidia driver
+#
 # Revision 1.16  2008/03/06 23:42:01  mjk
 # copyright storm on
 #
@@ -104,6 +109,6 @@
 # *** empty log message ***
 #
 
-VERSION		= 100
-NVIDIA_VERSION	= $(VERSION).14.19-pkg2
+VERSION		= 169
+NVIDIA_VERSION	= $(VERSION).12-pkg2
 NVIDIA_ARCH	= $(ARCH)

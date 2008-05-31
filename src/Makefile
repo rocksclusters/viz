@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.12 2008/03/06 23:41:59 mjk Exp $
+# $Id: Makefile,v 1.13 2008/05/31 02:57:18 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,11 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.13  2008/05/31 02:57:18  mjk
+# - SAGE is back and works (mostly)
+# - DMX building from source (in progress)
+# - Updated nvidia driver
+#
 # Revision 1.12  2008/03/06 23:41:59  mjk
 # copyright storm on
 #
@@ -94,7 +99,7 @@
 -include $(shell ../../../../bin/arch).mk
 -include $(shell ../../../../bin/os).mk
 
-SRCDIRS = `find . -type d -maxdepth 1 -not -name CVS -not -name .`
+SRCDIRS = `find . -type d -maxdepth 1 -not -name CVS -not -name . -not -name dmx`
 
 default:	rpm
 

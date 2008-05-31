@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.10 2008/03/06 23:42:02 mjk Exp $
+# $Id: __init__.py,v 1.11 2008/05/31 02:57:37 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,11 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.11  2008/05/31 02:57:37  mjk
+# - SAGE is back and works (mostly)
+# - DMX building from source (in progress)
+# - Updated nvidia driver
+#
 # Revision 1.10  2008/03/06 23:42:02  mjk
 # copyright storm on
 #
@@ -98,8 +103,7 @@ import re
 import tempfile
 import rocks.commands
 
-class Command(rocks.commands.HostArgumentProcessor,
-	rocks.commands.list.host.command):
+class Command(rocks.commands.list.host.command):
 	"""
 	Lists the X11 Xorg configuration for the given list of hosts.  If no
 	host list is provided the configuration for the current machine is

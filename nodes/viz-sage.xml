@@ -13,6 +13,11 @@
 
 	<changelog>
 	$Log: viz-sage.xml,v $
+	Revision 1.9  2008/05/31 02:57:18  mjk
+	- SAGE is back and works (mostly)
+	- DMX building from source (in progress)
+	- Updated nvidia driver
+	
 	Revision 1.8  2008/03/06 23:41:59  mjk
 	copyright storm on
 	
@@ -47,6 +52,8 @@
 	<package>mpeg2dec</package>
 	<package>libraw1394</package>
 	<package>libiec61883</package>
+	<package>QUANTA</package>
+	<package>sage</package>
 
 
 </kickstart> 

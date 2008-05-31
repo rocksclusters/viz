@@ -1,4 +1,3 @@
 NAME = dmx
-VERSION = $(shell date +%m_%d_%y)
+VERSION = 1.4
 RELEASE = 1
-

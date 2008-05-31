@@ -1,5 +1,4 @@
-# --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.18 2008/05/31 02:57:37 mjk Exp $
+# $Id: __init__.py,v 1.1 2008/05/31 02:57:37 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,88 +53,39 @@
 # 
 # @Copyright@
 #
-# $Log: Makefile,v $
-# Revision 1.18  2008/05/31 02:57:37  mjk
+# $Log: __init__.py,v $
+# Revision 1.1  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
 # - Updated nvidia driver
 #
-# Revision 1.17  2008/05/29 20:45:01  mjk
-# rocks specific fork of sage (no idea why)
-#
-# Revision 1.16  2008/05/27 17:42:52  mjk
-# luc has landed
-#
-# Revision 1.14  2007/07/30 23:11:29  mjk
-# beta time
-#
-# Revision 1.13  2007/07/27 17:30:22  mjk
-# checkpoint
-#
-# Revision 1.12  2007/07/25 19:18:38  mjk
-# *** empty log message ***
-#
-# Revision 1.11  2007/07/25 19:13:38  mjk
-# *** empty log message ***
-#
-# Revision 1.10  2007/07/25 18:52:38  mjk
-# *** empty log message ***
-#
-# Revision 1.4  2007/07/24 02:11:03  mjk
-# atlantis works
-#
-# Revision 1.3  2007/06/23 04:04:06  mjk
-# mars hill copyright
-#
-# Revision 1.2  2007/04/28 01:26:11  mjk
-# *** empty log message ***
-#
-# Revision 1.1  2007/04/27 19:19:56  mjk
-# *** empty log message ***
-#
 
-PKGROOT		= /opt/sage
-REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
--include $(ROCKSROOT)/etc/Rules.mk
-include Rules.mk
+import rocks.commands
 
-refresh: clean
-	svn checkout svn://cube.evl.uic.edu/dev/$(SVNNAME)
-	-find $(SVNNAME) -name .svn -exec rm -rf {} \;
-	tar -czf $(SVNNAME).tar.gz $(SVNNAME)
-	rm -rf $(SVNNAME)
+class Command(rocks.commands.report.command):
+	"""
+	Reports the configuration for the SAGE Audio streams to go the
+	the master node
 	
-build:
-	gunzip -c $(SVNNAME).tar.gz | tar -x
-	cd patch-files && find . -type f | grep -v CVS | cpio -pduv ../
-	(							\
-		export SAGE_DIRECTORY=`pwd`/$(SVNNAME);		\
-		cd $(SVNNAME);					\
-		make;						\
-		cd app/mplayer;					\
-		./configure --prefix=build --disable-x264;	\
-		make;						\
-		make install;					\
-		cp build/bin/mplayer ../../bin;			\
-	)
+	<example cmd='report sage audio'>
+	</example>
+	"""
 
-install::
-	mkdir -p $(ROOT)/$(PKGROOT)
-	mkdir -p $(ROOT)/etc/profile.d
-	mkdir -p $(ROOT)/etc/ld.so.conf.d
-	(							\
-		cd $(SVNNAME);					\
-		make ROOT=$(ROOT) install;			\
-	)
-	install -m644 $(NAME).sh  $(ROOT)/etc/profile.d/
-	install -m644 $(NAME).csh $(ROOT)/etc/profile.d/
-	echo $(PKGROOT)/lib > $(ROOT)/etc/ld.so.conf.d/$(NAME).conf
-#	chmod -R a+r $(ROOT)/$(PKGROOT)
-#	find $(ROOT)/$(PKGROOT) -type d -exec chmod a+x {} \;
-#	chmod a+x $(ROOT)/$(PKGROOT)/bin/file_server/file_grabber.py
-#	chmod a+x $(ROOT)/$(PKGROOT)/bin/file_server/file_server.py
+    
+	def run(self, params, args):
+		
+		hostname = self.db.getGlobalVar('Kickstart', 'PublicHostname')
+		privAddr = self.db.getGlobalVar('Kickstart', 'PrivateAddress')
 
+		self.addText('AudioTileDisplay\n')
+		self.addText('\tDeviceID -1\n')
+		self.addText('\tSampleFormat Float32\n')
+		self.addText('\tSamplingRate 44100\n')
+		self.addText('\tChannels 2\n')
+		self.addText('\tFramePerBuffer 2048\n')
+		self.addText('\tMachines 1\n')
+		self.addText('\n')
+		self.addText('AudioNode\n')
+		self.addText('\tName local\n')
+		self.addText('\tIP %s\n' % privAddr)
 
-clean::
-	rm -rf $(SVNNAME)

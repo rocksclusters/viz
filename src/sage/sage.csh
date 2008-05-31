@@ -1,5 +1,5 @@
-# --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.18 2008/05/31 02:57:37 mjk Exp $
+#
+# $Id: sage.csh,v 1.5 2008/05/31 02:57:37 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,88 +54,35 @@
 # 
 # @Copyright@
 #
-# $Log: Makefile,v $
-# Revision 1.18  2008/05/31 02:57:37  mjk
+# $Log: sage.csh,v $
+# Revision 1.5  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
 # - Updated nvidia driver
 #
-# Revision 1.17  2008/05/29 20:45:01  mjk
-# rocks specific fork of sage (no idea why)
-#
-# Revision 1.16  2008/05/27 17:42:52  mjk
-# luc has landed
-#
-# Revision 1.14  2007/07/30 23:11:29  mjk
-# beta time
-#
-# Revision 1.13  2007/07/27 17:30:22  mjk
-# checkpoint
-#
-# Revision 1.12  2007/07/25 19:18:38  mjk
+# Revision 1.3  2007/07/25 19:13:38  mjk
 # *** empty log message ***
 #
-# Revision 1.11  2007/07/25 19:13:38  mjk
+# Revision 1.6  2007/07/09 17:53:49  mjk
 # *** empty log message ***
 #
-# Revision 1.10  2007/07/25 18:52:38  mjk
-# *** empty log message ***
-#
-# Revision 1.4  2007/07/24 02:11:03  mjk
-# atlantis works
-#
-# Revision 1.3  2007/06/23 04:04:06  mjk
+# Revision 1.5  2007/06/23 04:04:05  mjk
 # mars hill copyright
 #
-# Revision 1.2  2007/04/28 01:26:11  mjk
+# Revision 1.4  2006/09/11 22:50:40  mjk
+# monkey face copyright
+#
+# Revision 1.3  2006/08/10 00:12:15  mjk
+# 4.2 copyright
+#
+# Revision 1.2  2006/02/23 00:13:28  mjk
+# added LD_LIBRARY_PATH
+#
+# Revision 1.1  2006/02/17 20:27:26  mjk
 # *** empty log message ***
 #
-# Revision 1.1  2007/04/27 19:19:56  mjk
-# *** empty log message ***
-#
 
-PKGROOT		= /opt/sage
-REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
--include $(ROCKSROOT)/etc/Rules.mk
-include Rules.mk
-
-refresh: clean
-	svn checkout svn://cube.evl.uic.edu/dev/$(SVNNAME)
-	-find $(SVNNAME) -name .svn -exec rm -rf {} \;
-	tar -czf $(SVNNAME).tar.gz $(SVNNAME)
-	rm -rf $(SVNNAME)
-	
-build:
-	gunzip -c $(SVNNAME).tar.gz | tar -x
-	cd patch-files && find . -type f | grep -v CVS | cpio -pduv ../
-	(							\
-		export SAGE_DIRECTORY=`pwd`/$(SVNNAME);		\
-		cd $(SVNNAME);					\
-		make;						\
-		cd app/mplayer;					\
-		./configure --prefix=build --disable-x264;	\
-		make;						\
-		make install;					\
-		cp build/bin/mplayer ../../bin;			\
-	)
-
-install::
-	mkdir -p $(ROOT)/$(PKGROOT)
-	mkdir -p $(ROOT)/etc/profile.d
-	mkdir -p $(ROOT)/etc/ld.so.conf.d
-	(							\
-		cd $(SVNNAME);					\
-		make ROOT=$(ROOT) install;			\
-	)
-	install -m644 $(NAME).sh  $(ROOT)/etc/profile.d/
-	install -m644 $(NAME).csh $(ROOT)/etc/profile.d/
-	echo $(PKGROOT)/lib > $(ROOT)/etc/ld.so.conf.d/$(NAME).conf
-#	chmod -R a+r $(ROOT)/$(PKGROOT)
-#	find $(ROOT)/$(PKGROOT) -type d -exec chmod a+x {} \;
-#	chmod a+x $(ROOT)/$(PKGROOT)/bin/file_server/file_grabber.py
-#	chmod a+x $(ROOT)/$(PKGROOT)/bin/file_server/file_server.py
-
-
-clean::
-	rm -rf $(SVNNAME)
+if ( -d /opt/sage ) then
+	setenv SAGE_DIRECTORY "${HOME}/.sage"
+	setenv PATH "${PATH}:$SAGE_DIRECTORY/bin"
+endif

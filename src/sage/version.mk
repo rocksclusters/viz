@@ -1,4 +1,4 @@
 NAME = sage
 SVNNAME = sage3.0-rocks
-VERSION = $(shell date +%m_%d_%y)
+VERSION = 3.0
 RELEASE = 1

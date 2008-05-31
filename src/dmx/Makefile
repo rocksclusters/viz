@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.17 2008/03/06 23:42:00 mjk Exp $
+# $Id: Makefile,v 1.18 2008/05/31 02:57:18 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,11 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.18  2008/05/31 02:57:18  mjk
+# - SAGE is back and works (mostly)
+# - DMX building from source (in progress)
+# - Updated nvidia driver
+#
 # Revision 1.17  2008/03/06 23:42:00  mjk
 # copyright storm on
 #
@@ -111,12 +116,6 @@ ROCKSROOT	= ../../../../..
 include Rules.mk
 
 
-refresh: clean
-	$(CVS) -d:pserver:anonymous@dmx.cvs.sourceforge.net:/cvsroot/dmx login
-	$(CVS) -d:pserver:anonymous@dmx.cvs.sourceforge.net:/cvsroot/dmx co dmx
-	tar -czf $(NAME).tar.gz $(NAME)
-	rm -rf $(NAME)
-
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)/bin
 	mkdir -p $(ROOT)/$(PKGROOT)/lib
@@ -139,14 +138,19 @@ install::
 	)
 
 build:
-	gunzip -c $(NAME).tar.gz | tar -x
-	cd patch-files && find . -type f | grep -v CVS | cpio -pduv ../
-	cp host.def $(NAME)/xc/config/cf/
-	( cd $(NAME)/xc; make World )
-	echo '.so man3/DMXAddInput.3' > \
-		$(NAME)/xc/doc/man/DMX/DMXAddBackendInput._man
-	echo '.so man3/DMXAddInput.3' > \
-		$(NAME)/xc/doc/man/DMX/DMXAddConsoleInput._man
+	gunzip -c xorg-server-$(VERSION).tar.gz | tar -x
+	(								\
+		cd xorg-server-$(VERSION);				\
+		aclocal ; automake ; autoconf;				\
+		./configure;						\
+	)
+	#cd patch-files && find . -type f | grep -v CVS | cpio -pduv ../
+	#cp host.def xorg-server-$(VERSION)/xc/config/cf/
+	#( cd $(NAME)/xc; make World )
+	#echo '.so man3/DMXAddInput.3' > \
+	#	$(NAME)/xc/doc/man/DMX/DMXAddBackendInput._man
+	#echo '.so man3/DMXAddInput.3' > \
+	#	$(NAME)/xc/doc/man/DMX/DMXAddConsoleInput._man
 
 clean::
 	rm -rf $(NAME)

@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.15 2008/03/06 23:42:01 mjk Exp $
+# $Id: Makefile,v 1.16 2008/05/31 02:57:37 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,11 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.16  2008/05/31 02:57:37  mjk
+# - SAGE is back and works (mostly)
+# - DMX building from source (in progress)
+# - Updated nvidia driver
+#
 # Revision 1.15  2008/03/06 23:42:01  mjk
 # copyright storm on
 #
@@ -136,9 +141,6 @@ install-driver:
 	echo "if [ -e /usr/src/linux-2.6 ]" >> $@
 	echo "then" >> $@
 	echo "    ln -s /usr/src/linux-2.6 /usr/src/linux" >> $@
-	echo "elif [ -e /usr/src/linux-2.4 ]" >> $@
-	echo "then" >> $@
-	echo "    ln -s /usr/src/linux-2.4 /usr/src/linux" >> $@
 	echo "fi" >> $@
 	echo "$(PKGROOT)/drivers/nvidia/$(DRIVER) $(DRIVER_OPTIONS) > /dev/null" >> $@
 	
