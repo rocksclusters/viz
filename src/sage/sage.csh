@@ -1,5 +1,5 @@
 #
-# $Id: sage.csh,v 1.5 2008/05/31 02:57:37 mjk Exp $
+# $Id: sage.csh,v 1.6 2008/07/01 23:07:36 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: sage.csh,v $
+# Revision 1.6  2008/07/01 23:07:36  mjk
+# roll almost v ready
+#
 # Revision 1.5  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
@@ -86,3 +89,5 @@ if ( -d /opt/sage ) then
 	setenv SAGE_DIRECTORY "${HOME}/.sage"
 	setenv PATH "${PATH}:$SAGE_DIRECTORY/bin"
 endif
+
+setenv __GL_SYNC_TO_VBLANK 1

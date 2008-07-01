@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.16 2008/05/31 02:57:37 mjk Exp $
+# $Id: Makefile,v 1.17 2008/07/01 23:07:35 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.17  2008/07/01 23:07:35  mjk
+# roll almost v ready
+#
 # Revision 1.16  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
@@ -108,7 +111,6 @@
 
 PKGROOT		= /opt/viz
 REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 

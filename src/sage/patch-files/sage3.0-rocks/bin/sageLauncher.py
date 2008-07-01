@@ -2109,38 +2109,11 @@ class Process:
 
     def stop(self):
         """ stops the read thread and the process """
-        try:
-            # kill SAGE unconditionally
-            if self.componentType == SAGE:
-                for c in self.settings.getKillCmd():
-                    sp.Popen(c)
 
-                # kill extra stuff started before sage
-                for pid in self._extraProcesses:
-                    self.__killProcess(pid)
-                self._extraProcesses = []
-                
+	# Just run rocks stop sage.  The builtin code failed to find all
+	# the processes (e.g. dvdplayer)
 
-            # kill appLauncher unconditionally (because we can)
-            elif self.componentType == APP_LAUNCHER:
-                sp.Popen(self.settings.getKillCmd(), cwd=self.settings.getCwd())
-
-            # kill the other processes depending on whether they are running or not
-            elif self.isAlive():
-
-                # get the pid from the current object or from the saved settings
-                if self.p:    pid = self.p.pid
-                else:         pid = self.settings.pid
-
-                # execute a kill command
-                self.__killProcess(pid)
-
-            # execute any extra commands
-            self.__stopExtra()
-            
-        except:
-            print " ***** Error while stopping",self.componentType
-            print "".join(tb.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))
+	os.system('/opt/rocks/bin/rocks stop sage')
             
         self.settings.pid = -1
         self.running = False

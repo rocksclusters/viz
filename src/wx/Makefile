@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.18 2008/05/28 01:08:07 mjk Exp $
+# $Id: Makefile,v 1.19 2008/07/01 23:07:59 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.19  2008/07/01 23:07:59  mjk
+# roll almost v ready
+#
 # Revision 1.18  2008/05/28 01:08:07  mjk
 # python code now included in rpm
 #
@@ -91,7 +94,6 @@
 
 PKGROOT		= /opt/rocks
 REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 

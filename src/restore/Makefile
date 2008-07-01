@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.5 2008/03/06 23:42:01 mjk Exp $
+# $Id: Makefile,v 1.6 2008/07/01 23:07:35 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.6  2008/07/01 23:07:35  mjk
+# roll almost v ready
+#
 # Revision 1.5  2008/03/06 23:42:01  mjk
 # copyright storm on
 #
@@ -74,7 +77,6 @@
 
 PKGROOT = /export/site-roll/rocks/src/roll/restore/
 REDHAT.ROOT = $(PWD)/../../
-ROCKSROOT = ../../../../..
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk

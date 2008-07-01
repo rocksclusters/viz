@@ -14,6 +14,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.45  2008/07/01 23:07:31  mjk
+	roll almost v ready
+	
 	Revision 1.44  2008/03/06 23:41:59  mjk
 	copyright storm on
 	
@@ -223,7 +226,8 @@
 	<package>plib</package>
 	<package>SimGear</package>
 
-	<package>xorg-x11-server-Xdmx</package>
+	<package>rocks-Xdmx</package>
+
 	<package>libdmx</package>
 	<package>libdmx-devel</package>
 
@@ -266,10 +270,5 @@
 /opt/rocks/bin/rocks add var Viz HideBezels false
 
 </post>
-
-<post>
-ln -s /usr/bin/Xdmx /opt/viz/bin/Xdmx
-</post>
-
 
 </kickstart>

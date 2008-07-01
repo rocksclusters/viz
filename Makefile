@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.9 2008/03/06 23:41:59 mjk Exp $
+# $Id: Makefile,v 1.10 2008/07/01 23:07:31 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.10  2008/07/01 23:07:31  mjk
+# roll almost v ready
+#
 # Revision 1.9  2008/03/06 23:41:59  mjk
 # copyright storm on
 #
@@ -83,7 +86,6 @@
 #
 
 
-ROLLSROOT = ..
 -include $(ROLLSROOT)/etc/Rolls.mk
 include Rolls.mk
 

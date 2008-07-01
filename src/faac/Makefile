@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.2 2008/03/06 23:42:00 mjk Exp $
+# $Id: Makefile,v 1.3 2008/07/01 23:07:31 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.3  2008/07/01 23:07:31  mjk
+# roll almost v ready
+#
 # Revision 1.2  2008/03/06 23:42:00  mjk
 # copyright storm on
 #
@@ -65,7 +68,6 @@
 
 PKGROOT		= /opt/rocks
 REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 

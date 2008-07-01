@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.18 2008/05/31 02:57:37 mjk Exp $
+# $Id: Makefile,v 1.19 2008/07/01 23:07:36 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.19  2008/07/01 23:07:36  mjk
+# roll almost v ready
+#
 # Revision 1.18  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
@@ -96,7 +99,6 @@
 
 PKGROOT		= /opt/sage
 REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 
@@ -112,6 +114,7 @@ build:
 	(							\
 		export SAGE_DIRECTORY=`pwd`/$(SVNNAME);		\
 		cd $(SVNNAME);					\
+		make clean;					\
 		make;						\
 		cd app/mplayer;					\
 		./configure --prefix=build --disable-x264;	\
@@ -131,10 +134,6 @@ install::
 	install -m644 $(NAME).sh  $(ROOT)/etc/profile.d/
 	install -m644 $(NAME).csh $(ROOT)/etc/profile.d/
 	echo $(PKGROOT)/lib > $(ROOT)/etc/ld.so.conf.d/$(NAME).conf
-#	chmod -R a+r $(ROOT)/$(PKGROOT)
-#	find $(ROOT)/$(PKGROOT) -type d -exec chmod a+x {} \;
-#	chmod a+x $(ROOT)/$(PKGROOT)/bin/file_server/file_grabber.py
-#	chmod a+x $(ROOT)/$(PKGROOT)/bin/file_server/file_server.py
 
 
 clean::
