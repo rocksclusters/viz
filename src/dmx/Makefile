@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.18 2008/05/31 02:57:18 mjk Exp $
+# $Id: Makefile,v 1.19 2008/07/01 22:52:45 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.19  2008/07/01 22:52:45  mjk
+# *** empty log message ***
+#
 # Revision 1.18  2008/05/31 02:57:18  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
@@ -111,46 +114,11 @@
 
 PKGROOT		= /opt/viz
 REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 
 
-install::
-	mkdir -p $(ROOT)/$(PKGROOT)/bin
-	mkdir -p $(ROOT)/$(PKGROOT)/lib
-	mkdir -p $(ROOT)/$(PKGROOT)/man/man1
-	mkdir -p $(ROOT)/$(PKGROOT)/man/man3
-	mkdir -p $(ROOT)/$(PKGROOT)/include/X11/extensions
-	(								\
-		cd $(NAME)/xc;						\
-		install -m 555 programs/Xserver/Xdmx			\
-			$(ROOT)/$(PKGROOT)/bin/; 			\
-		install -m 644 exports/lib/libdmx.a 			\
-			$(ROOT)/$(PKGROOT)/lib/;			\
-		install -m 644 exports/lib/libdmx.so			\
-			$(ROOT)/$(PKGROOT)/lib/;			\
-		install -m 644 exports/include/X11/extensions/dmxext.h	\
-			exports/include/X11/extensions/dmxproto.h	\
-			$(ROOT)/$(PKGROOT)/include/X11/extensions/;	\
-		install -m 644 programs/Xserver/hw/dmx/Xdmx._man	\
-			$(ROOT)/$(PKGROOT)/man/man1/Xdmx.1;		\
-	)
+rpm::
+	rpmbuild -bb xorg-x11-server.spec
 
-build:
-	gunzip -c xorg-server-$(VERSION).tar.gz | tar -x
-	(								\
-		cd xorg-server-$(VERSION);				\
-		aclocal ; automake ; autoconf;				\
-		./configure;						\
-	)
-	#cd patch-files && find . -type f | grep -v CVS | cpio -pduv ../
-	#cp host.def xorg-server-$(VERSION)/xc/config/cf/
-	#( cd $(NAME)/xc; make World )
-	#echo '.so man3/DMXAddInput.3' > \
-	#	$(NAME)/xc/doc/man/DMX/DMXAddBackendInput._man
-	#echo '.so man3/DMXAddInput.3' > \
-	#	$(NAME)/xc/doc/man/DMX/DMXAddConsoleInput._man
 
-clean::
-	rm -rf $(NAME)

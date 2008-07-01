@@ -1,3 +1,1 @@
-NAME = dmx
-VERSION = 1.4
-RELEASE = 1
+MAKE.iscontrib = 1
