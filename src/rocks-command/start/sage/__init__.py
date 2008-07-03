@@ -1,9 +1,15 @@
-# $Id: __init__.py,v 1.6 2008/05/31 02:57:37 mjk Exp $
+# $Id: __init__.py,v 1.7 2008/07/03 01:14:13 mjk Exp $
 #
 # @Copyright@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.7  2008/07/03 01:14:13  mjk
+# - fix path to xrandr
+# - call xrandr twice (current mode, desired mode)
+#   otherwise it fails to set the desired mode
+# - sage respects the hidebezels mode
+#
 # Revision 1.6  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
@@ -44,9 +50,16 @@ class Command(rocks.commands.start.command):
 		if not sageDir:
 			self.Abort('SAGE_DIRECTORY not defined')
 
-		fsManagerConf	= os.path.join(sageDir, 'bin', 'fsManager.conf')
-		stdTileConf	= os.path.join(sageDir, 'bin', 'stdtile.conf')
-		audioConf	= os.path.join(sageDir, 'bin', 'audio.conf')
+		fsManagerConf	= os.path.join(sageDir, 'bin',
+					       'fsManager.conf')
+		stdTileConf	= os.path.join(sageDir, 'bin',
+					       'stdtile.conf')
+		stdTileHBConf	= os.path.join(sageDir, 'bin',
+					       'hide_bezels.conf')
+		stdTileSBConf	= os.path.join(sageDir, 'bin',
+					       'show_bezels.conf')
+		audioConf	= os.path.join(sageDir, 'bin',
+					       'audio.conf')
 		
 		# Create a local copy of SAGE (used to be lndir)
 		
@@ -54,16 +67,39 @@ class Command(rocks.commands.start.command):
 			os.system('cp -a %s %s' % (sageOpt, sageDir))
 			os.unlink(fsManagerConf)
 			os.unlink(stdTileConf)
-#			os.unlink(audioConf)
+
+		# Determine what bezel mode we are in. Then no matter
+		# what reset the system to show bezel mode.  We do
+		# this so the hardware (twinview mode) bezel hiding
+		# doesn't run under SAGE. We touch the ~/.hidebezels
+		# file after disabling to make sure we leave the system
+		# in the right state.
+
+		hb = os.path.join(os.environ['HOME'], '.hidebezels')
+		if os.path.exists(hb):
+			self.command('disable.hidebezels', [])
+			os.system('touch %s' % hb)
+			os.system('ln -s %s %s' % (stdTileHBConf, stdTileConf))
+		else:
+			self.command('disable.hidebezels', [])
+			os.system('ln -s %s %s' % (stdTileSBConf, stdTileConf))
+
 		
 		if not os.path.exists(fsManagerConf):
 			file = open(fsManagerConf, 'w')
 			file.write(self.command('report.sage.fsmanager'))
 			file.close()
 
-		if not os.path.exists(stdTileConf):
+		if not os.path.exists(stdTileHBConf):
 			file = open(stdTileConf, 'w')
-			file.write(self.command('report.sage.layout'))
+			file.write(self.command('report.sage.layout',
+						['hidebezels=1']))
+			file.close()
+
+		if not os.path.exists(stdTileSBConf):
+			file = open(stdTileConf, 'w')
+			file.write(self.command('report.sage.layout',
+						['hidebezels=0']))
 			file.close()
 
 		if not os.path.exists(audioConf):

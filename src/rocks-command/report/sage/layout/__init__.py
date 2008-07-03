@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2008/05/31 02:57:37 mjk Exp $
+# $Id: __init__.py,v 1.2 2008/07/03 01:14:13 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,12 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.2  2008/07/03 01:14:13  mjk
+# - fix path to xrandr
+# - call xrandr twice (current mode, desired mode)
+#   otherwise it fails to set the desired mode
+# - sage respects the hidebezels mode
+#
 # Revision 1.1  2008/05/31 02:57:37  mjk
 # - SAGE is back and works (mostly)
 # - DMX building from source (in progress)
@@ -73,6 +79,9 @@ class Command(rocks.commands.report.command):
 
 	def run(self, params, args):
 
+		(hidebezels, ) = self.fillParams([('hidebezels', 'y')])
+		hidebezels = self.str2bool(hidebezels)
+		
 		self.db.execute("""select max(hcoord), max(vcoord)
 			from videowall""")
 		hmax, vmax = self.db.fetchone()
@@ -122,9 +131,12 @@ class Command(rocks.commands.report.command):
 		
 		self.addText('TileDisplay\n')
 		self.addText('\tDimensions %d %d\n' % (hmax+1, vmax+1))
-		self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
-			(tile.tvborder, tile.bvborder, 
-			tile.lhborder, tile.rhborder))
+		if hidebezels:
+			self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
+				     (tile.tvborder, tile.bvborder, 
+				      tile.lhborder, tile.rhborder))
+		else:
+			self.addText('\tMullions 0.001 0.001 0.001 0.001\n')
 		self.addText('\tResolution %d %d\n' % (tile.hres, tile.vres))
 		self.addText('\tPPI %d\n' % ppi)
 		self.addText('\tMachines %d\n' % len(dict))

@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2008/03/06 23:42:02 mjk Exp $
+# $Id: __init__.py,v 1.5 2008/07/03 01:14:12 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,12 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.5  2008/07/03 01:14:12  mjk
+# - fix path to xrandr
+# - call xrandr twice (current mode, desired mode)
+#   otherwise it fails to set the desired mode
+# - sage respects the hidebezels mode
+#
 # Revision 1.4  2008/03/06 23:42:02  mjk
 # copyright storm on
 #
@@ -101,6 +107,9 @@ class Command(rocks.commands.disable.command):
 		for (host, card) in dict.keys():
 			if dict[(host, card)]:
 				os.system('ssh -f '
-					'%s /usr/X11R6/bin/xrandr -d :0 -s 0'
+					'%s /usr/bin/xrandr -d :0 -s 1'
+					% host)
+				os.system('ssh -f '
+					'%s /usr/bin/xrandr -d :0 -s 0'
 					% host)
 				
