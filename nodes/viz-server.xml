@@ -14,6 +14,10 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.46  2008/07/08 19:40:03  mjk
+	- build dmx again
+	- added dump viz layout (saxutils.escape quoted for restore roll)
+	
 	Revision 1.45  2008/07/01 23:07:31  mjk
 	roll almost v ready
 	
@@ -257,10 +261,6 @@
         <package>swig</package>
         <package>guile</package>
         <package>umb-scheme</package>
-
-	<!-- files used to create the viz part of the restore roll -->
-        <package>viz-restore</package>
-	
 
 <post>
 

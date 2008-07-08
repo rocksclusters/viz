@@ -1,5 +1,5 @@
-# $Id: Makefile,v 1.14 2008/07/08 19:40:03 mjk Exp $
-#
+# $Id: plugin_viz_layout.py,v 1.1 2008/07/08 19:40:03 mjk Exp $
+# 
 # @Copyright@
 # 
 # 				Rocks(r)
@@ -53,61 +53,25 @@
 # 
 # @Copyright@
 #
-# $Log: Makefile,v $
-# Revision 1.14  2008/07/08 19:40:03  mjk
+# $Log: plugin_viz_layout.py,v $
+# Revision 1.1  2008/07/08 19:40:03  mjk
 # - build dmx again
 # - added dump viz layout (saxutils.escape quoted for restore roll)
 #
-# Revision 1.13  2008/05/31 02:57:18  mjk
-# - SAGE is back and works (mostly)
-# - DMX building from source (in progress)
-# - Updated nvidia driver
-#
-# Revision 1.12  2008/03/06 23:41:59  mjk
-# copyright storm on
-#
-# Revision 1.11  2007/06/23 04:04:02  mjk
-# mars hill copyright
-#
-# Revision 1.10  2007/04/26 23:07:56  mjk
-# using all the bits
-#
-# Revision 1.9  2006/09/11 22:50:23  mjk
-# monkey face copyright
-#
-# Revision 1.8  2006/08/10 00:12:05  mjk
-# 4.2 copyright
-#
-# Revision 1.7  2006/02/13 20:00:18  bruno
-# cleanup
-#
-# Revision 1.6  2005/10/12 18:11:10  mjk
-# final copyright for 4.1
-#
-# Revision 1.5  2005/09/16 01:04:50  mjk
-# updated copyright
-#
-# Revision 1.4  2005/05/24 21:24:01  mjk
-# update copyright, release is not any closer
-#
-# Revision 1.3  2004/09/01 17:50:28  mjk
-# *** empty log message ***
-#
-# Revision 1.2  2004/07/15 05:42:02  mjk
-# *** empty log message ***
-#
-# Revision 1.1  2004/01/16 19:52:01  mjk
-# *** empty log message ***
-#
 
--include $(shell ../../../../bin/arch).mk
--include $(shell ../../../../bin/os).mk
+import os
+import rocks.commands
 
-SRCDIRS = `find . -type d -maxdepth 1 -not -name CVS -not -name .`
+class Plugin(rocks.commands.Plugin):
 
-default:	rpm
+	def provides(self):
+		return 'viz-layout'
+		
+	def requires(self):
+		return [ 'host', 'network' ]
+		
+	def run(self, args):
+		self.owner.addText(self.owner.command('dump.viz.layout',
+			[]))
+		
 
-copyright rpm clean::
-	for i in $(SRCDIRS) ; do \
-		(cd $$i; if [ -f Makefile ] ; then make $@; fi$(BG)); \
-	done

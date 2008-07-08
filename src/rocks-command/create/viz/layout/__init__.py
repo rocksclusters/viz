@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.3 2008/03/06 23:42:02 mjk Exp $
+# $Id: __init__.py,v 1.4 2008/07/08 19:40:03 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.4  2008/07/08 19:40:03  mjk
+# - build dmx again
+# - added dump viz layout (saxutils.escape quoted for restore roll)
+#
 # Revision 1.3  2008/03/06 23:42:02  mjk
 # copyright storm on
 #
@@ -124,6 +128,11 @@ class Command(rocks.commands.create.command):
 	"""
 
 	def run(self, params, args):
+
+		# If a filename is provided read the XML layout from
+		# the files.  Othewise if we are not a tty read the XML
+		# layout from the pipe we are connected to (restore roll
+		# uses this).  Final case (no data) use the default layout.
 		
 		if len(args):
 			filename = args[0]
@@ -133,7 +142,12 @@ class Command(rocks.commands.create.command):
 				self.abort('cannot open file', filename)
 			xml = string.join(file.readlines())
 		else:
-			xml = self.command('list.viz.layout', [])
+			if not sys.stdin.isatty:
+				xml = ''
+				for line in sys.stdin.readlines():
+					xml += list
+			else:
+				xml = self.command('list.viz.layout', [])
 
 		#
 		# First Pass: learn row,col geometry of the wall
