@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.19 2008/07/01 22:52:45 mjk Exp $
+# $Id: Makefile,v 1.20 2008/07/08 18:02:10 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.20  2008/07/08 18:02:10  mjk
+# builds again
+#
 # Revision 1.19  2008/07/01 22:52:45  mjk
 # *** empty log message ***
 #
@@ -119,6 +122,7 @@ include Rules.mk
 
 
 rpm::
+	rpm -Uhv --force xorg-x11-server-1.1.1-48.26.el5_1.4.src.rpm
 	rpmbuild -bb xorg-x11-server.spec
 
 
