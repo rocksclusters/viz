@@ -1,5 +1,4 @@
 %define pkgname xorg-server
-%define _prefix /opt/viz
 
 Summary:   X.Org X11 X server
 Name:      rocks
@@ -490,7 +489,7 @@ export CPPFLAGS="-DMAXSCREENS=32"
 	--with-fontdir=%(pkg-config --variable=fontdir fontutil) \
 %if %{with_dri}
 	--enable-dri \
-	--with-mesa-source=/usr/share/mesa/source \
+	--with-mesa-source=%{_datadir}/mesa/source \
 	--with-dri-driver-path=%{drimoduledir} \
 %else
 	--disable-dri \
