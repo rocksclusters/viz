@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.7 2008/03/06 23:42:02 mjk Exp $
+# $Id: __init__.py,v 1.8 2008/07/12 00:38:13 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.8  2008/07/12 00:38:13  mjk
+# *** empty log message ***
+#
 # Revision 1.7  2008/03/06 23:42:02  mjk
 # copyright storm on
 #
@@ -105,7 +108,7 @@ class Command(rocks.commands.start.command):
 	def run(self, params, args):
 	
 		(xdmx, wm, outputDisplay) = self.fillParams([
-			('dmx', '/opt/viz/bin/Xdmx'),
+			('dmx', '/usr/bin/Xdmx'),
 			('wm', '/opt/rocks/bin/fvwm'),
 			('display', 1)
 			])
