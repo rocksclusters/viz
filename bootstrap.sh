@@ -2,7 +2,7 @@
 #
 # This file should remain OS independent
 #
-# $Id: bootstrap.sh,v 1.13 2008/03/12 17:32:31 bruno Exp $
+# $Id: bootstrap.sh,v 1.14 2008/07/15 22:41:46 mjk Exp $
 #
 # @Copyright@
 # 
@@ -58,6 +58,9 @@
 # @Copyright@
 #
 # $Log: bootstrap.sh,v $
+# Revision 1.14  2008/07/15 22:41:46  mjk
+# added portaudio
+#
 # Revision 1.13  2008/03/12 17:32:31  bruno
 # better bootstrap
 #
@@ -136,6 +139,7 @@ compile_and_install faad2
 compile_and_install ffmpeg
 compile_and_install mpeg2dec
 compile_and_install wx
+compile_and_install portaudio
 
 compile quanta
 install QUANTA
