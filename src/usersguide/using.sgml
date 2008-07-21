@@ -1,10 +1,13 @@
 <!-- 
-$Id: using.sgml,v 1.5 2006/09/21 03:21:02 mjk Exp $
+$Id: using.sgml,v 1.6 2008/07/21 21:23:28 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.6  2008/07/21 21:23:28  mjk
+docs good
+
 Revision 1.5  2006/09/21 03:21:02  mjk
 cleanup manual
 
@@ -14,7 +17,72 @@ cleanup manual
 
 <title>Using</title>
 
-&source_sage;
-&source_dmx;
+<section>
+<title>Controlling Mullions</title>
+
+<para>
+The Viz Roll supports control over hiding of pixels behind LCD mullions 
+(bezels) for DMX, Chromium, and SAGE.  
+The default is to not hide the bezels.
+In this mode all images rendered on the wall will display all pixels.
+This effect can be distracting for movies and other moving images.  
+The <computeroutput>rocks enable hidebezels</computeroutput> and
+<computeroutput>rocks disable hidebezels</computeroutput> commands can be 
+used to control this behavior.
+</para>
+
+</section>
+
+<section>
+<title>Chromium</title>
+
+<para>
+Chromium is used to display OpenGL applications on the wall.  
+It can be used both with and without DMX (next section).  
+Chromium support is controlled by the 
+<computeroutput>rocks enable chromium</computeroutput> and 
+<computeroutput>rocks disable chromium</computeroutput> commands.  
+Once enabled all dynamically linked OpenGL application will use the 
+Chromium GL libraries.  
+Some newer applications may contain code written to a later OpenGL 
+specification than is supported by Chromium, however, most application work
+without any source code changes.
+</para>
+
+</section>
+
+<section>
+<title>DMX</title>
+
+<para>
+DMX is used to create a single X11 desktop (using the FVWM window manager) 
+on the wall.  
+DMX works best on small walls and also supports OpenGL application.  
+For larger walls performance will suffer, and Chromium will need to be 
+enabled to run OpenGL applications at a reasonable speed.  
+DMX can be started using the <computeroutput>rocks start dmx</computeroutput> 
+command.
+</para>
+
+</section>
+
+<section>
+<title>SAGE</title>
+
+<para>
+SAGE can be started and stopped using the 
+<computeroutput>rocks start sage</computeroutput> and 
+<computeroutput>rocks stop sage</computeroutput> commands.  
+The Rocks integration of SAGE differs from the standard EVL practices of
+deploying SAGE in two ways.  
+First, starting SAGE will create a per-user copy of /opt/sage in ~/.sage and 
+all configuration files will be  generated into this user directory.  
+Second, the <computeroutput>rocks stop sage</computeroutput> command is used 
+by the GUI to kill all SAGE processes, this new kill behavior can 
+take several seconds to track done orphaned SAGE processes.
+</para>
+
+</section>
+
 
 </chapter>
