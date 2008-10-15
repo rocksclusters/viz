@@ -2,7 +2,7 @@
 #
 # This file should remain OS independent
 #
-# $Id: bootstrap.sh,v 1.14 2008/07/15 22:41:46 mjk Exp $
+# $Id: bootstrap.sh,v 1.15 2008/10/15 20:13:05 mjk Exp $
 #
 # @Copyright@
 # 
@@ -58,6 +58,10 @@
 # @Copyright@
 #
 # $Log: bootstrap.sh,v $
+# Revision 1.15  2008/10/15 20:13:05  mjk
+# - more changes to build outside of the tree
+# - removed some old fds-only targets
+#
 # Revision 1.14  2008/07/15 22:41:46  mjk
 # added portaudio
 #
@@ -104,7 +108,7 @@
 # add bootstrapping
 #
 
-. ../etc/bootstrap-functions.sh
+. $ROLLSROOT/etc/bootstrap-functions.sh
 
 install_os_packages viz-server
 

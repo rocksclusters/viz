@@ -1,3 +1,4 @@
+ROLLNAME	= viz
 RELEASE		= 0
 COLOR		= RosyBrown
 
