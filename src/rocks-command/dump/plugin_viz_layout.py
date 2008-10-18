@@ -1,10 +1,10 @@
-# $Id: plugin_viz_layout.py,v 1.1 2008/07/08 19:40:03 mjk Exp $
+# $Id: plugin_viz_layout.py,v 1.2 2008/10/18 00:56:20 mjk Exp $
 # 
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		            version 5.0 (V)
+# 		           version 5.1  (VI)
 # 
 # Copyright (c) 2000 - 2008 The Regents of the University of California.
 # All rights reserved.	
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: plugin_viz_layout.py,v $
+# Revision 1.2  2008/10/18 00:56:20  mjk
+# copyright 5.1
+#
 # Revision 1.1  2008/07/08 19:40:03  mjk
 # - build dmx again
 # - added dump viz layout (saxutils.escape quoted for restore roll)

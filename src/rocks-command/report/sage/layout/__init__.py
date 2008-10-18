@@ -1,12 +1,12 @@
-# $Id: __init__.py,v 1.2 2008/07/03 01:14:13 mjk Exp $
+# $Id: __init__.py,v 1.3 2008/10/18 00:56:21 mjk Exp $
 #
 # @Copyright@
 # 
-# 				Rocks(tm)
+# 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		        version 4.3 (Mars Hill)
+# 		           version 5.1  (VI)
 # 
-# Copyright (c) 2000 - 2007 The Regents of the University of California.
+# Copyright (c) 2000 - 2008 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,7 @@
 # 3. All advertising and press materials, printed or electronic, mentioning
 # features or use of this software must display the following acknowledgement: 
 # 
-# 	"This product includes software developed by the Rocks(tm)
+# 	"This product includes software developed by the Rocks(r)
 # 	Cluster Group at the San Diego Supercomputer Center at the
 # 	University of California, San Diego and its contributors."
 # 
@@ -54,6 +54,9 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.3  2008/10/18 00:56:21  mjk
+# copyright 5.1
+#
 # Revision 1.2  2008/07/03 01:14:13  mjk
 # - fix path to xrandr
 # - call xrandr twice (current mode, desired mode)

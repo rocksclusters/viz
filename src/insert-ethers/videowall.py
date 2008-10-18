@@ -1,4 +1,4 @@
-# $Id: videowall.py,v 1.3 2008/03/06 23:42:01 mjk Exp $
+# $Id: videowall.py,v 1.4 2008/10/18 00:56:19 mjk Exp $
 #
 # insert-ethers plugin module
 # 
@@ -6,7 +6,7 @@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		            version 5.0 (V)
+# 		           version 5.1  (VI)
 # 
 # Copyright (c) 2000 - 2008 The Regents of the University of California.
 # All rights reserved.	
@@ -56,6 +56,9 @@
 # @Copyright@
 #
 # $Log: videowall.py,v $
+# Revision 1.4  2008/10/18 00:56:19  mjk
+# copyright 5.1
+#
 # Revision 1.3  2008/03/06 23:42:01  mjk
 # copyright storm on
 #

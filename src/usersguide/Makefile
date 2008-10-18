@@ -1,11 +1,11 @@
 # 
-# $Id: Makefile,v 1.18 2008/07/01 23:07:59 mjk Exp $
+# $Id: Makefile,v 1.19 2008/10/18 00:56:22 mjk Exp $
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		            version 5.0 (V)
+# 		           version 5.1  (VI)
 # 
 # Copyright (c) 2000 - 2008 The Regents of the University of California.
 # All rights reserved.	
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.19  2008/10/18 00:56:22  mjk
+# copyright 5.1
+#
 # Revision 1.18  2008/07/01 23:07:59  mjk
 # roll almost v ready
 #
