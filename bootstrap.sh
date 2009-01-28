@@ -2,7 +2,7 @@
 #
 # This file should remain OS independent
 #
-# $Id: bootstrap.sh,v 1.16 2008/10/18 00:56:17 mjk Exp $
+# $Id: bootstrap.sh,v 1.17 2009/01/28 20:45:52 mjk Exp $
 #
 # @Copyright@
 # 
@@ -58,6 +58,10 @@
 # @Copyright@
 #
 # $Log: bootstrap.sh,v $
+# Revision 1.17  2009/01/28 20:45:52  mjk
+# - make node files "public"
+# - added glew to bootstap
+#
 # Revision 1.16  2008/10/18 00:56:17  mjk
 # copyright 5.1
 #
@@ -147,6 +151,7 @@ compile_and_install ffmpeg
 compile_and_install mpeg2dec
 compile_and_install wx
 compile_and_install portaudio
+compile_add_install glew
 
 compile quanta
 install QUANTA

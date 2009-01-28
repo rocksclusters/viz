@@ -19,6 +19,10 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.24  2009/01/28 20:45:52  mjk
+	- make node files "public"
+	- added glew to bootstap
+	
 	Revision 1.23  2008/10/18 00:56:18  mjk
 	copyright 5.1
 	
@@ -106,6 +110,7 @@
 	</edge>
 
 	<edge from="viz-client">
+		<to>client</to>
 		<to>viz-base</to>
 	</edge>
 
@@ -117,8 +122,6 @@
 
 	<edge from="viz-tile">
 		<to>viz-client</to>
-		<to>client</to>
-		<to>x11</to>
 	</edge>
 
 	<edge from="xen-base">

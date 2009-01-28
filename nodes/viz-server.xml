@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 
-<kickstart>
+<kickstart interface="public">
 
 
 	<description>
@@ -14,6 +14,10 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.48  2009/01/28 20:45:52  mjk
+	- make node files "public"
+	- added glew to bootstap
+	
 	Revision 1.47  2008/10/18 00:56:18  mjk
 	copyright 5.1
 	
@@ -271,6 +275,8 @@
 	membership=Tile node=viz-tile
 
 /opt/rocks/bin/rocks add var Viz HideBezels false
+
+/opt/rocks/bin/rocks set appliance attr tile x11 true
 
 </post>
 
