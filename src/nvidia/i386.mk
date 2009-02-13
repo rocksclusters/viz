@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: i386.mk,v 1.20 2008/10/18 00:56:19 mjk Exp $
+# $Id: i386.mk,v 1.21 2009/02/13 17:49:55 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: i386.mk,v $
+# Revision 1.21  2009/02/13 17:49:55  mjk
+# new drivers
+#
 # Revision 1.20  2008/10/18 00:56:19  mjk
 # copyright 5.1
 #
@@ -118,6 +121,6 @@
 # *** empty log message ***
 #
 
-VERSION		= 169
-NVIDIA_VERSION	= $(VERSION).12-pkg1
+VERSION		= 180
+NVIDIA_VERSION	= $(VERSION).29-pkg1
 NVIDIA_ARCH	= x86
