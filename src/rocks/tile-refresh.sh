@@ -2,15 +2,15 @@
 #
 # Force the tile nodes to unblank X11.
 #
-# $Id: tile-refresh.sh,v 1.5 2008/10/18 00:56:20 mjk Exp $
+# $Id: tile-refresh.sh,v 1.6 2009/05/01 19:07:31 mjk Exp $
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		           version 5.1  (VI)
+# 		       version 5.2 (Chimichanga)
 # 
-# Copyright (c) 2000 - 2008 The Regents of the University of California.
+# Copyright (c) 2000 - 2009 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -58,6 +58,9 @@
 # @Copyright@
 #
 # $Log: tile-refresh.sh,v $
+# Revision 1.6  2009/05/01 19:07:31  mjk
+# chimi con queso
+#
 # Revision 1.5  2008/10/18 00:56:20  mjk
 # copyright 5.1
 #
