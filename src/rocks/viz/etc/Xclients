@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/opt/rocks/bin/python
 #
-# $Id: Xclients,v 1.24 2009/05/01 19:07:31 mjk Exp $
+# $Id: Xclients,v 1.25 2009/05/07 23:28:01 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,9 @@
 # @Copyright@
 #
 # $Log: Xclients,v $
+# Revision 1.25  2009/05/07 23:28:01  mjk
+# now in python
+#
 # Revision 1.24  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -134,23 +137,31 @@
 # *** empty log message ***
 #
 
-# open up access to X11 and chromium
+import os
+import popen2
+import string
+import time
 
-chmod a+rw /dev/nvidia*
-chmod a+rw /dev/dsp*
-chmod a+rw /dev/audio*
-xhost +
+os.system('chmod a+rw /dev/nvidia*')
+os.system('chmod a+rw /dev/dsp*')
+os.system('chmod a+rw /dev/audio*')
 
-# set the metamode to the default (show bezels)
-/usr/X11R6/bin/xrandr -s 0
+displays = []
+r,w = popen2.popen2('nvidia-settings -q screens')
+for line in r.readlines():
+	if line.find('[') != -1:
+		displays.append(line.split()[1])
 
-# turn off video blanking
-xset -dpms
-xset s off
-xset s noblank
+for display in displays:
+	os.environ['DISPLAY'] = display
+	os.system('xhost +')
+	os.system('xset -dpms')
+	os.system('xset s off')
+	os.system('xset s noblank')
+	os.system('xsetroot -cursor /opt/viz/etc/invisible-cursor.xbm \
+		/opt/viz/etc/invisible-cursor.xbm')
 
-# turn off the cursor on the tile nodes
-xsetroot -cursor /opt/viz/etc/invisible-cursor.xbm \
-	/opt/viz/etc/invisible-cursor.xbm
+	os.system('/opt/viz/sbin/tile-banner &')
 
-/opt/viz/sbin/tile-banner
+while True:
+	time.sleep(1)
