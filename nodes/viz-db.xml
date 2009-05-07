@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-db.xml,v $
+	Revision 1.18  2009/05/07 00:03:02  mjk
+	*** empty log message ***
+	
 	Revision 1.17  2009/05/01 19:07:24  mjk
 	chimi con queso
 	
@@ -87,7 +90,7 @@ CREATE TABLE videowall (
 ) TYPE=MyISAM;
 </file>
 
-/usr/bin/mysql cluster &lt; /tmp/viz-tables.sql
+/opt/rocks/bin/mysql --user=root --password='' cluster &lt; /tmp/viz-tables.sql
 
 </post>
 

@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.50  2009/05/07 00:03:02  mjk
+	*** empty log message ***
+	
 	Revision 1.49  2009/05/01 19:07:24  mjk
 	chimi con queso
 	
@@ -278,7 +281,7 @@
 /opt/rocks/bin/rocks add appliance tile \
 	membership=Tile node=viz-tile
 
-/opt/rocks/bin/rocks add var Viz HideBezels false
+/opt/rocks/bin/rocks set attr HideBezels false
 
 /opt/rocks/bin/rocks set appliance attr tile x11 true
 
