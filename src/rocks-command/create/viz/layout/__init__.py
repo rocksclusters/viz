@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.6 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.7 2009/05/09 23:04:08 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,13 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.7  2009/05/09 23:04:08  mjk
+# - tile-banner use rand seed to sync the logo on multi-head nodes
+# - Xclients is python, and disables screensaver (again)
+# - xorg.conf on tiles turns off DPMS
+# - tiles come up in a completely probed mode (resolution not set)
+# - all else is just broken and this is a check point
+#
 # Revision 1.6  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -310,7 +317,7 @@ class LayoutHandlerPassTwo(handler.ContentHandler,
 		handler.ContentHandler.__init__(self)
 		self.vtiles = geometry[0]	# number of rows (tall)
 		self.htiles = geometry[1]	# number of cols (wide)
-		self.vcoord = self.vtiles - 1	# counting down from top
+		self.vcoord = 0			# counting up from bottom
 		self.hcoord = 0			# conting up from left
 		self.displays = []
 		self.defaults = defaults
@@ -345,7 +352,7 @@ class LayoutHandlerPassTwo(handler.ContentHandler,
 	# <col>
 
 	def startElement_col(self, name, attrs):
-		self.vcoord = self.vtiles - 1
+		self.vcoord = 0
 
 	def endElement_col(self, name):
 		self.hcoord += 1
@@ -379,7 +386,7 @@ class LayoutHandlerPassTwo(handler.ContentHandler,
 			display.cardid = int(attrs.get('card'))
 
 		self.displays.append(display)
-		self.vcoord -= 1
+		self.vcoord += 1
 
 
 	def startElement(self, name, attrs):

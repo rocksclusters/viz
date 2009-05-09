@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.9 2009/05/01 19:07:32 mjk Exp $
+# $Id: __init__.py,v 1.10 2009/05/09 23:04:08 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,13 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.10  2009/05/09 23:04:08  mjk
+# - tile-banner use rand seed to sync the logo on multi-head nodes
+# - Xclients is python, and disables screensaver (again)
+# - xorg.conf on tiles turns off DPMS
+# - tiles come up in a completely probed mode (resolution not set)
+# - all else is just broken and this is a check point
+#
 # Revision 1.9  2009/05/01 19:07:32  mjk
 # chimi con queso
 #
@@ -105,7 +112,8 @@ class Command(rocks.commands.Command):
 
 	def run(self, params, args):
 
-		hideBezels = self.db.getGlobalVar('Viz', 'HideBezels')
+		hideBezels = 0
+		# self.db.getGlobalVar('Viz', 'HideBezels')
 
 		self.db.execute("""select distinctrow n.name from
 			nodes n, videowall v where v.node=n.id""")

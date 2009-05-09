@@ -1,6 +1,6 @@
 #!/opt/rocks/bin/python
 #
-# $Id: Xclients,v 1.25 2009/05/07 23:28:01 mjk Exp $
+# $Id: Xclients,v 1.26 2009/05/09 23:04:07 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,13 @@
 # @Copyright@
 #
 # $Log: Xclients,v $
+# Revision 1.26  2009/05/09 23:04:07  mjk
+# - tile-banner use rand seed to sync the logo on multi-head nodes
+# - Xclients is python, and disables screensaver (again)
+# - xorg.conf on tiles turns off DPMS
+# - tiles come up in a completely probed mode (resolution not set)
+# - all else is just broken and this is a check point
+#
 # Revision 1.25  2009/05/07 23:28:01  mjk
 # now in python
 #
@@ -146,6 +153,13 @@ os.system('chmod a+rw /dev/nvidia*')
 os.system('chmod a+rw /dev/dsp*')
 os.system('chmod a+rw /dev/audio*')
 
+os.system('xset s 0 0')
+os.system('xset s noexpose')
+os.system('xset s noblank')
+os.system('xset s off')
+os.system('xsetroot -cursor /opt/viz/etc/invisible-cursor.xbm \
+	/opt/viz/etc/invisible-cursor.xbm')
+
 displays = []
 r,w = popen2.popen2('nvidia-settings -q screens')
 for line in r.readlines():
@@ -155,13 +169,8 @@ for line in r.readlines():
 for display in displays:
 	os.environ['DISPLAY'] = display
 	os.system('xhost +')
-	os.system('xset -dpms')
-	os.system('xset s off')
-	os.system('xset s noblank')
-	os.system('xsetroot -cursor /opt/viz/etc/invisible-cursor.xbm \
-		/opt/viz/etc/invisible-cursor.xbm')
-
 	os.system('/opt/viz/sbin/tile-banner &')
 
 while True:
 	time.sleep(1)
+	os.system('xset s reset')

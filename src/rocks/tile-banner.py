@@ -1,6 +1,6 @@
 #!/opt/rocks/bin/python
 #
-# $Id: tile-banner.py,v 1.15 2009/05/01 19:07:30 mjk Exp $
+# $Id: tile-banner.py,v 1.16 2009/05/09 23:04:07 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,13 @@
 # @Copyright@
 #
 # $Log: tile-banner.py,v $
+# Revision 1.16  2009/05/09 23:04:07  mjk
+# - tile-banner use rand seed to sync the logo on multi-head nodes
+# - Xclients is python, and disables screensaver (again)
+# - xorg.conf on tiles turns off DPMS
+# - tiles come up in a completely probed mode (resolution not set)
+# - all else is just broken and this is a check point
+#
 # Revision 1.15  2009/05/01 19:07:30  mjk
 # chimi con queso
 #
@@ -223,6 +230,13 @@ class App(rocks.app.Application):
 		os.system('xsetroot -solid "#%06x"' % rgb)
 
 	def run(self):
+
+		# Seed the random generator with a hash of the hostname
+		# rather than the display name.  This keeps all the
+		# banner processes on a single host synchronized, 
+		# assuming we start everything at the same time.
+
+		random.seed(hash(socket.gethostname()))
 	
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_position(gtk.WIN_POS_CENTER)
@@ -231,12 +245,11 @@ class App(rocks.app.Application):
 		self.changeColor(self.index)
 		
 		display = self.window.get_screen().get_display().get_name()
-		hostname = socket.gethostname().split('.')[0]
 		
 		for i in range(0, 6):
 			self.label[i].set_markup(
 				'<span weight="bold" face="sans" size="64000">'\
-				'%s%s</span>' % (hostname, display))
+				'%s</span>' % display)
 
 		gobject.timeout_add(10000, callback, self)
 		gtk.main()
