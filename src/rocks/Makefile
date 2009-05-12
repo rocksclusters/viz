@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.40 2009/05/01 19:07:30 mjk Exp $
+# $Id: Makefile,v 1.41 2009/05/12 00:26:54 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.41  2009/05/12 00:26:54  mjk
+# *** empty log message ***
+#
 # Revision 1.40  2009/05/01 19:07:30  mjk
 # chimi con queso
 #
@@ -185,7 +188,7 @@
 
 
 PKGROOT = /opt/viz
-SCRIPTS = tile-banner tile-refresh
+SCRIPTS = tile-banner tile-reset
 REDHAT.ROOT = $(PWD)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
@@ -212,8 +215,8 @@ install::
 	install -m544 viz/etc/gnome2/gdm	\
 		$(ROOT)/$(PKGROOT)/etc/.gnome2/gdm
 	touch	$(ROOT)/$(PKGROOT)/etc/.ssh/id_rsa.pub
-	install -m755 tile-refresh		$(ROOT)/$(PKGROOT)/sbin
 	install -m755 tile-banner		$(ROOT)/$(PKGROOT)/sbin
+	install -m755 tile-reset		$(ROOT)/$(PKGROOT)/sbin
 	install -m444 rocks-logo-*.png		$(ROOT)/$(PKGROOT)/lib/images
 	install -m644 *.xml	$(ROOT)/$(PKGROOT)/lib/tilelayout/examples
 
