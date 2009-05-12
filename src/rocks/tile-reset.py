@@ -4,6 +4,9 @@
 # @Copyright@
 #
 # $Log: tile-reset.py,v $
+# Revision 1.2  2009/05/12 18:36:29  mjk
+# *** empty log message ***
+#
 # Revision 1.1  2009/05/12 00:26:54  mjk
 # *** empty log message ***
 #
@@ -21,6 +24,11 @@ os.system('/opt/viz/bin/nvidia-xconfig \
 
 display = -1
 fin = open(tmp, 'r')
+try:
+	fout = open('/etc/X11/xorg.conf', 'w')
+except:
+	fout = None
+
 for line in fin.readlines():
 	if line.find('"DPMS"') != -1:
 		line = '\tOption\t"DPMS"\t"False"\n'
@@ -31,8 +39,14 @@ for line in fin.readlines():
 			line += '\tModes\t"%s"\n' % resolutions[display]
 		except:
 			pass
-	print line[:-1]
+	if fout:
+		fout.write(line)
+	else:
+		print line[:-1]
+
 fin.close()
+if fout:
+	fout.close()
 os.unlink(tmp)
 
 
