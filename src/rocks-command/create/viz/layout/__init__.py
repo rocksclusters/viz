@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.7 2009/05/09 23:04:08 mjk Exp $
+# $Id: __init__.py,v 1.8 2009/05/17 13:41:53 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.8  2009/05/17 13:41:53  mjk
+# checkpoint before zurich
+#
 # Revision 1.7  2009/05/09 23:04:08  mjk
 # - tile-banner use rand seed to sync the logo on multi-head nodes
 # - Xclients is python, and disables screensaver (again)
@@ -140,13 +143,27 @@ class Command(rocks.commands.create.command):
 	</example>
 	"""
 
+	def insertDisplay(self, display, x, y):
+		print display.hostname, display.display, x, y
+		self.db.execute("""insert videowall
+			(Node, Display, 
+			Resolution, 
+			X, Y,
+			LeftBorder, RightBorder,
+			TopBorder, BottomBorder) 
+			values ((select id from nodes where name="%s"), '%s',
+			'%s',
+			%d, %d,
+			%d, %d,
+			%d, %d)""" % 
+			(self.db.getHostname(display.hostname), display.display,
+			display.resolution,
+			x, y,
+			display.border.l, display.border.r,
+			display.border.t, display.border.b))
+			
 	def run(self, params, args):
 
-		# If a filename is provided read the XML layout from
-		# the files.  Othewise if we are not a tty read the XML
-		# layout from the pipe we are connected to (restore roll
-		# uses this).  Final case (no data) use the default layout.
-		
 		if len(args):
 			filename = args[0]
 			try:
@@ -155,118 +172,71 @@ class Command(rocks.commands.create.command):
 				self.abort('cannot open file', filename)
 			xml = string.join(file.readlines())
 		else:
-			if not sys.stdin.isatty:
-				xml = ''
-				for line in sys.stdin.readlines():
-					xml += list
-			else:
-				xml = self.command('list.viz.layout', [])
-
-		#
-		# First Pass: learn row,col geometry of the wall
-		#
+			self.abort('missing input file')
 
 		parser  = make_parser()
-		handler = LayoutHandlerPassOne()
+		handler = LayoutHandler()
 		parser.setContentHandler(handler)
 		parser.feed(xml)
-
-		#
-		# Second Pass: find diplay and populate database
-		#
-
-		geometry = handler.geometry()
-		parser  = make_parser()
-		handler = LayoutHandlerPassTwo(LayoutDefaults(self), geometry)
-		parser.setContentHandler(handler)
-		parser.feed(xml)
-
-		self.db.execute('delete from videowall')
-		for display in handler.wall():
-			self.db.execute("""insert videowall 
-				(Node, HCoord, VCoord)
-				values ((select id from nodes where name="%s"), 
-				%d, %d)""" % 
-				(display.host, display.hcoord, display.vcoord))
-
-			# Update for any settings non-default settings.  This
-			# keeps all the default settings under the control
-			# of mysql.  No defaults are provided from this
-			# python code.
-
-			attrs = []
-			if display.cardid  != None:
-				attrs.append('CardId=%d' % display.cardid)
-			if display.lhborder != None:
-				attrs.append('LHBorder=%f' % display.lhborder)
-			if display.rhborder != None:
-				attrs.append('RHBorder=%f' % display.rhborder)
-			if display.tvborder != None:
-				attrs.append('TVBorder=%f' % display.tvborder)
-			if display.bvborder != None:
-				attrs.append('BVBorder=%f' % display.bvborder)
-			if display.hres    != None:
-				attrs.append('HRes=%d' % display.hres)
-			if display.vres    != None:
-				attrs.append('VRes=%d' % display.vres)
-			self.db.execute("""update videowall set %s where
-				node=(select id from nodes where name="%s") and
-				hcoord=%d and vcoord=%d""" %
-				(string.join(attrs, ','),
-				display.host,
-				display.hcoord, display.vcoord))
-
-
-class LayoutBase:
-	def __init__(self):
-		self.lhborder	= None
-		self.rhborder	= None
-		self.tvborder	= None
-		self.bvborder	= None
-		self.hres	= None
-		self.vres	= None
-		self.cardid	= None
-
-class LayoutDisplay(LayoutBase):
-	def __init__(self, defaults):
-		LayoutBase.__init__(self)
-		self.lhborder	= defaults.lhborder
-		self.rhborder	= defaults.rhborder
-		self.tvborder	= defaults.tvborder
-		self.bvborder	= defaults.bvborder
-		self.hres	= defaults.hres
-		self.vres	= defaults.vres
-		self.cardid	= defaults.cardid
-		self.hcoord	= 0
-		self.vcoord	= 0
-		self.host	= None
-
-class LayoutDefaults(LayoutBase):
-	def __init__(self, sql):
-		LayoutBase.__init__(self)
-		self.hres = 800
-		self.vres = 600
-
+		displays = handler.getDisplays()
+		(maxY, maxX) = handler.getGeometry()
 		
+		print 'maxX', maxX
+		print 'maxY', maxY
+		for display in displays:
+			print display.hostname, display.display
+		
+		self.db.execute('delete from videowall')
+		for x in range(0, maxX):
+			for y in range(maxY -1, -1, -1):
+				i = (x*maxY)+y
+				print i
+				self.insertDisplay(displays[i], x, maxY-y-1)
 
-class LayoutHandlerPassOne(handler.ContentHandler,
+
+
+
+class LayoutHandler(handler.ContentHandler,
 	handler.DTDHandler,
 	handler.EntityResolver,
 	handler.ErrorHandler):
-	"""
-	First Pass parsing of the layout XML file.  All we do here is
-	count the number of columns and rows in the file.  This gives
-	us the knowledge of the geometry of the wall before we start to
-	parse the <display> tags, and lets us assign the row,col to the
-	displays.
-	"""
+
 	def __init__(self):
 		handler.ContentHandler.__init__(self)
-		self.cols = 0
-		self.rows = 0
+		
+		self.default			= rocks.util.Struct()
+		self.default.border		= rocks.util.Struct()
+		self.default.border.l		= 0
+		self.default.border.r		= 0
+		self.default.border.t		= 0
+		self.default.border.b		= 0
+		self.default.resolution		= '800x600'
+		
+		self.cols			= 0
+		self.rows			= 0
+		
+		self.displays			= []		
 
-	def geometry(self):
+	def getGeometry(self):
 		return (self.rows, self.cols)
+		
+	def getDisplays(self):
+		return self.displays
+
+	# <defaults>
+
+	def startElement_defaults(self, name, attrs):
+
+		if attrs.get('leftborder'):
+			self.default.border.l = int(attrs.get('leftborder'))
+		if attrs.get('rightborder'):
+			self.default.border.r = int(attrs.get('rightborder'))
+		if attrs.get('topborder'):
+			self.default.border.t = int(attrs.get('topborder'))
+		if attrs.get('bottomborder'):
+			self.default.border.b = int(attrs.get('bottomborder'))
+		if attrs.get('resolution'):
+			self.default.resolution = attrs.get('resolution')
 
 	# <col>
 	def startElement_col(self, name, attrs):
@@ -274,122 +244,39 @@ class LayoutHandlerPassOne(handler.ContentHandler,
 		self.rows  = 0
 
 	# <display>
+	
 	def startElement_display(self, name, attrs):
 		self.rows += 1
 
+		self.current		= rocks.util.Struct()
+		self.current.border	= rocks.util.Struct()
+		self.current.border.l	= self.default.border.l
+		self.current.border.r	= self.default.border.r
+		self.current.border.t	= self.default.border.t
+		self.current.border.b	= self.default.border.b
+		self.current.resolution	= self.default.resolution
+
+		if attrs.get('leftborder'):
+			self.current.border.l = int(attrs.get('leftborder'))
+		if attrs.get('rightborder'):
+			self.current.border.r = int(attrs.get('rightborder'))
+		if attrs.get('topborder'):
+			self.current.border.t = int(attrs.get('topborder'))
+		if attrs.get('bottomborder'):
+			self.current.border.b = int(attrs.get('bottomborder'))
+		if attrs.get('resolution'):
+			self.current.resolution = attrs.get('resolution')
+
+
+	def endElement_display(self, name):
+		(name, display) = self.text.strip().split(':')
+
+		self.current.hostname = name
+		self.current.display = display
+		self.displays.append(self.current)
 
 	def startElement(self, name, attrs):
-		try:
-			eval('self.startElement_%s' % name)
-		except AttributeError:
-			return
-		eval('self.startElement_%s(name, attrs)' % name)
-
-	def endElement(self, name):
-		try:
-			eval('self.endElement_%s' % name)
-		except AttributeError:
-			return
-		eval('self.endElement_%s(name)' % name)
-
-
-
-class LayoutHandlerPassTwo(handler.ContentHandler,
-	handler.DTDHandler,
-	handler.EntityResolver,
-	handler.ErrorHandler):
-	"""
-	Sample format:
-
-	<wall>
-	        <col>
-	                <display host="tile-0-0" card="1"/>
-	                <display host="tile-0-0" card="1"/>
-	        </col>
-	        <col>
-	                <display host="tile-0-1" card="1"/>
-	                <display host="tile-0-1" card="1"/>
-	        </col>
-	</wall>
-	"""
-
-	def __init__(self, defaults, geometry):
-		handler.ContentHandler.__init__(self)
-		self.vtiles = geometry[0]	# number of rows (tall)
-		self.htiles = geometry[1]	# number of cols (wide)
-		self.vcoord = 0			# counting up from bottom
-		self.hcoord = 0			# conting up from left
-		self.displays = []
-		self.defaults = defaults
-
-	def wall(self):
-		return self.displays
-
-	# <defaults>
-
-	def startElement_defaults(self, name, attrs):
-		if attrs.get('hres'):
-			self.defaults.hres = int(attrs.get('hres'))
-		if attrs.get('vres'):
-			self.defaults.vres = int(attrs.get('vres'))
-		if attrs.get('hborder'):
-			self.defaults.lhborder = float(attrs.get('hborder'))
-			self.defaults.rhborder = self.defaults.lhborder
-		if attrs.get('lhborder'):
-			self.defaults.lhborder = float(attrs.get('lhborder'))
-		if attrs.get('rhborder'):
-			self.defaults.rhborder = float(attrs.get('rhborder'))
-		if attrs.get('vborder'):
-			self.defaults.tvborder = float(attrs.get('vborder'))
-			self.defaults.bvborder = self.defaults.tvborder
-		if attrs.get('tvborder'):
-			self.defaults.tvborder = float(attrs.get('tvborder'))
-		if attrs.get('bvborder'):
-			self.defaults.bvborder = float(attrs.get('bvborder'))
-		if attrs.get('card'):
-			self.defaults.cardid = int(attrs.get('card'))
-
-	# <col>
-
-	def startElement_col(self, name, attrs):
-		self.vcoord = 0
-
-	def endElement_col(self, name):
-		self.hcoord += 1
-	
-	# <display>
-	
-	def startElement_display(self, name, attrs):
-		display = LayoutDisplay(self.defaults)
-		display.host = attrs.get('host')
-		display.vcoord = self.vcoord
-		display.hcoord = self.hcoord
-		if attrs.get('hres'):
-			display.hres = int(attrs.get('hres'))
-		if attrs.get('vres'):
-			display.vres = int(attrs.get('vres'))
-		if attrs.get('hborder'):
-			display.lhborder = float(attrs.get('lhborder'))
-			display.rhborder = display.lhborder
-		if attrs.get('lhborder'):
-			display.lhborder = float(attrs.get('lhborder'))
-		if attrs.get('rhborder'):
-			display.rhborder = float(attrs.get('rhborder'))
-		if attrs.get('vborder'):
-			display.tvborder = float(attrs.get('vborder'))
-			display.bvborder = display.tvborder
-		if attrs.get('tvborder'):
-			display.tvborder = float(attrs.get('tvborder'))
-		if attrs.get('bvborder'):
-			display.bvborder = float(attrs.get('bvborder'))
-		if attrs.get('card'):
-			display.cardid = int(attrs.get('card'))
-
-		self.displays.append(display)
-		self.vcoord += 1
-
-
-	def startElement(self, name, attrs):
+		self.text = ''
 		try:
 			eval('self.startElement_%s' % name)
 		except AttributeError:
@@ -402,5 +289,9 @@ class LayoutHandlerPassTwo(handler.ContentHandler,
 		except AttributeError:
 			return	
 		eval('self.endElement_%s(name)' % name)
+
+	def characters(self, s):
+		self.text += s
+		
 
 

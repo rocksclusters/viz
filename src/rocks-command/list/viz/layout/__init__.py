@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.11 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.12 2009/05/17 13:41:53 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.12  2009/05/17 13:41:53  mjk
+# checkpoint before zurich
+#
 # Revision 1.11  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -89,86 +92,41 @@
 # no more lib64
 #
 
+import rocks.util
 import rocks.commands
 
 class Command(rocks.commands.list.command):
 	"""
-	List the XML representation of the Video Wall layout stored in the
-	cluster database.  This XML can be edited and fed back into the database
-	to change the physical layout of the tile display wall.
+	List the layout of the video wall.
 	
 	<example cmd='list viz layout'>
 	</example>
 	"""
 
-	def defaultLayout(self):
-		self.db.execute("""select n.name, n.rank, n.rack
-			from nodes n, memberships m where
-			n.membership=m.id and 
-			(m.name = "Tile" or m.name = "ComputeTile")
-			order by rack, rank""")
-		col = []
-		for (name, r, c) in self.db.fetchall():
-			try:
-				col[c].append(name)
-			except IndexError:
-				col.append([name])
-
-		self.addText('<wall>\n\n')
-		self.addText('\t<!-- edit the following line -->\n')
-		self.addText('\t<defaults card="1" hres="1920" vres="1200" '
-			'hborder="100" vborder="80"/>\n\n')
-		
-		for c in col:
-			self.addText('\t<col>\n')
-			for r in c:
-				self.addText('\t\t<display host="%s"/>\n' % r)
-			self.addText('\t</col>\n')
-		self.addText('\n</wall>\n')
-
-
-	def existingLayout(self):
-		self.db.execute('select max(vcoord),max(hcoord) '
-			'from videowall')
-		rows,cols =  self.db.fetchone()
-		self.addText('<wall>\n')
-		for c in range(0, cols+1):
-			self.addText('\t<col>\n')
-			for r in range(rows, -1, -1):
-				self.db.execute("""select n.name, v.cardid,
-					v.lhborder, v.rhborder,
-					v.tvborder, v.bvborder,
-					v.hres, v.vres
-					from nodes n,videowall v where
-					n.id=v.node and v.hcoord=%d and
-					v.vcoord=%d""" % (c, r))
-				node, cardid, lhborder, rhborder, \
-					tvborder, bvborder, \
-					hres, vres = self.db.fetchone()
-				self.addText('\t\t<display host="%s" card="%d" ' 
-					'lhborder="%.3f" rhborder="%.3f" '
-					'tvborder="%.3f" bvborder="%.3f" '
-					'hres="%d" vres="%d"/>\n' %
-					(node, cardid, 
-					lhborder, rhborder,
-					tvborder, bvborder,
-					hres, vres))
-			self.addText('\t</col>\n')
-		self.addText('</wall>\n')
-
-		
 	def run(self, params, args):
 
 		rows = self.db.execute("""select * from videowall""")
+		if not rows:
+			self.abort('layout does no exist')
+					
+		self.db.execute('select max(x),max(y) from videowall')
+		maxX, maxY =  self.db.fetchone()
+		
+		self.db.execute("""select n.name, 
+			v.display, v.resolution, v.x, v.y, 
+			v.leftborder, v.rightborder, v.topborder, v.bottomborder
+			from nodes n, videowall v where
+			n.id=v.node order by v.x, v.y""")
 
-		if rows > 0:
-			try:
-				self.existingLayout()
-				return
-			except TypeError:
-				self.clearText()
+		for row in self.db.fetchall():
+			self.addOutput(row[0], row[1:])
+			
+		self.endOutput(header=['host',
+			'display', 'resolution', 'x', 'y',
+			'leftborder', 'rightborder',
+			'topborder', 'bottomborder'])
+			
 
-		self.defaultLayout()
 
 	
 

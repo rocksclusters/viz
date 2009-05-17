@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-client.xml,v $
+	Revision 1.14  2009/05/17 13:41:53  mjk
+	checkpoint before zurich
+	
 	Revision 1.13  2009/05/09 23:04:07  mjk
 	- tile-banner use rand seed to sync the logo on multi-head nodes
 	- Xclients is python, and disables screensaver (again)
@@ -117,16 +120,8 @@
 
 <post>
 
-/opt/viz/bin/nvidia-xconfig
-
 <file name="/etc/sysconfig/rocks-post">
-
-/opt/viz/bin/nvidia-xconfig \
-	--separate-x-screens --no-twinview -a -o /tmp/xorg.conf
-
-awk '/DPMS/ { print "\tOption\t\"DPMS\"\t\"False\""; next;} { print; }' \
-	/tmp/xorg.conf > /etc/X11/xorg.conf
-
+/opt/viz/sbin/tile-reset
 killall Xorg
 </file>
 

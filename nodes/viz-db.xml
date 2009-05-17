@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-db.xml,v $
+	Revision 1.19  2009/05/17 13:41:53  mjk
+	checkpoint before zurich
+	
 	Revision 1.18  2009/05/07 00:03:02  mjk
 	*** empty log message ***
 	
@@ -74,19 +77,22 @@
 
 <post>
 
+<!--
+
+-->
+
 <file name="/tmp/viz-tables.sql">
 DROP TABLE IF EXISTS videowall;
 CREATE TABLE videowall (
 	Node		int(11) NOT NULL default '0',
-	CardID		int(11) NOT NULL default '1',
-	HCoord		int(11) NOT NULL default '0',
-	VCoord		int(11) NOT NULL default '0',
-	LHBorder	int(11) NOT NULL default '75',
-	RHBorder	int(11) NOT NULL default '75',
-	TVBorder	int(11) NOT NULL default '75',
-	BVBorder	int(11) NOT NULL default '75',
-	HRes		int(11) NOT NULL default '1920',
-	VRes		int(11) NOT NULL default '1200'
+	Display         varchar(8)  NOT NULL default '0:0',
+	Resolution      varchar(32) NOT NULL default '1920x1200',
+	X	        int(11) NOT NULL default '0',
+	Y	        int(11) NOT NULL default '0',
+	LeftBorder      int(11) NOT NULL default '75',
+	RightBorder     int(11) NOT NULL default '75',
+	TopBorder       int(11) NOT NULL default '75',
+	BottomBorder    int(11) NOT NULL default '75'
 ) TYPE=MyISAM;
 </file>
 
