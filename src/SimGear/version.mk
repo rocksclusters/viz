@@ -1,4 +1,0 @@
-NAME = SimGear
-VERSION = 0.3.10
-RELEASE = 1
-

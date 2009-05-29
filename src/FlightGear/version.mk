@@ -1,4 +1,0 @@
-NAME = FlightGear
-VERSION = 0.9.10
-RELEASE = 1
-
