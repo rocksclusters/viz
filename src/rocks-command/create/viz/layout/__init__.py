@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.8 2009/05/17 13:41:53 mjk Exp $
+# $Id: __init__.py,v 1.9 2009/05/29 19:35:41 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.9  2009/05/29 19:35:41  mjk
+# *** empty log message ***
+#
 # Revision 1.8  2009/05/17 13:41:53  mjk
 # checkpoint before zurich
 #
@@ -144,7 +147,6 @@ class Command(rocks.commands.create.command):
 	"""
 
 	def insertDisplay(self, display, x, y):
-		print display.hostname, display.display, x, y
 		self.db.execute("""insert videowall
 			(Node, Display, 
 			Resolution, 

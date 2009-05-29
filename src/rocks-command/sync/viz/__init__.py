@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.11 2009/05/17 13:41:53 mjk Exp $
+# $Id: __init__.py,v 1.12 2009/05/29 19:35:41 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.12  2009/05/29 19:35:41  mjk
+# *** empty log message ***
+#
 # Revision 1.11  2009/05/17 13:41:53  mjk
 # checkpoint before zurich
 #
@@ -115,33 +118,48 @@ class Command(rocks.commands.Command):
 
 	def run(self, params, args):
 
-		self.db.execute("""select n.name, v.display, v.resolution
-			from nodes n, videowall v where n.id=v.node""")
-		
-		tiles = {}
-		for row in self.db.fetchall():
-			hostname	= row[0]
-			display		= row[1]
-			resolution	= row[2]
-			
-			if hostname not in tiles:
-				tiles[hostname] = {}
-			tiles[hostname][display] = resolution
-			
-		for host in tiles.keys():
+		self.db.execute("""select n.name from nodes n, memberships m 
+			where n.membership=m.id and m.name='Tile'""")
 
-			# build the resolution list for all the displays
-			# attached to the host
-			
-			displays = tiles[host].keys()
+		for (host, ) in self.db.fetchall():
+
+			# Look for any /etc/X11/xorg.conf.HOSTNAME files
+			# and use these rather than the computed configuration.
+			# This allows the user to override the Rocks defaults.
+
+			xconf = os.path.join(os.sep, 'etc', 'X11',
+				'xorg.conf.%s' % host)
+			if os.path.isfile(xconf):
+				self.addText('sync %s (%s)\n' % (host, xconf))
+				os.system('scp %s %s:%s' % (xconf, host,
+					os.path.join(os.sep, 
+					'etc', 'X11', 'xorg.conf')))
+				continue
+
+			self.db.execute("""select v.display, v.resolution
+				from nodes n, videowall v where 
+				n.name='%s' and n.id=v.node""" % host)
+			displays = []
+			for (display, resolution) in self.db.fetchall():
+				displays.append((display, resolution))
 			displays.sort()
-			resolutions = []
-			for display in displays:
-				resolutions.append(tiles[host][display])
-			resolutions = string.join(resolutions)
 
-			os.system('ssh -x %s /opt/viz/sbin/tile-reset %s' %
-				(host, resolutions))
-			os.system('ssh -x %s killall Xorg' % host)
+			resolutions = []
+			for e in displays:
+				resolutions.append(e[1])
+			resolutions = string.join(resolutions)
+			if not resolutions:
+				continue
+
+			self.addText('sync %s (%s)\n' % (host, resolutions))
+			self.command('run.host', [ host,
+				'x11=false',
+				'/opt/viz/sbin/tile-reset %s' % resolutions ])
+
+		self.command('run.host',
+			[ 'tile', 'x11=false', 'killall Xorg' ])
+
+
+
 
 

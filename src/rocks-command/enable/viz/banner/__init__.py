@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.11 2009/05/29 19:35:41 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/05/29 19:35:41 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,102 +54,22 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
-# Revision 1.11  2009/05/29 19:35:41  mjk
-# *** empty log message ***
-#
-# Revision 1.10  2009/05/01 19:07:31  mjk
-# chimi con queso
-#
-# Revision 1.9  2008/10/18 00:56:21  mjk
-# copyright 5.1
-#
-# Revision 1.8  2008/07/12 00:38:13  mjk
-# *** empty log message ***
-#
-# Revision 1.7  2008/03/06 23:42:02  mjk
-# copyright storm on
-#
-# Revision 1.6  2007/10/03 22:19:58  mjk
-# *** empty log message ***
-#
-# Revision 1.5  2007/09/20 15:46:30  mjk
-# cleanup lock file
-#
-# Revision 1.4  2007/09/19 13:28:58  mjk
-# Swiss Viss
-#
-# Revision 1.3  2007/09/19 11:35:08  mjk
-# more swiss changes
-#
-# Revision 1.2  2007/09/04 22:47:35  mjk
-# move dmxrc generation to rcl
-#
-# Revision 1.1  2007/08/30 17:24:37  mjk
+# Revision 1.1  2009/05/29 19:35:41  mjk
 # *** empty log message ***
 #
 
-import rocks.commands.start
-import popen2
+import rocks.commands.enable
 import os
 
-class Command(rocks.commands.start.command):
+class Command(rocks.commands.enable.command):
 	"""
-	Starts a DMX session.
+	Enable Viz Wall Banner (screen saver)
 	
-	<param name="display" type="int">
-	X11 display numbers (default is 1).
-	</param>
-	
-	<param name="hidebezels" type="bool">
-	Set the TRUE to hide the LCD bezels (default is false).
-	</param>
-	
-	<param name="wm" type="string">
-	Name of window manager to use (default is fvwm).
-	</param>
-	
-	<example cmd="start dmx">
+	<example cmd="enable viz banner">
 	</example>
 	"""
-
-	MustBeRoot = 0
 	
 	def run(self, params, args):
-	
-		(xdmx, wm, outputDisplay) = self.fillParams([
-			('dmx', '/usr/bin/Xdmx'),
-			('wm', '/opt/rocks/bin/fvwm'),
-			('display', 1)
-			])
 
-		if os.path.exists(os.path.join(os.environ['HOME'],
-			'.hidebezels')):
-			config = 'hide_bezels'
-		else:
-			config = 'show_bezels'
-
-		try:
-			inputDisplay = os.getenv('DISPLAY')
-		except:
-			self.Abort('X11 not running')
-			
-		os.environ['WINDOWMANAGER'] = wm
-
-		dmxlayout = os.path.join(os.environ['HOME'], '.dmxrc')
-		
-		if not os.path.exists(dmxlayout):
-			file = open(dmxlayout, 'w')
-			file.write(self.command('report.dmx.layout'))
-			file.close()
-
-		cmd = 'startx -- %s :%d -config %s -configfile %s -input %s' % \
-			(xdmx, outputDisplay, config, dmxlayout, inputDisplay)
-
-		r,w = popen2.popen2(cmd)
-			
-		for line in r.readlines():
-			self.addText(line[:-1])
-
-		if os.path.exists('/tmp/.X%d-lock' % outputDisplay):
-			os.unlink('/tmp/.X%d-lock' % outputDisplay)
-		
+		self.command('run.host', [ 'tile', 'x11=false',
+			'/bin/rm -f /opt/viz/etc/nobanner' ])
