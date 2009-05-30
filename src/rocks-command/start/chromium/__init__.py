@@ -1,6 +1,6 @@
-# $Id: __init__.py,v 1.12 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.13 2009/05/30 00:02:26 mjk Exp $
 #
-# This script began from the autodmx.conf mothersip configuration from 
+# This script began life as the autodmx.conf mothersip configuration from 
 # the Chromium source code, and inherits the following copyright.
 #
 # Copyright (c) 2001, Stanford University
@@ -62,6 +62,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.13  2009/05/30 00:02:26  mjk
+# *** empty log message ***
+#
 # Revision 1.12  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -147,6 +150,21 @@ class Command(rocks.commands.start.command):
 
 	MustBeRoot = 0
 
+	def getXOffset(self, wall, x, y):
+		offset = wall[x][y].leftborder
+		for i in range(0, x):
+			tile = wall[i][y]
+			offset += tile.xres + tile.leftborder + tile.rightborder
+		return offset
+
+	def getYOffset(self, wall, x, y):
+		offset = wall[x][y].bottomborder
+		for i in range(0, y):
+			tile = wall[x][i]
+			offset += tile.yres + tile.bottomborder + tile.topborder
+		return offset
+
+
 	def run(self, params, args):
 		
 		(args, mothershipPort) = self.fillPositionalArgs(('port',))
@@ -160,46 +178,86 @@ class Command(rocks.commands.start.command):
 
 		mothershipPort	= int(mothershipPort)
 		mtu		= int(mtu)
-	
-		# Check the return code of dmx_config to see if
-		# dmx is running.  In either case we still get the
-		# configuration from ~/.dmx_config.
-		
-		if not os.system(os.path.join(crbindir, 'dmx_config')):
-			dmx = 1
+
+		if os.path.isfile(os.path.join(os.environ['HOME'], 
+			'.hidebezels')):
+			hideBezels = True
 		else:
-			self.command('start.dmx', [ 'wm=/bin/true' ])
-			dmx = 0
+			hideBezels = False
 
-		filename = os.path.join(os.environ['HOME'], '.dmx_config')
-		file = open(filename, 'r')
-		cfg = file.read()
-		file.close()
-		layout = eval(cfg)
-		if not cfg:
-			self.abort('cannot read tile layout')
+		self.db.execute('select max(x), max(y) from videowall')
+		maxX, maxY = self.db.fetchone()
+	
+		# Create 2D Array represening the wall
 
-		
-		# The origin for DMX is the upper-left, but for Chromium
-		# the origin is the lower left.  To fix this we need to
-		# know the the height of the wall. 
-		# (only required w/o DMX).
+		wall = []
+		for i in range(0, maxX+1):
+			list = []
+			for j in range(0, maxY+1):
+				list.append(None)
+			wall.append(list)
 
-		yoriginMax = 0
-		for tile in layout:
-			if tile['yorigin'] > yoriginMax:
-				yoriginMax = tile['yorigin']
+		self.db.execute("""select n.name, 
+			v.display, v.resolution, v.x, v.y,
+			v.leftborder, v.rightborder,
+			v.topborder, v.bottomborder
+			from nodes n, videowall v where
+			v.node=n.id""")
+
+		for tokens in self.db.fetchall():
+
+			tile		= rocks.util.Struct()
+			tile.name	= tokens[0]
+			tile.display	= tokens[1]
+		        resolution	= tokens[2].split('x')
+			tile.xres	= int(resolution[0])
+			tile.yres	= int(resolution[1])
+			tile.x		= int(tokens[3])
+			tile.y		= int(tokens[4])
+			tile.xoffset	= 0
+			tile.yoffset	= 0
+
+			if hideBezels:
+				tile.leftborder		= int(tokens[5])
+				tile.rightborder	= int(tokens[6])
+				tile.topborder		= int(tokens[7])
+				tile.bottomborder	= int(tokens[8])
+			else:
+				tile.leftborder		= 0
+				tile.rightborder	= 0
+				tile.topborder		= 0
+				tile.bottomborder	= 0
+
+			wall[tile.x][tile.y] = tile
+
 				
-		wallHeight = 0
-		for tile in layout:
-			if tile['yorigin'] == yoriginMax:
-				height = tile['yorigin'] + tile['height']
-				if height > wallHeight:
-					wallHeight = height
+		# Traverse the perimeter of the wall and set the outside 
+		# bezel sizes to zero.  After the above operations this leaves
+		# only the interior bezels in place.
+		
+		for x in wall:
+			x[0].bottomborder = 0	# clear bezels on bottom row
+			x[maxY].topborder = 0	# clear bezels on top row
 
-
+		for y in range(0, maxY+1):
+			wall[0][y].leftborder = 0	# clear bezels on left
+			wall[maxX][y].leftborder = 0	# clear bezels on right
 			
-		serverPort = random.randint(7000, 7099)
+
+		# Compute the xoffset and yoffset of each tile
+
+		for x in range(0, maxX+1):
+			for y in range(0, maxY+1):
+				tile = wall[x][y]
+				tile.xoffset = self.getXOffset(wall, x, y)
+				tile.yoffset = self.getYOffset(wall, x, y)
+
+		layout = []
+		for x in range(0, maxX+1):
+			for y in range(0, maxY+1):
+				tile = wall[x][y]
+				layout.append(tile)
+
 		localHostname = self.db.getHostname()
 
 		cr = CR()
@@ -211,45 +269,34 @@ class Command(rocks.commands.start.command):
 		clientnode.AddSPU(SPU('array'))
 		clientnode.AddSPU(tilesortspu)
 		clientnode.Conf('show_cursor', 1)
-		if dmx:
-			tilesortspu.Conf('use_dmx', 1)
-			clientnode.Conf('track_window_size', 1)
-			clientnode.Conf('track_window_position', 1)
+
+		serverPort = random.randint(7000, 7099)
 
 		for tile in layout:
-			host = tile['display'].split(':')[0]
-
-			servernode = CRNetworkNode(host)
+			servernode = CRNetworkNode(tile.name)
 			renderspu  = SPU('render')
-			renderspu.Conf('display_string', tile['display'])
+			renderspu.Conf('display_string', '%s:%s' % 
+				(tile.name, tile.display))
 			renderspu.Conf('show_cursor', 1)
-			if dmx:
-				renderspu.Conf('render_to_app_window', 1)
-				servernode.AddTile(0, 0,
-					tile['width'], tile['height'])
-				servernode.Conf('use_dmx', 1)
-			else:
-				renderspu.Conf('fullscreen', 1)
-				renderspu.Conf('borderless', 1)
-				renderspu.Conf( 'window_geometry', 
-					[0, 0, tile['width'], tile['height']])
-				servernode.AddTile(tile['xorigin'],
-					wallHeight - (tile['yorigin'] + 
-						tile['height']),
-					tile['width'],
-					tile['height'])
+			renderspu.Conf('fullscreen', 1)
+			renderspu.Conf('borderless', 1)
+			renderspu.Conf('window_geometry', 
+				[0, 0, tile.xres, tile.yres])
+			servernode.AddTile(tile.xoffset, tile.yoffset,
+				tile.xres, tile.yres)
 					
 			servernode.AddSPU(renderspu)
 			cr.AddNode(servernode)
 
-			servernode.AutoStart(["/usr/bin/ssh", '-x', host,
+			servernode.AutoStart(["/usr/bin/ssh", '-x', tile.name,
 			 	"bash --login -c "
-				"'env DISPLAY=:0.0 %s -mothership %s:%d'" %
-				(os.path.join(crbindir, 'crserver'),
+				"'env DISPLAY=:%s %s -mothership %s:%d'" %
+				(tile.display,
+				os.path.join(crbindir, 'crserver'),
 				localHostname, mothershipPort)])
 
 			tilesortspu.AddServer(servernode, protocol='tcpip',
-				port=serverPort )
+				port=serverPort + int(float(tile.display) * 10))
 
 		cr.AddNode(clientnode)
 		cr.Go(mothershipPort)

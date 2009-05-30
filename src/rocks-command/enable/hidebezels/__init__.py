@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.7 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.8 2009/05/30 00:02:26 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.8  2009/05/30 00:02:26  mjk
+# *** empty log message ***
+#
 # Revision 1.7  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -93,28 +96,4 @@ class Command(rocks.commands.enable.command):
 	MustBeRoot = 0
 
 	def run(self, params, args):
-
 		os.system('touch ~/.hidebezels')
-		
-		# If the database videowall layout has two (or more) entries
-		# for the same host and card we know we are in twinview
-		# mode.  In this case we need to reconfigure and restart
-		# X11 for this host.
-		
-		self.db.execute("""select n.name, v.cardid 
-			from nodes n, videowall v where v.node=n.id""")
-		dict     = {}
-		for key in self.db.fetchall():
-			if dict.has_key(key):
-				dict[key] = 1	# TwinView host
-			else:
-				dict[key] = 0	# NonTwinView host (so far)
-
-		for (host, card) in dict.keys():
-			if dict[(host, card)]:
-				os.system('ssh -f '
-					'%s /usr/bin/xrandr -d :0 -s 0'
-					% host)
-				os.system('ssh -f '
-					'%s /usr/bin/xrandr -d :0 -s 1'
-					% host)
