@@ -1,6 +1,6 @@
 #!/opt/rocks/bin/python
 #
-# $Id: tile-banner.py,v 1.16 2009/05/09 23:04:07 mjk Exp $
+# $Id: tile-banner.py,v 1.17 2009/05/30 00:12:06 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,9 @@
 # @Copyright@
 #
 # $Log: tile-banner.py,v $
+# Revision 1.17  2009/05/30 00:12:06  mjk
+# remove dmx and fvwm
+#
 # Revision 1.16  2009/05/09 23:04:07  mjk
 # - tile-banner use rand seed to sync the logo on multi-head nodes
 # - Xclients is python, and disables screensaver (again)
@@ -170,11 +173,22 @@ class App(rocks.app.Application):
 		"""Run once a second after processing outstanding GTK
 		events."""
 		
-		if random.randint(0, 100) < 80:
-			self.moveLogo()
+		if os.path.isfile('/opt/viz/etc/nobanner'):
+			if self.visible:
+				os.system('xsetroot -solid "#3f3f3f"')
+				self.visible = 0
+				self.window.hide()
 		else:
-			self.index = (self.index + 1) % 6
-			self.changeColor(random.randint(0,5))
+			if not self.visible:
+				self.visible = 1
+				self.index = random.randint(0,5)
+				self.changeColor(self.index)
+
+			elif random.randint(0, 100) < 80:
+				self.moveLogo()
+			else:
+				self.index = (self.index + 1) % 6
+				self.changeColor(random.randint(0,5))
 
 
 	def moveLogo(self):
@@ -230,6 +244,8 @@ class App(rocks.app.Application):
 		os.system('xsetroot -solid "#%06x"' % rgb)
 
 	def run(self):
+
+		self.visible = 1
 
 		# Seed the random generator with a hash of the hostname
 		# rather than the display name.  This keeps all the

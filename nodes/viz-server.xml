@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.51  2009/05/30 00:12:51  mjk
+	remove dmx and fvwm
+	
 	Revision 1.50  2009/05/07 00:03:02  mjk
 	*** empty log message ***
 	
@@ -226,28 +229,16 @@
 	<package>libidn</package>
 	<package>libidn-devel</package>
 	<package>rocks-command-viz</package>
-<!-- Keep off the roll until docs are correct
 	<package>roll-viz-usersguide</package>
--->
-	<package>viz-dbreport</package>
 	<package>viz-insert-ethers</package>
 	<package>joystick</package>
 	<package>joy2key</package>
 	<package>rollercoaster</package>
-	<package>doomlegacy</package>
 	<package>rocks-movies</package>
 
-	<package>FlightGear</package>
-	<package>fgfs-base</package>
 	<package>openal</package>
 	<package>freealut</package>
 	<package>plib</package>
-	<package>SimGear</package>
-
-	<package>rocks-Xdmx</package>
-
-	<package>libdmx</package>
-	<package>libdmx-devel</package>
 
 	<package>ImageMagick</package>
 	<package>ImageMagick-devel</package>
@@ -257,7 +248,7 @@
 
 
 	<!-- we need these packages to build the roll -->
-	<package arch="i386">cmake</package>
+	<package>cmake</package>
 	<package>glib-devel</package>
 	<package>freeglut-devel</package>
 	<package>libtiff-devel</package>

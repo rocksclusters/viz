@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.39  2009/05/30 00:12:51  mjk
+	remove dmx and fvwm
+	
 	Revision 1.38  2009/05/01 19:07:24  mjk
 	chimi con queso
 	
@@ -198,7 +201,6 @@
 	</changelog>
 
 	<package>rocks-viz</package>
-	<package>fvwm</package>
 	<package>nvidia-driver</package>
 	<package>freeglut</package>
 	<package>chromium</package>

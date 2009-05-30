@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.41 2009/05/12 00:26:54 mjk Exp $
+# $Id: Makefile,v 1.42 2009/05/30 00:12:06 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.42  2009/05/30 00:12:06  mjk
+# remove dmx and fvwm
+#
 # Revision 1.41  2009/05/12 00:26:54  mjk
 # *** empty log message ***
 #
@@ -195,8 +198,6 @@ REDHAT.ROOT = $(PWD)/../../
 include Rules.mk
 
 install::
-	mkdir -p $(ROOT)/etc/skel
-	mkdir -p $(ROOT)/etc/skel/.fvwm
 	mkdir -p $(ROOT)/etc/sysconfig
 	mkdir -p $(ROOT)/$(PKGROOT)/etc/.ssh
 	mkdir -p $(ROOT)/$(PKGROOT)/etc/.gnome2
@@ -206,8 +207,6 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/lib/tilelayout/examples
 	mkdir -p $(ROOT)/etc/ld.so.conf.d
 	echo $(PKGROOT)/lib >> $(ROOT)/etc/ld.so.conf.d/viz.conf
-	install -m744 etc/skel/Xclients		$(ROOT)/etc/skel/.Xclients
-	install -m544 etc/skel/fvwm2rc		$(ROOT)/etc/skel/.fvwm/.fvwm2rc
 	install -m744 viz/etc/Xclients		\
 		$(ROOT)/$(PKGROOT)/etc/.Xclients
 	install -m744 viz/etc/invisible-cursor.xbm	\

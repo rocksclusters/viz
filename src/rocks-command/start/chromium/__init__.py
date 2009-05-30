@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.13 2009/05/30 00:02:26 mjk Exp $
+# $Id: __init__.py,v 1.14 2009/05/30 00:12:06 mjk Exp $
 #
 # This script began life as the autodmx.conf mothersip configuration from 
 # the Chromium source code, and inherits the following copyright.
@@ -62,6 +62,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.14  2009/05/30 00:12:06  mjk
+# remove dmx and fvwm
+#
 # Revision 1.13  2009/05/30 00:02:26  mjk
 # *** empty log message ***
 #
@@ -205,7 +208,6 @@ class Command(rocks.commands.start.command):
 			v.node=n.id""")
 
 		for tokens in self.db.fetchall():
-
 			tile		= rocks.util.Struct()
 			tile.name	= tokens[0]
 			tile.display	= tokens[1]
