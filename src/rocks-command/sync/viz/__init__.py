@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.13 2009/06/03 01:23:23 mjk Exp $
+# $Id: __init__.py,v 1.14 2009/06/03 20:15:31 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.14  2009/06/03 20:15:31  mjk
+# - kill gdm-binary to reset X server
+# - bezel commands are chromium specific
+#
 # Revision 1.13  2009/06/03 01:23:23  mjk
 # - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
 # - Simple (chromium) and Sage modes work
@@ -229,7 +233,7 @@ class Command(rocks.commands.Command):
 					self.syncCGLXMode(host, tiles)
 
 		self.command('run.host',
-			[ 'tile', 'x11=false', 'killall /usr/sbin/gdm-binary' ])
+			[ 'tile', 'x11=false', 'killall gdm-binary' ])
 		self.command('run.host', 
 		 	[ 'tile', 'x11=false',
 				'echo %s > /opt/viz/etc/mode' % mode ])

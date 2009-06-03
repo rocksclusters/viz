@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.8 2009/05/30 00:02:26 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/03 20:15:31 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.1  2009/06/03 20:15:31  mjk
+# - kill gdm-binary to reset X server
+# - bezel commands are chromium specific
+#
 # Revision 1.8  2009/05/30 00:02:26  mjk
 # *** empty log message ***
 #
@@ -82,10 +86,10 @@
 # more swiss changes
 #
 
-import rocks.commands.enable
+import rocks.commands.enable.chromium
 import os
 
-class Command(rocks.commands.enable.command):
+class Command(rocks.commands.enable.chromium.command):
 	"""
 	Enable Bezel Hiding mode.
 	
@@ -93,7 +97,5 @@ class Command(rocks.commands.enable.command):
 	</example>
 	"""
 	
-	MustBeRoot = 0
-
 	def run(self, params, args):
 		os.system('touch ~/.hidebezels')

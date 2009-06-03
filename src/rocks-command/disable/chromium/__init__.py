@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.5 2009/06/03 20:15:31 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.5  2009/06/03 20:15:31  mjk
+# - kill gdm-binary to reset X server
+# - bezel commands are chromium specific
+#
 # Revision 1.4  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -67,10 +71,13 @@
 # *** empty log message ***
 #
 
-import rocks.commands.enable
+import rocks.commands.disable
 import os
 
-class Command(rocks.commands.enable.command):
+class command(rocks.commands.disable.command):
+	MustBeRoot = 0
+
+class Command(command):
 	"""
 	Disable Chromium for all dynamically linked OpenGL applications.
 	
@@ -78,7 +85,6 @@ class Command(rocks.commands.enable.command):
 	</example>
 	"""
 	
-	MustBeRoot = 0
 
 	def run(self, params, args):
 	
