@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.14 2009/05/30 00:12:06 mjk Exp $
+# $Id: __init__.py,v 1.15 2009/06/03 01:23:23 mjk Exp $
 #
 # This script began life as the autodmx.conf mothersip configuration from 
 # the Chromium source code, and inherits the following copyright.
@@ -62,6 +62,16 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.15  2009/06/03 01:23:23  mjk
+# - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
+# - Simple (chromium) and Sage modes work
+# - Requires root to do a "rocks sync viz mode=??" to switch
+# - "rocks enable/disable hidebezels" is chromium specific
+#   The command line needs to change to reflect this fact
+# - Tile-banner tell you the resolution and mode node
+# - Sage works (surprised)
+# - Removed autoselect of video mode on first boot, started to crash nodes
+#
 # Revision 1.14  2009/05/30 00:12:06  mjk
 # remove dmx and fvwm
 #
@@ -153,21 +163,6 @@ class Command(rocks.commands.start.command):
 
 	MustBeRoot = 0
 
-	def getXOffset(self, wall, x, y):
-		offset = wall[x][y].leftborder
-		for i in range(0, x):
-			tile = wall[i][y]
-			offset += tile.xres + tile.leftborder + tile.rightborder
-		return offset
-
-	def getYOffset(self, wall, x, y):
-		offset = wall[x][y].bottomborder
-		for i in range(0, y):
-			tile = wall[x][i]
-			offset += tile.yres + tile.bottomborder + tile.topborder
-		return offset
-
-
 	def run(self, params, args):
 		
 		(args, mothershipPort) = self.fillPositionalArgs(('port',))
@@ -182,83 +177,7 @@ class Command(rocks.commands.start.command):
 		mothershipPort	= int(mothershipPort)
 		mtu		= int(mtu)
 
-		if os.path.isfile(os.path.join(os.environ['HOME'], 
-			'.hidebezels')):
-			hideBezels = True
-		else:
-			hideBezels = False
-
-		self.db.execute('select max(x), max(y) from videowall')
-		maxX, maxY = self.db.fetchone()
-	
-		# Create 2D Array represening the wall
-
-		wall = []
-		for i in range(0, maxX+1):
-			list = []
-			for j in range(0, maxY+1):
-				list.append(None)
-			wall.append(list)
-
-		self.db.execute("""select n.name, 
-			v.display, v.resolution, v.x, v.y,
-			v.leftborder, v.rightborder,
-			v.topborder, v.bottomborder
-			from nodes n, videowall v where
-			v.node=n.id""")
-
-		for tokens in self.db.fetchall():
-			tile		= rocks.util.Struct()
-			tile.name	= tokens[0]
-			tile.display	= tokens[1]
-		        resolution	= tokens[2].split('x')
-			tile.xres	= int(resolution[0])
-			tile.yres	= int(resolution[1])
-			tile.x		= int(tokens[3])
-			tile.y		= int(tokens[4])
-			tile.xoffset	= 0
-			tile.yoffset	= 0
-
-			if hideBezels:
-				tile.leftborder		= int(tokens[5])
-				tile.rightborder	= int(tokens[6])
-				tile.topborder		= int(tokens[7])
-				tile.bottomborder	= int(tokens[8])
-			else:
-				tile.leftborder		= 0
-				tile.rightborder	= 0
-				tile.topborder		= 0
-				tile.bottomborder	= 0
-
-			wall[tile.x][tile.y] = tile
-
-				
-		# Traverse the perimeter of the wall and set the outside 
-		# bezel sizes to zero.  After the above operations this leaves
-		# only the interior bezels in place.
-		
-		for x in wall:
-			x[0].bottomborder = 0	# clear bezels on bottom row
-			x[maxY].topborder = 0	# clear bezels on top row
-
-		for y in range(0, maxY+1):
-			wall[0][y].leftborder = 0	# clear bezels on left
-			wall[maxX][y].leftborder = 0	# clear bezels on right
-			
-
-		# Compute the xoffset and yoffset of each tile
-
-		for x in range(0, maxX+1):
-			for y in range(0, maxY+1):
-				tile = wall[x][y]
-				tile.xoffset = self.getXOffset(wall, x, y)
-				tile.yoffset = self.getYOffset(wall, x, y)
-
-		layout = []
-		for x in range(0, maxX+1):
-			for y in range(0, maxY+1):
-				tile = wall[x][y]
-				layout.append(tile)
+		layout = eval(self.command('report.viz.wall'))
 
 		localHostname = self.db.getHostname()
 
@@ -275,30 +194,32 @@ class Command(rocks.commands.start.command):
 		serverPort = random.randint(7000, 7099)
 
 		for tile in layout:
-			servernode = CRNetworkNode(tile.name)
+			servernode = CRNetworkNode(tile['name'])
 			renderspu  = SPU('render')
 			renderspu.Conf('display_string', '%s:%s' % 
-				(tile.name, tile.display))
+				(tile['name'], tile['display']))
 			renderspu.Conf('show_cursor', 1)
 			renderspu.Conf('fullscreen', 1)
 			renderspu.Conf('borderless', 1)
 			renderspu.Conf('window_geometry', 
-				[0, 0, tile.xres, tile.yres])
-			servernode.AddTile(tile.xoffset, tile.yoffset,
-				tile.xres, tile.yres)
+				[0, 0, tile['xres'], tile['yres']])
+			servernode.AddTile(tile['xoffset'], tile['yoffset'],
+				tile['xres'], tile['yres'])
 					
 			servernode.AddSPU(renderspu)
 			cr.AddNode(servernode)
 
-			servernode.AutoStart(["/usr/bin/ssh", '-x', tile.name,
+			servernode.AutoStart(["/usr/bin/ssh", '-x',
+				tile['name'],
 			 	"bash --login -c "
 				"'env DISPLAY=:%s %s -mothership %s:%d'" %
-				(tile.display,
+				(tile['display'],
 				os.path.join(crbindir, 'crserver'),
 				localHostname, mothershipPort)])
 
 			tilesortspu.AddServer(servernode, protocol='tcpip',
-				port=serverPort + int(float(tile.display) * 10))
+				port=serverPort + 
+					int(float(tile['display']) * 10))
 
 		cr.AddNode(clientnode)
 		cr.Go(mothershipPort)

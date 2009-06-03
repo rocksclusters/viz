@@ -1,6 +1,6 @@
 #!/opt/rocks/bin/python
 #
-# $Id: tile-banner.py,v 1.17 2009/05/30 00:12:06 mjk Exp $
+# $Id: tile-banner.py,v 1.18 2009/06/03 01:23:23 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,16 @@
 # @Copyright@
 #
 # $Log: tile-banner.py,v $
+# Revision 1.18  2009/06/03 01:23:23  mjk
+# - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
+# - Simple (chromium) and Sage modes work
+# - Requires root to do a "rocks sync viz mode=??" to switch
+# - "rocks enable/disable hidebezels" is chromium specific
+#   The command line needs to change to reflect this fact
+# - Tile-banner tell you the resolution and mode node
+# - Sage works (surprised)
+# - Removed autoselect of video mode on first boot, started to crash nodes
+#
 # Revision 1.17  2009/05/30 00:12:06  mjk
 # remove dmx and fvwm
 #
@@ -157,16 +167,22 @@ class App(rocks.app.Application):
 			( 0xff, 0x00, 0xff )	# M
 			]
 		
-		self.label = [ ]
+		self.label = []
+		self.res = []
+		self.mode = []
 		self.box = []
 		
 		for i in range(0, 6):
 			self.label.append(gtk.Label())
+			self.res.append(gtk.Label())
+			self.mode.append(gtk.Label())
 
 		for i in range(0, 6):
 			self.box.append(gtk.VBox())
 			self.box[i].pack_start(logo[(i+3)%6])
 			self.box[i].pack_start(self.label[i])
+			self.box[i].pack_start(self.res[i])
+			self.box[i].pack_start(self.mode[i])
 
 
 	def loop(self):
@@ -239,11 +255,22 @@ class App(rocks.app.Application):
 			gtk.gdk.color_parse('#%06x' % rgb))
 		self.label[index].modify_fg(gtk.STATE_NORMAL, 
 			gtk.gdk.color_parse('#%06x' % notrgb))
+		self.res[index].modify_fg(gtk.STATE_NORMAL, 
+			gtk.gdk.color_parse('#%06x' % notrgb))
+		self.mode[index].modify_fg(gtk.STATE_NORMAL, 
+			gtk.gdk.color_parse('#%06x' % notrgb))
 
 		self.window.show_all()
 		os.system('xsetroot -solid "#%06x"' % rgb)
 
 	def run(self):
+
+		try:
+			fin = open('/opt/viz/etc/mode')
+			mode = fin.readline()
+			fin.close()
+		except:
+			mode = 'init'
 
 		self.visible = 1
 
@@ -260,12 +287,28 @@ class App(rocks.app.Application):
 		self.index = random.randint(0,5)
 		self.changeColor(self.index)
 		
-		display = self.window.get_screen().get_display().get_name()
+		# Trim the domainname of of the display name
+
+		name = self.window.get_screen().get_display().get_name()
+		(hostname, display) = name.split(':')
+		tokens = hostname.split('.')
+		display = '%s:%s' % (tokens[0], display)
+
+		x = self.window.get_screen().get_width()
+		y = self.window.get_screen().get_height()
+		res = '%d x %d' % (x,y)
+
 		
 		for i in range(0, 6):
 			self.label[i].set_markup(
-				'<span weight="bold" face="sans" size="64000">'\
+				'<span weight="bold" size="64000">'\
 				'%s</span>' % display)
+			self.res[i].set_markup(
+				'<span weight="bold" size="32000">'\
+				'%s</span>' % res)
+			self.mode[i].set_markup(
+				'<span weight="bold" size="32000">'\
+				'%s</span>' % mode)
 
 		gobject.timeout_add(10000, callback, self)
 		gtk.main()

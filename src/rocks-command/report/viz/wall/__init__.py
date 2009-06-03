@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2009/06/03 01:23:23 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/03 01:23:23 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,7 +54,7 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
-# Revision 1.4  2009/06/03 01:23:23  mjk
+# Revision 1.1  2009/06/03 01:23:23  mjk
 # - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
 # - Simple (chromium) and Sage modes work
 # - Requires root to do a "rocks sync viz mode=??" to switch
@@ -64,64 +64,121 @@
 # - Sage works (surprised)
 # - Removed autoselect of video mode on first boot, started to crash nodes
 #
-# Revision 1.3  2009/05/01 19:07:31  mjk
-# chimi con queso
-#
-# Revision 1.2  2008/10/18 00:56:21  mjk
-# copyright 5.1
-#
-# Revision 1.1  2008/05/31 02:57:37  mjk
-# - SAGE is back and works (mostly)
-# - DMX building from source (in progress)
-# - Updated nvidia driver
-#
 
-import rocks.commands
+import os
+import sys
+import string
+import rocks.commands.report
 
 class Command(rocks.commands.report.command):
 	"""
-	Reports the configuration for the SAGE Free Space Manager.
-	
-	<example cmd='report sage fsmanger'>
-	</example>
+	Reports the layout of the Viz Wall as a Python list of tiles.
 	"""
 
-    
+	MustBeRoot = 0
+
+	def getXOffset(self, wall, x, y):
+		offset = wall[x][y]['leftborder']
+		for i in range(0, x):
+			t = wall[i][y]
+			offset += t['xres'] + t['leftborder'] + t['rightborder']
+		return offset
+
+	def getYOffset(self, wall, x, y):
+		offset = wall[x][y]['bottomborder']
+		for i in range(0, y):
+			t = wall[x][i]
+			offset += t['yres'] + t['bottomborder'] + t['topborder']
+		return offset
+
+
 	def run(self, params, args):
 		
-		hostname = self.db.getHostAttr('localhost',
-			'Kickstart_PublicHostname')
-		pubAddr  = self.db.getHostAttr('localhost',
-			'Kickstart_PublicAddress')
-		privAddr = self.db.getHostAttr('localhost',
-			'Kickstart_PrivateAddress')
+		if os.path.isfile(os.path.join(os.environ['HOME'], 
+			'.hidebezels')):
+			hideBezels = True
+		else:
+			hideBezels = False
+
+		self.db.execute('select max(x), max(y) from videowall')
+		maxX, maxY = self.db.fetchone()
+	
+		# Create 2D Array represening the wall
+
+		wall = []
+		for i in range(0, maxX+1):
+			list = []
+			for j in range(0, maxY+1):
+				list.append(None)
+			wall.append(list)
+
+		self.db.execute("""select n.name, 
+			v.display, v.resolution, v.x, v.y,
+			v.leftborder, v.rightborder,
+			v.topborder, v.bottomborder
+			from nodes n, videowall v where
+			v.node=n.id""")
+
+		for tokens in self.db.fetchall():
+			tile			= {}
+			tile['name']		= tokens[0]
+			tile['display']		= tokens[1]
+		        resolution		= tokens[2].split('x')
+			tile['xres']		= int(resolution[0])
+			tile['yres']		= int(resolution[1])
+			tile['x']		= int(tokens[3])
+			tile['y']		= int(tokens[4])
+			tile['xoffset']		= 0
+			tile['yoffset']		= 0
+
+			if hideBezels:
+				tile['leftborder']	= int(tokens[5])
+				tile['rightborder']	= int(tokens[6])
+				tile['topborder']	= int(tokens[7])
+				tile['bottomborder']	= int(tokens[8])
+			else:
+				tile['leftborder']	= 0
+				tile['rightborder']	= 0
+				tile['topborder']	= 0
+				tile['bottomborder']	= 0
+
+			wall[tile['x']][tile['y']] = tile
+
+				
+		# Traverse the perimeter of the wall and set the outside 
+		# bezel sizes to zero.  After the above operations this leaves
+		# only the interior bezels in place.
+		
+		for x in wall:
+			x[0]['bottomborder'] = 0 # clear bottom edge
+			x[maxY]['topborder'] = 0 # clear top edge
+
+		for y in range(0, maxY+1):
+			wall[0][y]['leftborder'] = 0	  # clear left side
+			wall[maxX][y]['rightborder'] = 0 # clear right side
+			
+
+		# Compute the xoffset and yoffset of each tile
+
+		for x in range(0, maxX+1):
+			for y in range(0, maxY+1):
+				tile = wall[x][y]
+				tile['xoffset'] = self.getXOffset(wall, x, y)
+				tile['yoffset'] = self.getYOffset(wall, x, y)
 
 
-		self.addText('fsManager   %s %s %s\n' % 
-			(hostname, privAddr, pubAddr))
-		self.addText('systemPort  20002\n')
-		self.addText('uiPort      20001\n')
-		self.addText('trackPort   20003\n')
-		self.addText('conManager 206.220.241.46 15557\n')
-		self.addText('\n')
+		# Flatten the 2x2 matrix to just a list of tiles
 
-		self.addText('tileConfiguration  stdtile.conf\n')
-		self.addText('receiverSyncPort   12000\n')
-		self.addText('receiverStreamPort 22000\n')
-		self.addText('receiverBufSize    100\n')
-		self.addText('fullScreen 1\n')
-		self.addText('winTime    0\n')
-		self.addText('winStep    1\n')
-		self.addText('\n')
+		list = []
+		for col in wall:
+			for tile in col:
+				list.append(tile)
+			
+		self.addText('%s' % list)
 
-		self.addText('audio                 true\n')
-		self.addText('audioConfiguration    audio.conf\n')
-		self.addText('receiverAudioSyncPort 28000\n')
-		self.addText('receiverAudioPort     26000\n')
-		self.addText('syncPort              24000\n')
-		self.addText('\n')
 
-		self.addText('wcvNwBufSize  4M\n')
-		self.addText('sendNwBufSize 4M\n')
-		self.addText('MTU 1400\n')
 
+
+
+			
+		

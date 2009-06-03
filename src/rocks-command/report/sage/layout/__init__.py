@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.5 2009/06/03 01:23:23 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,16 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.5  2009/06/03 01:23:23  mjk
+# - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
+# - Simple (chromium) and Sage modes work
+# - Requires root to do a "rocks sync viz mode=??" to switch
+# - "rocks enable/disable hidebezels" is chromium specific
+#   The command line needs to change to reflect this fact
+# - Tile-banner tell you the resolution and mode node
+# - Sage works (surprised)
+# - Removed autoselect of video mode on first boot, started to crash nodes
+#
 # Revision 1.4  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -85,87 +95,57 @@ class Command(rocks.commands.report.command):
 
 	def run(self, params, args):
 
-		(hidebezels, ) = self.fillParams([('hidebezels', 'y')])
-		hidebezels = self.str2bool(hidebezels)
-		
-		self.db.execute("""select max(hcoord), max(vcoord)
-			from videowall""")
-		hmax, vmax = self.db.fetchone()
-		
-		self.wall = []
-		for i in range(0, vmax+1):
-			list = []
-			for j in range(0, hmax+1):
-				list.append(None)
-			self.wall.append(list)
+		layout = eval(self.command('report.viz.wall'))
 
-		self.db.execute("""select n.name, v.cardid, 
-			v.hcoord, v.vcoord, v.hres, v.vres, 
-			v.lhborder, v.rhborder, v.tvborder, v.bvborder
-			from nodes n, videowall v where 
-			v.node=n.id order by v.vcoord desc, v.hcoord asc""")
-			
-		dict = {}
-		for tokens in self.db.fetchall():
-			tile		= rocks.util.Struct()
-			ppi		= 100
-			tile.name	= tokens[0]
-			tile.card	= int(tokens[1])
-			tile.hcoord	= int(tokens[2])
-			tile.vcoord	= int(tokens[3])
-			tile.hres	= int(tokens[4])
-			tile.vres	= int(tokens[5])
-			tile.lhborder	= float(tokens[6]) / ppi
-			tile.rhborder	= float(tokens[7]) / ppi
-			tile.tvborder	= float(tokens[8]) / ppi
-			tile.bvborder	= float(tokens[9]) / ppi
+		# Sage computes Mullions in inches not pixels
 
+		hosts = {}
+		ppi = 100
+		maxX = 0
+		maxY = 0
+		for tile in layout:
 
-			# If key exists add the secondary tile's resolution to
-			# the known tile's resolution.  Otherwise just 
-			# record that we've seen the tile,card tuple already.
-			
-			key = (tile.name, tile.card)
-			if dict.has_key(key):
-				dict[key].append(tile)
-			else:
-				dict[key] = [ tile ]
-				
+			if tile['name'] not in hosts:
+				hosts[tile['name']] = []
+			hosts[tile['name']].append(tile)
+
+			if tile['x'] > maxX:
+				maxX = tile['x']
+			if tile['y'] > maxY:
+				maxY = tile['y']
+
 		# Use the values from the last tile we saw for the
 		# SAGE global settings.  Future versions of SAGE will
 		# allow these to be display dependent.
 		
 		self.addText('TileDisplay\n')
-		self.addText('\tDimensions %d %d\n' % (hmax+1, vmax+1))
-		if hidebezels:
-			self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
-				     (tile.tvborder, tile.bvborder, 
-				      tile.lhborder, tile.rhborder))
-		else:
-			self.addText('\tMullions 0.001 0.001 0.001 0.001\n')
-		self.addText('\tResolution %d %d\n' % (tile.hres, tile.vres))
+		self.addText('\tDimensions %d %d\n' % (maxX+1, maxY+1))
+		self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
+			(float(tile['topborder'])   / ppi,
+			float(tile['bottomborder']) / ppi, 
+			float(tile['leftborder'])   / ppi,
+			float(tile['rightborder']   / ppi)))
+		self.addText('\tResolution %d %d\n' % 
+			(tile['xres'], tile['yres']))
 		self.addText('\tPPI %d\n' % ppi)
-		self.addText('\tMachines %d\n' % len(dict))
+		self.addText('\tMachines %d\n' % len(hosts))
 		
-		# key = (node-name, card-number)
-		# value = list of tiles for this key (node,card)
-		
-		list = dict.keys()
+		list = hosts.keys()
 		list.sort()
-		for key in list:
+		for host in list:
 			self.addText('\nDisplayNode\n')
-			self.addText('\tName %s\n' % key[0])
+			self.addText('\tName %s\n' % host)
 			
 			self.db.execute("""select net.ip from 
 				nodes n,networks net where
 				n.name="%s" and net.node=n.id and
-				net.device="eth0" """ % key[0])
+				net.device="eth0" """ % host)
 				
 			for ip, in self.db.fetchall():
 				if ip:
 					self.addText('\tIP %s\n' % ip)
-			self.addText('\tMonitors %d ' % len(dict[key]))
-			for tile in dict[key]:
+			self.addText('\tMonitors %d ' % len(hosts[host]))
+			for tile in hosts[host]:
 				self.addText('(%d,%d) ' %
-					(tile.hcoord, vmax - tile.vcoord))
+					(tile['x'], tile['y']))
 			self.addText('\n')

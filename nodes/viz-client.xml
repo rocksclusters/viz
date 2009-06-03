@@ -15,6 +15,16 @@
 
 	<changelog>
 	$Log: viz-client.xml,v $
+	Revision 1.15  2009/06/03 01:23:23  mjk
+	- Now using the idea of modes for the wall (e.g. simple, sage, cglx)
+	- Simple (chromium) and Sage modes work
+	- Requires root to do a "rocks sync viz mode=??" to switch
+	- "rocks enable/disable hidebezels" is chromium specific
+	  The command line needs to change to reflect this fact
+	- Tile-banner tell you the resolution and mode node
+	- Sage works (surprised)
+	- Removed autoselect of video mode on first boot, started to crash nodes
+	
 	Revision 1.14  2009/05/17 13:41:53  mjk
 	checkpoint before zurich
 	
@@ -117,15 +127,6 @@
 	*** empty log message ***
 	
 	</changelog>
-
-<post>
-
-<file name="/etc/sysconfig/rocks-post">
-/opt/viz/sbin/tile-reset
-killall Xorg
-</file>
-
-</post>
 
 
 

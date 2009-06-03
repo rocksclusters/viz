@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.3 2009/05/01 19:07:31 mjk Exp $
+# $Id: __init__.py,v 1.4 2009/06/03 01:23:23 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,16 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.4  2009/06/03 01:23:23  mjk
+# - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
+# - Simple (chromium) and Sage modes work
+# - Requires root to do a "rocks sync viz mode=??" to switch
+# - "rocks enable/disable hidebezels" is chromium specific
+#   The command line needs to change to reflect this fact
+# - Tile-banner tell you the resolution and mode node
+# - Sage works (surprised)
+# - Removed autoselect of video mode on first boot, started to crash nodes
+#
 # Revision 1.3  2009/05/01 19:07:31  mjk
 # chimi con queso
 #
@@ -80,8 +90,8 @@ class Command(rocks.commands.report.command):
     
 	def run(self, params, args):
 		
-		hostname = self.db.getGlobalVar('Kickstart', 'PublicHostname')
-		privAddr = self.db.getGlobalVar('Kickstart', 'PrivateAddress')
+		privAddr = self.db.getHostAttr('localhost',
+			'Kickstart_PrivateAddress')
 
 		self.addText('AudioTileDisplay\n')
 		self.addText('\tDeviceID -1\n')
