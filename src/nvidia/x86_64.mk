@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: x86_64.mk,v 1.20 2009/05/01 19:07:30 mjk Exp $
+# $Id: x86_64.mk,v 1.21 2009/06/05 00:07:50 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: x86_64.mk,v $
+# Revision 1.21  2009/06/05 00:07:50  mjk
+# new drivers
+#
 # Revision 1.20  2009/05/01 19:07:30  mjk
 # chimi con queso
 #
@@ -119,5 +122,5 @@
 #
 
 VERSION		= 180
-NVIDIA_VERSION	= $(VERSION).29-pkg2
+NVIDIA_VERSION	= $(VERSION).60-pkg2
 NVIDIA_ARCH	= $(ARCH)
