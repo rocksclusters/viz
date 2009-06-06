@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2009/06/06 00:55:31 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/06 00:55:31 mjk Exp $
 #
 # @Copyright@
 # 
@@ -51,105 +51,38 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# @Copyright@ 
+# @Copyright@
 #
 # $Log: __init__.py,v $
-# Revision 1.2  2009/06/06 00:55:31  mjk
+# Revision 1.1  2009/06/06 00:55:31  mjk
 # checkpoint
 #
-# Revision 1.1  2009/05/17 13:41:53  mjk
-# checkpoint before zurich
-#
 
-import rocks.util
+import string
 import rocks.commands
 
-class Command(rocks.commands.report.viz.command):
+
+class Command(rocks.commands.set.command):
 	"""
-	Report the layout of the video wall.
-	
-	<example cmd='report viz layout'>
-	</example>
+	Sets the default screen resolution for each tile.
 	"""
 
-	def defaultLayout(self):
-		self.db.execute("""select n.name,n.rack,n.rank from 
-			nodes n, memberships m where 
-			n.membership=m.id and m.name='Tile'
-			order by rack, rank desc""")
-		self.addText('<wall>\n')
-		self.addText('\n')
-		self.addText('\t<defaults resolution="1920x1200"\n')
-		self.addText('\t\tleftborder="100" rightborder="100"\n')
-		self.addText('\t\ttopborder="80" bottomborder="80"/>\n')
-		self.addText('\n')
-		col = -1
-		for host, x, y in self.db.fetchall():
-			if x > col:
-				col = x
-				if col > 0:
-					self.addText('\t</col>\n')
-				self.addText('\t<col>\n')
-			self.addText('\t\t<display>%s:0.0</display>\n' % host)
-		if col >= 0:
-			self.addText('\t</col>\n')
-		self.addText('</wall>\n')
+        def run(self, params, args):
+        	if not len(args):
+        		self.abort('must supply resolution')
 
-
-	def run(self, params, args):
-
-		rows = self.db.execute("""select * from videowall""")
-		if not rows:
-			self.abort('layout does no exist')
-					
-		self.db.execute('select max(x),max(y) from videowall')
-		maxX, maxY =  self.db.fetchone()
+		res = None
+		try:
+			(x, y) = args[0].split('x')
+			if int(x) > 0 and int(y) > 0:
+				res = args[0]
+		except:
+			pass
 		
-		rows = self.db.execute("""select n.name, 
-			v.display, v.resolution, v.x, v.y, 
-			v.leftborder, v.rightborder, v.topborder, v.bottomborder
-			from nodes n, videowall v where
-			n.id=v.node order by v.x, v.y desc""")
-
-		if not rows:
-			self.defaultLayout()
-			return
-
-		self.addText('<wall>\n')
-		prevX = -1
-		for row in self.db.fetchall():
-			hostname	= row[0]
-			display		= row[1]
-			resolution	= row[2]
-			x		= row[3]
-			y		= row[4]
-			border		= rocks.util.Struct()
-			border.l	= row[5]
-			border.r	= row[6]
-			border.t	= row[7]
-			border.b	= row[8]
-			if x != prevX:
-				if x > 0:
-					self.addText('\t</col>\n')
-				self.addText('\t<col>\n')
-
-			attrs  = 'resolution="%s" '  % resolution
-			attrs += 'leftborder="%d" '  % border.l
-			attrs += 'rightborder="%d" ' % border.r
-			attrs += 'topborder="%d" '   % border.t
-			attrs += 'bottomborder="%d"' % border.b
-			self.addText('\t\t<display %s>%s:%s</display>\n' %
-				(attrs, hostname, display))
-			prevX = x	
+		if not res:
+			self.abort('invalid resolution %s' % args[0])
 		
-		if prevX != -1:
-			self.addText('\t</col>\n')
-		self.addText('</wall>\n')
+		self.command('set.attr', [ 'VizTileResolution', res ])
+		self.db.execute('update videowall set resolution="%s"' % res)
 		
-			
 
-
-	
-
-
-	

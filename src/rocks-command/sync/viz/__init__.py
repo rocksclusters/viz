@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.14 2009/06/03 20:15:31 mjk Exp $
+# $Id: __init__.py,v 1.15 2009/06/06 00:55:32 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.15  2009/06/06 00:55:32  mjk
+# checkpoint
+#
 # Revision 1.14  2009/06/03 20:15:31  mjk
 # - kill gdm-binary to reset X server
 # - bezel commands are chromium specific
@@ -116,8 +119,82 @@
 
 
 import os
+import sys
 import string
 import rocks.commands
+import tempfile
+
+class Plugin(rocks.commands.Plugin):
+
+	def getXConfPath(self):
+		return os.path.join(os.sep, 'etc', 'X11', 'xorg.conf')
+
+
+	def sendFileToHost(self, src, host, dst=None):
+		if not os.path.isfile(src):
+			self.addText('warning - file %s does not exist\n' % src)
+			return
+
+		if dst == None:
+			dst = src
+		os.system('scp -q %s %s:%s' % (src, host, dst))
+
+
+	def getFileFromHost(self, host, src, dst=None):
+		if dst == None:
+			dst = src
+		os.system('scp -q %s:%s %s' % (host, src, dst))
+
+
+
+	def getHosts(self):
+		"""Returns a list of host that currently have tiles
+		connected to them."""
+		list = []
+		for tile in self.layout:
+			if tile['name'] not in list:
+				list.append(tile['name'])
+		list.sort()
+		return list
+
+	def sendXConf(self, host, mode):
+		"""Send the host specific xorg.conf file to the host and
+		record the mode we are in."""
+		xconf = '%s-%s-%s' % (self.getXConfPath(), mode, host)
+		self.owner.addText('sync %s (%s)\n' % (host, xconf))
+		self.sendFileToHost(xconf, host, self.getXConfPath())
+		self.owner.command('run.host', [ host, 'x11=false',
+			'echo %s > /opt/viz/etc/mode' % mode ])
+
+
+	def getHostTiles(self, host):
+		"""Return a list of tiles that are connected to the given
+		host sortd by the display number"""
+		dict = {}
+		list = []
+		for tile in self.layout:
+			if tile['name'] == host:
+				dict[tile['display']] = tile
+		displays = dict.keys()
+		displays.sort()
+		for display in displays:
+			list.append(dict[display])
+		return list
+
+	def configureWall(self, owner):
+		"""Calls the configureHost method for all Tile machines
+		define in the viz layout."""
+
+		for host in self.getHosts():
+			self.configureHost(owner, host)
+
+	def run(self, args):
+		self.owner   = args[0]
+		self.layout  = args[1]
+		self.methods = args[2]
+		self.methods[self.provides()] = self
+
+
 
 class Command(rocks.commands.Command):
 	"""
@@ -130,113 +207,29 @@ class Command(rocks.commands.Command):
 	</example>
 	"""
 
-	def syncUserMode(self):
-		"""
-		Manual mode applies to all Tile appliances, not just the
-		Tiles defined in the database.  Look for any 
-		/etc/X11/xorg.conf.HOSTNAME files and use these rather than the
-		computed configuration.  This allows the user to override the 
-		Rocks defaults.
-		"""
-		self.db.execute("""select n.name from nodes n, memberships m 
-			where n.membership=m.id and m.name='Tile'""")
-		for (host, ) in self.db.fetchall():
-			xconf = os.path.join(os.sep, 'etc', 'X11', 
-				'xorg.conf.%s' % host)
-			if os.path.isfile(xconf):
-				self.addText('sync %s (%s)\n' % (host, xconf))
-				os.system('scp %s %s:%s' % (xconf, host,
-					os.path.join(os.sep, 
-					'etc', 'X11', 'xorg.conf')))
-
-	def syncSageMode(self, host, tiles):
-		if len(tiles) == 1:
-			return self.syncSimpleMode(host, tiles)
-
-		displays = []
-		x = []
-		y = []
-		for tile in tiles:
-			displays.append((tile['display'], 
-				tile['xres'], tile['yres']))
-			x.append(tile['x'])
-			y.append(tile['y'])
-		displays.sort()
-
-		if x[0] > x[1]:
-			orientation = 'LeftOf'
-		elif x[0] < x[1]:
-			orientation  = 'RightOf'
-		elif y[0] > y[1]:
-			orientation = 'Above'
-		elif y[0] < y[1]:
-			orientation = 'Below'
-		else:
-			return # error - do not configure the node
-
-		resolutions = ''
-		for e in displays:
-			resolutions += '%dx%d ' % (e[1], e[2])
-		resolutions = resolutions.strip()
-
-		self.addText('sync %s (%s %s)\n' % 
-			(host, orientation, resolutions))
-		self.command('run.host', [ host, 'x11=false',
-			'/opt/viz/sbin/tile-reset -mtwinview -o%s %s' % 
-			(orientation, resolutions) ])
-
-
-	def syncSimpleMode(self, host, tiles):
-		displays = []
-		for tile in tiles:
-			displays.append((tile['display'], 
-				tile['xres'], tile['yres']))
-		displays.sort()
-		resolutions = ''
-		for e in displays:
-			resolutions += '%dx%d ' % (e[1], e[2])
-		resolutions = resolutions.strip()
-		self.addText('sync %s (%s)\n' % (host, resolutions))
-		self.command('run.host', [ host, 'x11=false',
-			'/opt/viz/sbin/tile-reset -mstandard %s' % resolutions
-			])
-
-
 	def run(self, params, args):
 
-		(mode, ) = self.fillParams([('mode', 'simple')])
+		if len(args) > 1:
+			self.abort('requires only one mode')
+		if len(args) == 0:
+			mode = 'simple'
+		else:
+			mode = args[0]
 
-		if mode not in [ 'user', 'simple', 'sage', 'cglx' ]:
+		layout  = eval(self.command('report.viz.wall', []))
+		methods = {}
+		self.runPlugins([self, layout, methods])
+		if mode not in methods:
 			self.abort('invalid mode "%s"' % mode)
 
-		if mode == 'user':
-			self.syncUserMode()
-		else:
-
-			# Build a dictionary of hostnames with the value
-			# a list of tiles attached to the host
-
-			layout = eval(self.command('report.viz.wall', []))
-			hosts = {}
-			for tile in layout:
-				if tile['name'] not in hosts:
-					hosts[tile['name']] = []
-				hosts[tile['name']].append(tile)
-
-			for host in hosts.keys():
-				tiles = hosts[host]
-				if mode == 'simple':
-					self.syncSimpleMode(host, tiles)
-				elif mode == 'sage':
-					self.syncSageMode(host, tiles)
-				elif mode == 'cglx':
-					self.syncCGLXMode(host, tiles)
+		methods[mode].configureWall(self)
 
 		self.command('run.host',
 			[ 'tile', 'x11=false', 'killall gdm-binary' ])
-		self.command('run.host', 
-		 	[ 'tile', 'x11=false',
-				'echo %s > /opt/viz/etc/mode' % mode ])
+
+
+
+
 
 
 

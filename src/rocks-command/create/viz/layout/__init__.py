@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.9 2009/05/29 19:35:41 mjk Exp $
+# $Id: __init__.py,v 1.10 2009/06/06 00:55:31 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.10  2009/06/06 00:55:31  mjk
+# checkpoint
+#
 # Revision 1.9  2009/05/29 19:35:41  mjk
 # *** empty log message ***
 #
@@ -174,7 +177,7 @@ class Command(rocks.commands.create.command):
 				self.abort('cannot open file', filename)
 			xml = string.join(file.readlines())
 		else:
-			self.abort('missing input file')
+			xml = self.command('report.viz.layout', [])
 
 		parser  = make_parser()
 		handler = LayoutHandler()
@@ -183,16 +186,10 @@ class Command(rocks.commands.create.command):
 		displays = handler.getDisplays()
 		(maxY, maxX) = handler.getGeometry()
 		
-		print 'maxX', maxX
-		print 'maxY', maxY
-		for display in displays:
-			print display.hostname, display.display
-		
 		self.db.execute('delete from videowall')
 		for x in range(0, maxX):
 			for y in range(maxY -1, -1, -1):
 				i = (x*maxY)+y
-				print i
 				self.insertDisplay(displays[i], x, maxY-y-1)
 
 
