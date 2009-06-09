@@ -1,4 +1,4 @@
-# $Id: plugin_user.py,v 1.1 2009/06/06 00:56:30 mjk Exp $
+# $Id: plugin_user.py,v 1.1 2009/06/09 23:51:46 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: plugin_user.py,v $
+# Revision 1.1  2009/06/09 23:51:46  mjk
+# *** empty log message ***
+#
 # Revision 1.1  2009/06/06 00:56:30  mjk
 # *** empty log message ***
 #

@@ -1,4 +1,4 @@
-# $Id: plugin_meta.py,v 1.1 2009/06/06 00:56:30 mjk Exp $
+# $Id: plugin_simple.py,v 1.1 2009/06/09 23:51:46 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -53,58 +53,35 @@
 # 
 # @Copyright@
 #
-# $Log: plugin_meta.py,v $
+# $Log: plugin_simple.py,v $
+# Revision 1.1  2009/06/09 23:51:46  mjk
+# *** empty log message ***
+#
 # Revision 1.1  2009/06/06 00:56:30  mjk
 # *** empty log message ***
 #
 
+
 import os
-import string
 import rocks.commands.sync.viz
 
+
 class Plugin(rocks.commands.sync.viz.Plugin):
-	"""
-	Meta Mode Plugin
-
-	Using the viz layout in the database compute the xorg.conf file for
-	all managed Tiles.  For single tile hosts this pluging call the Simple
-	Mode configureHost method.  For multi-tile hosts pairs of GPUs are
-	TwinView configured and then these pairs are Xinerama connect.  It is
-	assumed that the orientation of TwinView and Xinerama are indentical.
-	This means that you can define rows or cols of multi-tile hosts but
-	cannot define a square of tiles on one host.
-
-	Both Sage and CGLX work well in this mode for multi-tile hosts.
-	Chromium does not work in this mode with multi-tile hosts.
-	"""
 
 	def provides(self):
-		return 'meta'
+		return 'simple'
 
 	def configureHost(self, owner, host):
 		tiles = self.getHostTiles(host)
-		if len(tiles) == 1:
-			return self.methods['simple'].configureHost(owner, host)
 
-		if tiles[0]['x'] > tiles[1]['x']:
-			orientation = 'LeftOf'
-		elif tiles[0]['x'] < tiles[1]['x']:
-			orientation = 'RightOf'
-		elif tiles[0]['y'] < tiles[1]['y']:
-			orientation = 'Above'
-		elif tiles[0]['y'] > tiles[1]['y']:
-			orientation = 'Below'
+		flags =  '--force-generate'
+		flags += ' --no-xinerama --separate-x-screens --no-twinview'
+		if len(tiles) > 1:
+			flags += ' -a'
 		else:
-			return # bad config, skip node
+			flags += ' --only-one-x-screen '
 
-		flags  = '--force-generate -a'
-		flags += ' --twinview --twinview-orientation=%s' % orientation
-		if len(tiles) <= 2:
-			flags += ' --no-xinerama'
-		else:
-			flags += ' --xinerama'
-
-		xconf = '%s-meta-%s' % (self.getXConfPath(), host)
+		xconf = '%s-simple-%s' % (self.getXConfPath(), host)
 		os.system('ssh -x %s "/opt/viz/bin/nvidia-xconfig %s"' %
 		      	(host, flags))
 		self.getFileFromHost(host, self.getXConfPath(), xconf)
@@ -113,17 +90,16 @@ class Plugin(rocks.commands.sync.viz.Plugin):
 		fin  = open(xconf, 'r')
 		display = -1
 		for line in fin.readlines():
-			line = line.replace('RightOf', orientation)
 			if line.find('Option         "DPMS"') != -1:
 				line = '\tOption\t"DPMS"\t"False"\n'
 			elif line.find('Section "Screen"') != -1:
 				display += 1
-			elif line.find('Option         "MetaModes"') != -1:
-				line = '\tOption\t"MetaModes" "%sx%s,%sx%s"\n'\
-				    % (tiles[display*2]['xres'], 
-				       tiles[display*2]['yres'],
-				       tiles[display*2+1]['xres'],
-				       tiles[display*2+1]['yres'])
+			elif line.find('SubSection     "Display"') != -1:
+				line += '\tModes\t"%sx%s"\n' % \
+					(tiles[display]['xres'],
+					 tiles[display]['yres'])
+			elif line.find('Section "Device"') != -1:
+				line += '\tOption\t"UseDisplayDevice" "DFP, CRT"\n'
 			list.append(line)
 		fin.close()
 		fout = open(xconf, 'w')
@@ -131,8 +107,4 @@ class Plugin(rocks.commands.sync.viz.Plugin):
 			fout.write(line)
 		fout.close()
 
-		self.sendXConf(host, 'meta')
-
-
-
-
+		self.sendXConf(host, 'simple')

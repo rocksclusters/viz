@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.15 2009/06/06 00:55:32 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/09 23:51:46 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.1  2009/06/09 23:51:46  mjk
+# *** empty log message ***
+#
 # Revision 1.15  2009/06/06 00:55:32  mjk
 # checkpoint
 #
@@ -119,10 +122,14 @@
 
 
 import os
-import sys
 import string
+import rocks.tile
 import rocks.commands
-import tempfile
+
+class command(rocks.tile.TileCommand,
+	rocks.tile.TileArgumentProcessor,
+	rocks.commands.sync.command):
+	pass
 
 class Plugin(rocks.commands.Plugin):
 
@@ -196,7 +203,7 @@ class Plugin(rocks.commands.Plugin):
 
 
 
-class Command(rocks.commands.Command):
+class Command(command):
 	"""
 	Generates a new X11 configuration for each tile node on the frontend
 	and then copies the files to the nodes.  After the copy all tile
@@ -209,24 +216,32 @@ class Command(rocks.commands.Command):
 
 	def run(self, params, args):
 
-		if len(args) > 1:
-			self.abort('requires only one mode')
-		if len(args) == 0:
-			mode = 'simple'
-		else:
-			mode = args[0]
+		(mode, ) = self.fillParams([ ('mode', 'simple') ])
 
-		layout  = eval(self.command('report.viz.wall', []))
+		# Build a list of hostnames that are connected to the
+		# specified tiles, and a list of fully qualified display
+		# names.
+
+		hosts = []
+		tiles = []
+		for (server, display) in self.getTileNames(args):
+			if server not in hosts:
+				hosts.append(server)
+			tiles.append('%s:%s' % (server, display))
+
+		layout  = eval(self.command('report.tile', tiles))
 		methods = {}
+
 		self.runPlugins([self, layout, methods])
 		if mode not in methods:
 			self.abort('invalid mode "%s"' % mode)
 
 		methods[mode].configureWall(self)
 
-		self.command('run.host',
-			[ 'tile', 'x11=false', 'killall gdm-binary' ])
-
+		args = hosts
+		args.append('x11=false')
+		args.append('killall gdm-binary')
+		self.command('run.host', args)
 
 
 
