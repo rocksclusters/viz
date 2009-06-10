@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.12 2009/05/17 13:41:53 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/10 02:12:50 mjk Exp $
 #
 # @Copyright@
 # 
@@ -51,84 +51,27 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# @Copyright@ 
+# @Copyright@
 #
 # $Log: __init__.py,v $
-# Revision 1.12  2009/05/17 13:41:53  mjk
-# checkpoint before zurich
-#
-# Revision 1.11  2009/05/01 19:07:31  mjk
-# chimi con queso
-#
-# Revision 1.10  2008/10/18 00:56:21  mjk
-# copyright 5.1
-#
-# Revision 1.9  2008/03/06 23:42:02  mjk
-# copyright storm on
-#
-# Revision 1.8  2007/10/30 18:28:14  mjk
-# - Fix whitespace error (start chromium)
-# - Remove PPI stuff from the create/list viz layout commands
-#
-# Revision 1.7  2007/10/03 22:19:58  mjk
+# Revision 1.1  2009/06/10 02:12:50  mjk
 # *** empty log message ***
 #
-# Revision 1.6  2007/08/10 23:38:56  mjk
+# Revision 1.1  2009/05/29 19:35:41  mjk
 # *** empty log message ***
-#
-# Revision 1.5  2007/08/05 04:20:50  bruno
-# doc tweak.
-#
-# Revision 1.4  2007/07/24 02:11:36  mjk
-# - sage2 starting to work
-#
-# Revision 1.3  2007/07/06 18:38:10  mjk
-# 4.3 Command Line cleanup
-#
-# Revision 1.2  2007/06/23 04:04:06  mjk
-# mars hill copyright
-#
-# Revision 1.1  2007/05/11 18:35:52  mjk
-# no more lib64
 #
 
-import rocks.util
 import rocks.commands
 
-class Command(rocks.commands.list.command):
+class Command(rocks.commands.disable.tile.command):
 	"""
-	List the layout of the video wall.
+	Enable Viz Wall Banner (screen saver)
 	
-	<example cmd='list viz layout'>
+	<example cmd="enable viz banner">
 	</example>
 	"""
-
+	
 	def run(self, params, args):
-
-		rows = self.db.execute("""select * from videowall""")
-		if not rows:
-			self.abort('layout does no exist')
-					
-		self.db.execute('select max(x),max(y) from videowall')
-		maxX, maxY =  self.db.fetchone()
-		
-		self.db.execute("""select n.name, 
-			v.display, v.resolution, v.x, v.y, 
-			v.leftborder, v.rightborder, v.topborder, v.bottomborder
-			from nodes n, videowall v where
-			n.id=v.node order by v.x, v.y""")
-
-		for row in self.db.fetchall():
-			self.addOutput(row[0], row[1:])
-			
-		self.endOutput(header=['host',
-			'display', 'resolution', 'x', 'y',
-			'leftborder', 'rightborder',
-			'topborder', 'bottomborder'])
-			
-
-
-	
-
-
-	
+		for (server, display) in self.getTileNames(args):
+			self.command('run.host', [ server, 'x11=false',
+				'touch /opt/viz/etc/nobanner-%s' % display ])

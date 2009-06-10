@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/05/17 13:41:53 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/10 02:12:50 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,12 +54,29 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
-# Revision 1.1  2009/05/17 13:41:53  mjk
-# checkpoint before zurich
+# Revision 1.1  2009/06/10 02:12:50  mjk
+# *** empty log message ***
 #
 
+
+import rocks.tile
 import rocks.commands
 
-class command(rocks.commands.report.command):
+class command(rocks.tile.TileCommand,
+	rocks.tile.TileArgumentProcessor,
+	rocks.commands.dump.command):
 	pass
+
+class Command(command):
+	"""
+	Dump the list of tiles
+	"""
+
+	def run(self, params, args):
+
+		self.db.execute("""select t.name, n.name, t.x, t.y from
+			nodes n, tiles t where t.node=n.id""")
+
+		for row in self.db.fetchall():
+			self.dump('add tile %s host=%s x=%s y=%s' % row)
 

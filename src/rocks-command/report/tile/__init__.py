@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/06/10 01:35:19 mjk Exp $
+# $Id: __init__.py,v 1.2 2009/06/10 02:12:50 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.2  2009/06/10 02:12:50  mjk
+# *** empty log message ***
+#
 # Revision 1.1  2009/06/10 01:35:19  mjk
 # *** empty log message ***
 #
@@ -131,8 +134,6 @@ class Command(command):
 			nodes n, tiles t where t.node=n.id""")
 
 		for (host, display, x, y) in self.db.fetchall():
-			if (host, display) not in tiles:
-				continue
 
 			attrs = self.getTileAttrs('%s:%s' % (host, display))
 			tile = {}
@@ -187,7 +188,8 @@ class Command(command):
 		list = []
 		for col in wall:
 			for tile in col:
-				list.append(tile)
+				if (tile['name'], tile['display']) in tiles:
+					list.append(tile)
 			
 		self.addText('%s' % list)
 

@@ -1,5 +1,5 @@
-# $Id: __init__.py,v 1.1 2009/05/29 19:35:41 mjk Exp $
-#
+# $Id: plugin_tile_attr.py,v 1.1 2009/06/10 02:14:12 mjk Exp $
+# 
 # @Copyright@
 # 
 # 				Rocks(r)
@@ -53,24 +53,23 @@
 # 
 # @Copyright@
 #
-# $Log: __init__.py,v $
-# Revision 1.1  2009/05/29 19:35:41  mjk
+# $Log: plugin_tile_attr.py,v $
+# Revision 1.1  2009/06/10 02:14:12  mjk
 # *** empty log message ***
 #
 
-import rocks.commands.enable
-import os
 
-class Command(rocks.commands.enable.command):
-	"""
-	Disable Viz Wall Banner (screen saver)
-	
-	<example cmd="disable viz banner">
-	</example>
-	"""
-	
-	def run(self, params, args):
+import rocks.commands
 
-		self.command('run.host', [ 'tile', 'x11=false',
-			'touch /opt/viz/etc/nobanner' ])
+class Plugin(rocks.commands.Plugin):
 
+	def provides(self):
+		return 'tile-attr'
+
+	def run(self, args):
+		(server, display) = args
+		self.db.execute("""
+			delete from tile_attributes where 
+			tile=(select t.id from nodes n, tiles t where
+			t.node=n.id and n.name='%s' and t.name='%s')
+			""" % (server, display))

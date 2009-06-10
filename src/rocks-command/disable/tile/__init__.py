@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/05/29 19:35:41 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/10 02:12:50 mjk Exp $
 #
 # @Copyright@
 # 
@@ -51,25 +51,20 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# @Copyright@
+# @Copyright@ 
 #
 # $Log: __init__.py,v $
-# Revision 1.1  2009/05/29 19:35:41  mjk
+# Revision 1.1  2009/06/10 02:12:50  mjk
 # *** empty log message ***
 #
 
-import rocks.commands.enable
-import os
 
-class Command(rocks.commands.enable.command):
-	"""
-	Enable Viz Wall Banner (screen saver)
-	
-	<example cmd="enable viz banner">
-	</example>
-	"""
-	
-	def run(self, params, args):
+import rocks.tile
+import rocks.commands
 
-		self.command('run.host', [ 'tile', 'x11=false',
-			'/bin/rm -f /opt/viz/etc/nobanner' ])
+class command(rocks.tile.TileCommand, 
+	rocks.tile.TileArgumentProcessor,
+	rocks.commands.disable.command):
+	pass
+
+	
