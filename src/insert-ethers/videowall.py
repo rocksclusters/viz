@@ -1,4 +1,4 @@
-# $Id: videowall.py,v 1.5 2009/05/01 19:07:29 mjk Exp $
+# $Id: videowall.py,v 1.6 2009/06/10 20:09:07 mjk Exp $
 #
 # insert-ethers plugin module
 # 
@@ -56,6 +56,11 @@
 # @Copyright@
 #
 # $Log: videowall.py,v $
+# Revision 1.6  2009/06/10 20:09:07  mjk
+# - run only for Tile appliances
+# - remove uses the command line
+# - add create a default :0.0 tile for the host
+#
 # Revision 1.5  2009/05/01 19:07:29  mjk
 # chimi con queso
 #
@@ -74,14 +79,24 @@
 #
 
 import os
-import popen2
-import commands
-import time
-import os.path
 import rocks.sql
 
 class Plugin(rocks.sql.InsertEthersPlugin):
 
+	def isTile(self, id):
+		self.app.execute("""select m.name from 
+			nodes n, memberships m where 
+			n.membership=m.id and n.id=%d""" % id)
+		membership, = self.app.fetchone()
+		if membership == 'Tile':
+			return True
+		return False
+
+	def added(self, nodename, id):
+		if self.isTile(id):
+			os.system('rocks add tile %s:0.0' % nodename)
+
 	def removed(self, nodename, id):
-		self.app.execute('delete from videowall where node=%s' % id)
+		if self.isTile(id):
+			os.system('rocks remove tile %s' % nodename)
 
