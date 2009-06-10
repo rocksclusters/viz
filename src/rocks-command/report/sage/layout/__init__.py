@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.5 2009/06/03 01:23:23 mjk Exp $
+# $Id: __init__.py,v 1.6 2009/06/10 02:51:14 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,11 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.6  2009/06/10 02:51:14  mjk
+# - Everything is now tile oriented (no more viz keywords)
+# - Can control everything on a per tile (host, x11server, display) basis
+# - Missing: add host / insert-ethers plugin for default non-twinview layout
+#
 # Revision 1.5  2009/06/03 01:23:23  mjk
 # - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
 # - Simple (chromium) and Sage modes work
@@ -95,7 +100,7 @@ class Command(rocks.commands.report.command):
 
 	def run(self, params, args):
 
-		layout = eval(self.command('report.viz.wall'))
+		layout = eval(self.command('report.tile'))
 
 		# Sage computes Mullions in inches not pixels
 
@@ -103,6 +108,7 @@ class Command(rocks.commands.report.command):
 		ppi = 100
 		maxX = 0
 		maxY = 0
+		tile = None
 		for tile in layout:
 
 			if tile['name'] not in hosts:
@@ -120,13 +126,14 @@ class Command(rocks.commands.report.command):
 		
 		self.addText('TileDisplay\n')
 		self.addText('\tDimensions %d %d\n' % (maxX+1, maxY+1))
-		self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
-			(float(tile['topborder'])   / ppi,
-			float(tile['bottomborder']) / ppi, 
-			float(tile['leftborder'])   / ppi,
-			float(tile['rightborder']   / ppi)))
-		self.addText('\tResolution %d %d\n' % 
-			(tile['xres'], tile['yres']))
+		if tile:
+			self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
+			 	(float(tile['topborder'])   / ppi,
+				float(tile['bottomborder']) / ppi, 
+				float(tile['leftborder'])   / ppi,
+				float(tile['rightborder']   / ppi)))
+			self.addText('\tResolution %d %d\n' % 
+				(tile['xres'], tile['yres']))
 		self.addText('\tPPI %d\n' % ppi)
 		self.addText('\tMachines %d\n' % len(hosts))
 		

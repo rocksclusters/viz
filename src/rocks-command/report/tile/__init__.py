@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2009/06/10 02:12:50 mjk Exp $
+# $Id: __init__.py,v 1.3 2009/06/10 02:51:14 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,11 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.3  2009/06/10 02:51:14  mjk
+# - Everything is now tile oriented (no more viz keywords)
+# - Can control everything on a per tile (host, x11server, display) basis
+# - Missing: add host / insert-ethers plugin for default non-twinview layout
+#
 # Revision 1.2  2009/06/10 02:12:50  mjk
 # *** empty log message ***
 #
@@ -109,6 +114,7 @@ class Command(command):
 
 		tiles = self.getTileNames(args)
 		if not tiles:
+			self.addText('%s' % [])
 			return
 
 		if os.path.isfile(os.path.join(os.environ['HOME'], 
@@ -190,7 +196,7 @@ class Command(command):
 			for tile in col:
 				if (tile['name'], tile['display']) in tiles:
 					list.append(tile)
-			
+
 		self.addText('%s' % list)
 
 
