@@ -1,6 +1,6 @@
 #!/opt/rocks/bin/python
 #
-# $Id: tile-banner.py,v 1.18 2009/06/03 01:23:23 mjk Exp $
+# $Id: tile-banner.py,v 1.19 2009/06/10 02:56:02 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,11 @@
 # @Copyright@
 #
 # $Log: tile-banner.py,v $
+# Revision 1.19  2009/06/10 02:56:02  mjk
+# - can enable/disable tile banner per display
+# - nuke sample xml files
+# - added rocks/tile.py for tile oriented commands
+#
 # Revision 1.18  2009/06/03 01:23:23  mjk
 # - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
 # - Simple (chromium) and Sage modes work
@@ -170,12 +175,14 @@ class App(rocks.app.Application):
 		self.label = []
 		self.res = []
 		self.mode = []
+		self.release = []
 		self.box = []
 		
 		for i in range(0, 6):
 			self.label.append(gtk.Label())
 			self.res.append(gtk.Label())
 			self.mode.append(gtk.Label())
+			self.release.append(gtk.Label())
 
 		for i in range(0, 6):
 			self.box.append(gtk.VBox())
@@ -183,13 +190,14 @@ class App(rocks.app.Application):
 			self.box[i].pack_start(self.label[i])
 			self.box[i].pack_start(self.res[i])
 			self.box[i].pack_start(self.mode[i])
+			self.box[i].pack_start(self.release[i])
 
 
 	def loop(self):
 		"""Run once a second after processing outstanding GTK
 		events."""
 		
-		if os.path.isfile('/opt/viz/etc/nobanner'):
+		if os.path.isfile('/opt/viz/etc/nobanner-%s' % self.display):
 			if self.visible:
 				os.system('xsetroot -solid "#3f3f3f"')
 				self.visible = 0
@@ -259,6 +267,8 @@ class App(rocks.app.Application):
 			gtk.gdk.color_parse('#%06x' % notrgb))
 		self.mode[index].modify_fg(gtk.STATE_NORMAL, 
 			gtk.gdk.color_parse('#%06x' % notrgb))
+		self.release[index].modify_fg(gtk.STATE_NORMAL, 
+			gtk.gdk.color_parse('#%06x' % notrgb))
 
 		self.window.show_all()
 		os.system('xsetroot -solid "#%06x"' % rgb)
@@ -271,6 +281,15 @@ class App(rocks.app.Application):
 			fin.close()
 		except:
 			mode = 'init'
+
+		try:
+			fin = open('/etc/rocks-release')
+			release = fin.readline()
+			fin.close()
+		except:
+			release = 'unknown release'
+		release = release.lower()
+		release = release.replace('rocks release', '').strip()
 
 		self.visible = 1
 
@@ -290,15 +309,14 @@ class App(rocks.app.Application):
 		# Trim the domainname of of the display name
 
 		name = self.window.get_screen().get_display().get_name()
-		(hostname, display) = name.split(':')
+		(hostname, self.display) = name.split(':')
 		tokens = hostname.split('.')
-		display = '%s:%s' % (tokens[0], display)
+		display = '%s:%s' % (tokens[0], self.display)
 
 		x = self.window.get_screen().get_width()
 		y = self.window.get_screen().get_height()
 		res = '%d x %d' % (x,y)
 
-		
 		for i in range(0, 6):
 			self.label[i].set_markup(
 				'<span weight="bold" size="64000">'\
@@ -309,6 +327,9 @@ class App(rocks.app.Application):
 			self.mode[i].set_markup(
 				'<span weight="bold" size="32000">'\
 				'%s</span>' % mode)
+			self.release[i].set_markup(
+				'<span weight="bold" size="16000">'\
+				'%s</span>' % release)
 
 		gobject.timeout_add(10000, callback, self)
 		gtk.main()

@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.42 2009/05/30 00:12:06 mjk Exp $
+# $Id: Makefile,v 1.43 2009/06/10 02:56:02 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,11 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.43  2009/06/10 02:56:02  mjk
+# - can enable/disable tile banner per display
+# - nuke sample xml files
+# - added rocks/tile.py for tile oriented commands
+#
 # Revision 1.42  2009/05/30 00:12:06  mjk
 # remove dmx and fvwm
 #
@@ -204,7 +209,6 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/etc/.fvwm
 	mkdir -p $(ROOT)/$(PKGROOT)/sbin
 	mkdir -p $(ROOT)/$(PKGROOT)/lib/images
-	mkdir -p $(ROOT)/$(PKGROOT)/lib/tilelayout/examples
 	mkdir -p $(ROOT)/etc/ld.so.conf.d
 	echo $(PKGROOT)/lib >> $(ROOT)/etc/ld.so.conf.d/viz.conf
 	install -m744 viz/etc/Xclients		\
@@ -217,7 +221,6 @@ install::
 	install -m755 tile-banner		$(ROOT)/$(PKGROOT)/sbin
 	install -m755 tile-reset		$(ROOT)/$(PKGROOT)/sbin
 	install -m444 rocks-logo-*.png		$(ROOT)/$(PKGROOT)/lib/images
-	install -m644 *.xml	$(ROOT)/$(PKGROOT)/lib/tilelayout/examples
 
 build: $(SCRIPTS)
 
