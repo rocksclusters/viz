@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/05/29 19:35:41 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/10 01:35:19 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,25 +54,38 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
-# Revision 1.1  2009/05/29 19:35:41  mjk
+# Revision 1.1  2009/06/10 01:35:19  mjk
 # *** empty log message ***
 #
 
 import os
 import sys
 import string
+import rocks.tile
 import rocks.commands
-import xml.sax.saxutils
 
-class Command(rocks.commands.dump.command):
+class command(rocks.tile.TileCommand,
+	rocks.tile.TileArgumentProcessor,
+        rocks.commands.remove.command):
+	pass
+
+	
+class Command(command):
 	"""
-	Dump the viz layout
+	Remove a tile from the database. This command will remove all
+	related database rows for each specified host.
+
+	<arg type='string' name='host' repeat='1'>
+	List of hosts to remove from the database.
+	</arg>
+
+	<example cmd='remove host compute-0-0'>
+	Remove the compute-0-0 from the database.
+	</example>
 	"""
 
 	def run(self, params, args):
 
-		layout = self.command('report.viz.layout', [])
-		self.addText('<file name="/root/layout.xml">\n')
-		self.addText(xml.sax.saxutils.escape(layout))
-		self.addText('</file>\n')
-		self.dump('create viz layout /root/layout.xml\n')
+		for (server, display) in self.getTileNames(args):
+			self.runPlugins((server, display))
+

@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.10 2009/06/06 00:55:31 mjk Exp $
+# $Id: __init__.py,v 1.1 2009/06/10 01:35:19 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.1  2009/06/10 01:35:19  mjk
+# *** empty log message ***
+#
 # Revision 1.10  2009/06/06 00:55:31  mjk
 # checkpoint
 #
@@ -134,7 +137,7 @@ from xml.sax import saxutils
 from xml.sax import handler
 from xml.sax import make_parser
 
-class Command(rocks.commands.create.command):
+class Command(rocks.commands.add.tile.command):
 	"""
 	Creates the Tile Layout table in the cluster database.  If an XML
 	file is provided the layout is taken from this file, otherwise a default 
@@ -144,29 +147,18 @@ class Command(rocks.commands.create.command):
 	XML description of the wall.
 	</arg>
 	
-	<example cmd='create viz layout layout.xml'>
+	<example cmd='create tile layout layout.xml'>
 	Creates the layout from the layout.xml file.
 	</example>
+
 	"""
 
 	def insertDisplay(self, display, x, y):
-		self.db.execute("""insert videowall
-			(Node, Display, 
-			Resolution, 
-			X, Y,
-			LeftBorder, RightBorder,
-			TopBorder, BottomBorder) 
-			values ((select id from nodes where name="%s"), '%s',
-			'%s',
-			%d, %d,
-			%d, %d,
-			%d, %d)""" % 
-			(self.db.getHostname(display.hostname), display.display,
-			display.resolution,
-			x, y,
-			display.border.l, display.border.r,
-			display.border.t, display.border.b))
-			
+		self.db.execute("""insert tiles (node, name, x, y) values 
+			((select id from nodes where name="%s"), %s, %d, %d)"""
+			% (self.db.getHostname(display.hostname),
+			   display.display, x, y))
+
 	def run(self, params, args):
 
 		if len(args):
@@ -177,7 +169,7 @@ class Command(rocks.commands.create.command):
 				self.abort('cannot open file', filename)
 			xml = string.join(file.readlines())
 		else:
-			xml = self.command('report.viz.layout', [])
+			self.abort('no input')
 
 		parser  = make_parser()
 		handler = LayoutHandler()
@@ -185,8 +177,10 @@ class Command(rocks.commands.create.command):
 		parser.feed(xml)
 		displays = handler.getDisplays()
 		(maxY, maxX) = handler.getGeometry()
-		
-		self.db.execute('delete from videowall')
+
+		if self.db.execute('select * from tiles') > 0:
+			self.abort('tiles already defined')
+
 		for x in range(0, maxX):
 			for y in range(maxY -1, -1, -1):
 				i = (x*maxY)+y
@@ -202,40 +196,15 @@ class LayoutHandler(handler.ContentHandler,
 
 	def __init__(self):
 		handler.ContentHandler.__init__(self)
-		
-		self.default			= rocks.util.Struct()
-		self.default.border		= rocks.util.Struct()
-		self.default.border.l		= 0
-		self.default.border.r		= 0
-		self.default.border.t		= 0
-		self.default.border.b		= 0
-		self.default.resolution		= '800x600'
-		
-		self.cols			= 0
-		self.rows			= 0
-		
-		self.displays			= []		
+		self.cols	= 0
+		self.rows	= 0
+		self.displays	= []		
 
 	def getGeometry(self):
 		return (self.rows, self.cols)
 		
 	def getDisplays(self):
 		return self.displays
-
-	# <defaults>
-
-	def startElement_defaults(self, name, attrs):
-
-		if attrs.get('leftborder'):
-			self.default.border.l = int(attrs.get('leftborder'))
-		if attrs.get('rightborder'):
-			self.default.border.r = int(attrs.get('rightborder'))
-		if attrs.get('topborder'):
-			self.default.border.t = int(attrs.get('topborder'))
-		if attrs.get('bottomborder'):
-			self.default.border.b = int(attrs.get('bottomborder'))
-		if attrs.get('resolution'):
-			self.default.resolution = attrs.get('resolution')
 
 	# <col>
 	def startElement_col(self, name, attrs):
@@ -246,25 +215,7 @@ class LayoutHandler(handler.ContentHandler,
 	
 	def startElement_display(self, name, attrs):
 		self.rows += 1
-
-		self.current		= rocks.util.Struct()
-		self.current.border	= rocks.util.Struct()
-		self.current.border.l	= self.default.border.l
-		self.current.border.r	= self.default.border.r
-		self.current.border.t	= self.default.border.t
-		self.current.border.b	= self.default.border.b
-		self.current.resolution	= self.default.resolution
-
-		if attrs.get('leftborder'):
-			self.current.border.l = int(attrs.get('leftborder'))
-		if attrs.get('rightborder'):
-			self.current.border.r = int(attrs.get('rightborder'))
-		if attrs.get('topborder'):
-			self.current.border.t = int(attrs.get('topborder'))
-		if attrs.get('bottomborder'):
-			self.current.border.b = int(attrs.get('bottomborder'))
-		if attrs.get('resolution'):
-			self.current.resolution = attrs.get('resolution')
+		self.current = rocks.util.Struct()
 
 
 	def endElement_display(self, name):
