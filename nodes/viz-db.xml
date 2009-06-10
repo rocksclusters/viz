@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-db.xml,v $
+	Revision 1.20  2009/06/10 02:56:22  mjk
+	- new schema
+	
 	Revision 1.19  2009/05/17 13:41:53  mjk
 	checkpoint before zurich
 	
@@ -82,17 +85,21 @@
 -->
 
 <file name="/tmp/viz-tables.sql">
-DROP TABLE IF EXISTS videowall;
-CREATE TABLE videowall (
-	Node		int(11) NOT NULL default '0',
-	Display         varchar(8)  NOT NULL default '0:0',
-	Resolution      varchar(32) NOT NULL default '1920x1200',
-	X	        int(11) NOT NULL default '0',
-	Y	        int(11) NOT NULL default '0',
-	LeftBorder      int(11) NOT NULL default '75',
-	RightBorder     int(11) NOT NULL default '75',
-	TopBorder       int(11) NOT NULL default '75',
-	BottomBorder    int(11) NOT NULL default '75'
+DROP TABLE IF EXISTS tiles;
+CREATE TABLE tiles (
+        ID      int(11) NOT NULL auto_increment,
+	Node	int(11) NOT NULL default '0',
+	Name	varchar(8)  NOT NULL default '0:0',
+	X	int(11) NOT NULL default '0',
+	Y	int(11) NOT NULL default '0',
+        PRIMARY KEY (ID)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS tile_attributes;
+CREATE TABLE tile_attributes (
+	Tile	int(11) NOT NULL default '0',
+	Attr	varchar(128) default NULL,
+	Value	text
 ) TYPE=MyISAM;
 </file>
 

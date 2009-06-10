@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.40  2009/06/10 02:56:22  mjk
+	- new schema
+	
 	Revision 1.39  2009/05/30 00:12:51  mjk
 	remove dmx and fvwm
 	
@@ -284,6 +287,10 @@ if [ -e /dev/dvd ]; then
 	chmod ugo+rx /dev/dvd
 fi
 </file>
+
+<!-- install the nvidia driver before the node boots -->
+
+/opt/viz/bin/nvidia-xconfig
 
 </post>
 
