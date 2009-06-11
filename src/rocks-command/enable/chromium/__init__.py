@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.8 2009/06/03 20:15:31 mjk Exp $
+# $Id: __init__.py,v 1.9 2009/06/11 23:34:02 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.9  2009/06/11 23:34:02  mjk
+# - 32/64 bit chromium
+# - cleaning up the usersguide
+#
 # Revision 1.8  2009/06/03 20:15:31  mjk
 # - kill gdm-binary to reset X server
 # - bezel commands are chromium specific
@@ -98,7 +102,8 @@ class Command(command):
 
 	def run(self, params, args):
 	
-		crlibs = os.path.join(os.environ['HOME'], '.crlibs')
+		crlibs64 = os.path.join(os.environ['HOME'], '.crlibs')
+		crlibs32 = os.path.join(os.environ['HOME'], '.crlibs32')
 		crconfig = os.path.join(os.environ['HOME'], '.crconfigs')
 		
 		if not os.path.exists(crconfig):
@@ -107,6 +112,9 @@ class Command(command):
 				'%p %m\n')
 			file.close()
 
-		if not os.path.exists(crlibs):
-			os.mkdir(crlibs)
-		os.system('lndir /opt/viz/lib/cr %s' % crlibs)
+		if not os.path.exists(crlibs64):
+			os.mkdir(crlibs64)
+		if not os.path.exists(crlibs32):
+			os.mkdir(crlibs32)
+		os.system('lndir /opt/viz/lib/cr %s'   % crlibs64)
+		os.system('lndir /opt/viz/lib32/cr %s' % crlibs32)

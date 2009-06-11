@@ -1,10 +1,14 @@
 <!--
-$Id: installing.sgml,v 1.15 2008/07/21 21:23:28 mjk Exp $
+$Id: installing.sgml,v 1.16 2009/06/11 23:34:02 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.16  2009/06/11 23:34:02  mjk
+- 32/64 bit chromium
+- cleaning up the usersguide
+
 Revision 1.15  2008/07/21 21:23:28  mjk
 docs good
 
@@ -99,7 +103,7 @@ starting new manual
 
 </section>
 
-<section>
+<section
 <title>Configuring the Wall</title>
 
 <section>
@@ -142,158 +146,31 @@ been installed your wall should look like the following.
 	</imageobject>
 </mediaobject></para>
 
-
-<para>
-After all the tile nodes have been installed, you'll need to configure 
-a file that describes your videowall.  If your wall is built for one Tile node
-for each LCD Display follow the instruction in the next section.  Otherwise 
-skip to the subsequent section to configure your wall in TwinView mode.
-</para>
-
 </section>
+
 
 <section>
 
-<title>Configure the Wall (one node per display)</title>
+<title>Multi-Display Support</title>
 
 <para>
-In this step you will create an XML file that describes the physical layout
-of your wall.  The syntax is very simple and the XML itself maps to the 
+The Viz Roll supports the construction of walls with either a single LCD display per machine or multiple displays per machine.  Multiple displays can be grouped together as a single X11 display using TwinView with or without Xinerama, or each display can be an independent X11 display.  The choice of whether to group a host's physical displays together or not is controlled by the <xref linkend="rocks-sync-tile"> command.
+</para>
+
+<para>
+The default configuration for Rocks is a single physical display per machine.  If this is your configuration skip to the next section.  If your wall has
+multiple displays per host you will need to create an XML an XML file that describes the physical layout of your wall.  
+The syntax is very simple and the XML itself maps to the 
 dimensions of the wall.  Each <emphasis>col</emphasis> tag describes a vertical
-column of the wall, with the nodes listed bottom to top.  The very first
+column of the wall, with the nodes listed top to bottom.  The very first
 <emphasis>col</emphasis> section lists the Tile nodes comprising the far left
 side of the wall, and from there the next section moves to the right.
-</para>
-
-<para>
-The <emphasis>defaults</emphasis> tag lists the resolution of each display,
-where the resolutions is assumed to be identical on all machines.  The
-<emphasis>hres</emphasis> and <emphasis>vres</emphasis> attributes describe 
-the horizontal and vertical resolution of the tile nodes' screens and the
-<emphasis>hborder</emphasis>,and <emphasis>vborder</emphasis> are 
-parameters used to hide display mullions, the units are pixels.  
-The values in the below example work well with Dell 2405FPW displays.
-</para>
-	
-<orderedlist>
-
-<listitem>
-	<para>
-	Create an initial tilelayout.xml file:
-	</para>
-
-<screen>
-# rocks list viz layout > /tmp/tilelayout.xml
-</screen>
-
-</listitem>
-
-
-<listitem>
-	<para>
-	Edit /tmp/tilelayout.xml and make sure you supply a 'defaults'
-	section at the top of the file.
-	</para>
-
-<screen>
-&lt;wall&gt;
-	&lt;defaults card="1" hres="1920" vres="1200"
-		hborder="80" vborder="80"/&gt;
-
-	&lt;col&gt;
-		&lt;display host="tile-0-0"/&gt;
-		&lt;display host="tile-0-1"/&gt;
-		&lt;display host="tile-0-2"/&gt;
-		&lt;display host="tile-0-3"/&gt;
-	&lt;/col&gt;
-	&lt;col&gt;
-		&lt;display host="tile-1-0"/&gt;
-		&lt;display host="tile-1-1"/&gt;
-		&lt;display host="tile-1-2"/&gt;
-		&lt;display host="tile-1-3"/&gt;
-	&lt;/col&gt;
-	&lt;col&gt;
-		&lt;display host="tile-2-0"/&gt;
-		&lt;display host="tile-2-1"/&gt;
-		&lt;display host="tile-2-2"/&gt;
-		&lt;display host="tile-2-3"/&gt;
-	&lt;/col&gt;
-	&lt;col&gt;
-		&lt;display host="tile-3-0"/&gt;
-		&lt;display host="tile-3-1"/&gt;
-		&lt;display host="tile-3-2"/&gt;
-		&lt;display host="tile-3-3"/&gt;
-	&lt;/col&gt;
-	&lt;col&gt;
-		&lt;display host="tile-4-0"/&gt;
-		&lt;display host="tile-4-1"/&gt;
-		&lt;display host="tile-4-2"/&gt;
-		&lt;display host="tile-4-3"/&gt;
-	&lt;/col&gt;
-&lt;/wall&gt;
-</screen>
-
-</listitem>
-
-<listitem>
-	<para>
-	After you update your tilelayout XML, now apply it to the database:
-	</para>
-
-	<screen>
-	# rocks create viz layout /tmp/tilelayout.xml
-	</screen>
-</listitem>
-
-<listitem>
-	<para>
-	Finally, reconfigure your tiles:
-	</para>
-
-	<screen>
-	# rocks sync viz
-	</screen>
-
-	<para>
-	This will generate xorg.conf files for each tile node,
-	copy them to the tile nodes, and restart the X11 server.  Once the
-	Tile nodes restart X11 your wall should look like the following 
-	picture.
-	Note that each display is labeled according the connected Tile
-	node.
-	</para>
-	
-	<mediaobject>
-		<imageobject>
-		<imagedata fileref="images/wall-nontwin.png" scale=20>
-		</imageobject>
-		<caption><para>
-		Completed installation for a standard visualization wall.
-		</para></caption>
-	</mediaobject>
-	
-</listitem>
-
-</orderedlist>
-
-</section>
-
-<section>
-
-<title>Configure the Wall (two nodes per display - TwinView)</title>
-
-<para>
-TwinView support is when a single nVidia card can support two displays,
-that is, one tile node drives two displays. This section describes how 
-you configure your viz cluster when your Tile nodes are in TwinView mode.
-For details on the XML syntax please see the above section.  The difference
-in the TwinView configuration is each Tile node is listed in twice in the XML.
 </para>
 
 <warning><para>
 When connecting a single video card to two display you must connect the
 primary video connector to the LCD above (or to the left) of the secondary
-connector.
+connector.  This is a requirement of the SAGE software.
 </para></warning>
 
 <orderedlist>
@@ -306,12 +183,11 @@ connector.
 	</para>
 
 	<para>
-	Here is the relevant portion of /tmp/tilelayout.xml:
+	Here is the relevant portion of tilelayout.xml:
 	</para>
 
 	<screen>
 	&lt;wall&gt;
-		&lt;defaults card="1" hres="1920" vres="1200" hborder="80" vborder="80"/&gt;
 
 		&lt;col&gt;
 			&lt;display host="tile-0-0"/&gt;
@@ -348,7 +224,7 @@ connector.
 	</para>
 
 	<screen>
-	# rocks create viz layout /tmp/tilelayout.xml
+	# rocks add tile layout layout.xml
 	</screen>
 </listitem>
 
@@ -358,7 +234,7 @@ connector.
 	</para>
 
 	<screen>
-	# rocks sync viz
+	# rocks sync viz mode=meta
 	</screen>
 
 	<para>

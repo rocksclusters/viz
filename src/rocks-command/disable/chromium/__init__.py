@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.5 2009/06/03 20:15:31 mjk Exp $
+# $Id: __init__.py,v 1.6 2009/06/11 23:34:02 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.6  2009/06/11 23:34:02  mjk
+# - 32/64 bit chromium
+# - cleaning up the usersguide
+#
 # Revision 1.5  2009/06/03 20:15:31  mjk
 # - kill gdm-binary to reset X server
 # - bezel commands are chromium specific
@@ -88,7 +92,10 @@ class Command(command):
 
 	def run(self, params, args):
 	
-		crlibs = os.path.join(os.environ['HOME'], '.crlibs')
+		crlibs64 = os.path.join(os.environ['HOME'], '.crlibs')
+		crlibs32 = os.path.join(os.environ['HOME'], '.crlibs32')
 		
-		if os.path.exists(crlibs):
-			os.system('rm -rf %s' % crlibs)
+		if os.path.exists(crlibs64):
+			os.system('rm -rf %s' % crlibs64)
+		if os.path.exists(crlibs32):
+			os.system('rm -rf %s' % crlibs32)

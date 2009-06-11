@@ -1,10 +1,14 @@
 <!-- 
-$Id: using.sgml,v 1.6 2008/07/21 21:23:28 mjk Exp $
+$Id: using.sgml,v 1.7 2009/06/11 23:34:02 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.7  2009/06/11 23:34:02  mjk
+- 32/64 bit chromium
+- cleaning up the usersguide
+
 Revision 1.6  2008/07/21 21:23:28  mjk
 docs good
 
@@ -18,11 +22,12 @@ cleanup manual
 <title>Using</title>
 
 <section>
-<title>Controlling Mullions</title>
+<title>ConfigSetting LCD Bezels Height and Width</title>
 
 <para>
 The Viz Roll supports control over hiding of pixels behind LCD mullions 
-(bezels) for DMX, Chromium, and SAGE.  
+(bezels) for both Chromium, and SAGE.
+
 The default is to not hide the bezels.
 In this mode all images rendered on the wall will display all pixels.
 This effect can be distracting for movies and other moving images.  
@@ -36,6 +41,8 @@ used to control this behavior.
 <section>
 <title>Chromium</title>
 
+<subsection>Controlling Bezels</subsection>
+The Viz Rolls supports hiding of pixels behind the LCD mulli
 <para>
 Chromium is used to display OpenGL applications on the wall.  
 It can be used both with and without DMX (next section).  
@@ -47,21 +54,6 @@ Chromium GL libraries.
 Some newer applications may contain code written to a later OpenGL 
 specification than is supported by Chromium, however, most application work
 without any source code changes.
-</para>
-
-</section>
-
-<section>
-<title>DMX</title>
-
-<para>
-DMX is used to create a single X11 desktop (using the FVWM window manager) 
-on the wall.  
-DMX works best on small walls and also supports OpenGL application.  
-For larger walls performance will suffer, and Chromium will need to be 
-enabled to run OpenGL applications at a reasonable speed.  
-DMX can be started using the <computeroutput>rocks start dmx</computeroutput> 
-command.
 </para>
 
 </section>
