@@ -16,14 +16,12 @@ THREADSAFE=0
 
 
 # Set to 1 if you want to force building 32-bit objects on a 64-bit system.
-FORCE_32BIT_ABI=0
+FORCE_32BIT_ABI=1
 
 # Set USE_DMX to 1 if you want to enable DMX support.
 # You'll need the libdmx.a library and dmxext.h header in the usual X
 # directories.  If you don't, set DMX_INCDIR and DMX_LIBDIR here.
-USE_DMX=1
-DMX_INCDIR=/opt/viz/include/X11/extensions/ 
-DMX_LIBDIR=/opt/viz/lib
+USE_DMX=0
 
 # Set USE_REPLICATE to 1 if you want to enable the "replicate" SPU build,
 # which can be used with a specially-constructed VNC viewer to use local

@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.33 2009/05/01 19:07:24 mjk Exp $
+# $Id: Makefile,v 1.34 2009/06/11 22:57:52 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,11 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.34  2009/06/11 22:57:52  mjk
+# - Build chromium 64bit and 32bit libs
+# - Google Earth now runs on a 64bit wall
+# - 32bit Viz Roll is now dead
+#
 # Revision 1.33  2009/05/01 19:07:24  mjk
 # chimi con queso
 #
@@ -172,6 +177,7 @@ refresh: clean
 
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)/bin
+	mkdir -p $(ROOT)/$(PKGROOT)/lib32/cr
 	mkdir -p $(ROOT)/$(PKGROOT)/lib/cr
 	mkdir -p $(ROOT)/$(PKGROOT)/include/cr/state
 	mkdir -p $(ROOT)/$(PKGROOT)/share/cr
@@ -181,12 +187,15 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/share/cr/mothership/tools
 	mkdir -p $(ROOT)/etc/ld.so.conf.d
 	mkdir -p $(ROOT)/etc/profile.d
-	echo $(PKGROOT)/lib > $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
+	echo $(PKGROOT)/lib    > $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
+	echo $(PKGROOT)/lib32 >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
 	$(INSTALL) -m644 chromium.sh  $(ROOT)/etc/profile.d
 	$(INSTALL) -m644 chromium.csh $(ROOT)/etc/profile.d
 	$(INSTALL) cr/bin/Linux/* $(ROOT)/$(PKGROOT)/bin/
 	$(INSTALL) cr/lib/Linux/*.a $(ROOT)/$(PKGROOT)/lib/
 	$(INSTALL) cr/lib/Linux/*.so $(ROOT)/$(PKGROOT)/lib/
+	$(INSTALL) cr/lib32/Linux/*.a $(ROOT)/$(PKGROOT)/lib32/
+	$(INSTALL) cr/lib32/Linux/*.so $(ROOT)/$(PKGROOT)/lib32/
 	$(INSTALL) -m644 cr/include/*.h $(ROOT)/$(PKGROOT)/include/cr/
 	$(INSTALL) -m644 cr/include/state/*.h \
 		$(ROOT)/$(PKGROOT)/include/cr/state/
@@ -209,6 +218,11 @@ build:
 	cd patch-files && find . -type f | grep -v CVS | cpio -pduv ../
 	(							\
 		cd cr;						\
+		cp options-32.mk options.mk;			\
+		make;						\
+		mv lib lib32;					\
+		cp options-64.mk options.mk;			\
+		make clean;					\
 		make;						\
 	)
 
