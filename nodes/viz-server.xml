@@ -15,6 +15,10 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.52  2009/06/11 23:26:56  mjk
+	- 32bit chromium support
+	- QT4 and other google earth prereqs
+	
 	Revision 1.51  2009/05/30 00:12:51  mjk
 	remove dmx and fvwm
 	
@@ -239,6 +243,7 @@
 	<package>openal</package>
 	<package>freealut</package>
 	<package>plib</package>
+	<package>zlib-devel</package>
 
 	<package>ImageMagick</package>
 	<package>ImageMagick-devel</package>
@@ -250,6 +255,7 @@
 	<!-- we need these packages to build the roll -->
 	<package>cmake</package>
 	<package>glib-devel</package>
+	<package>freeglut</package>
 	<package>freeglut-devel</package>
 	<package>libtiff-devel</package>
 	<package>readline-devel</package>
@@ -257,7 +263,12 @@
 	<package>flex</package>
         <package>readline-devel</package>
         <package>libxkbfile-devel</package>
+	<package>mesa-libGLU</package>
+	<package>mesa-libGLU-devel</package>
+	<package>mesa-libGL</package>
+	<package>mesa-libGL-devel</package>
         <package>mesa-source</package>
+	<package>libXi-devel</package>
 
         <!-- subversion needs the following (SAGE needs SVN) -->
 

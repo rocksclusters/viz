@@ -15,6 +15,10 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.41  2009/06/11 23:26:56  mjk
+	- 32bit chromium support
+	- QT4 and other google earth prereqs
+	
 	Revision 1.40  2009/06/10 02:56:22  mjk
 	- new schema
 	
@@ -272,6 +276,10 @@ exec /usr/bin/gdm-binary "$@"
 cd /opt/viz/lib/cr
 ln -s /opt/viz/lib/libcrfaker.so libGL.so 
 ln -s /opt/viz/lib/libcrfaker.so libGL.so.1
+cd /opt/viz/lib32/cr
+ln -s /opt/viz/lib32/libcrfaker.so libGL.so
+ln -s /opt/viz/lib32/libcrfaker.so libGL.so.1
+
 
 <!-- Copy NVIDIA header files over if present -->
 

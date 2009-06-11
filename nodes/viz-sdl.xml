@@ -15,6 +15,10 @@
 
 	<changelog>
 	$Log: viz-sdl.xml,v $
+	Revision 1.14  2009/06/11 23:26:56  mjk
+	- 32bit chromium support
+	- QT4 and other google earth prereqs
+	
 	Revision 1.13  2009/05/01 19:07:24  mjk
 	chimi con queso
 	
@@ -59,6 +63,7 @@
 	<!-- SDL needs stuff we trim off the base CD -->
 	<package>arts</package>
 	<package>qt</package>
+	<package>qt4</package>
 
 	<!-- SDL is now in the foundation -->
 	<package>foundation-sdl</package>
