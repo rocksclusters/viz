@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.53  2009/06/16 22:22:23  mjk
+	added rocks-pylib-viz
+	
 	Revision 1.52  2009/06/11 23:26:56  mjk
 	- 32bit chromium support
 	- QT4 and other google earth prereqs
@@ -228,6 +231,7 @@
 	
 	</changelog>
 
+	<package>rocks-pylib-viz</package>
 	<package>curl</package>
 	<package>curl-devel</package>
 	<package>libidn</package>
