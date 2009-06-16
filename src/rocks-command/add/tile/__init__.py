@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/06/10 01:35:18 mjk Exp $
+# $Id: __init__.py,v 1.2 2009/06/16 22:06:14 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.2  2009/06/16 22:06:14  mjk
+# fix checking for existing tile
+#
 # Revision 1.1  2009/06/10 01:35:18  mjk
 # *** empty log message ***
 #
@@ -137,8 +140,7 @@ class Command(command):
 
 		# Make sure the tile doesn't already exist
 
-		x = self.getTileNames(['%s:%s' % (host, display)])
-		if x:
+		if self.getTileNames(['%s:%s' % (host, display)]):
 			self.abort('tile %s exists' % tile)
 
 		# Lookup the rack and rank of the host and use these values
