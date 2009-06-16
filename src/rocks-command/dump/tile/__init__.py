@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/06/10 02:12:50 mjk Exp $
+# $Id: __init__.py,v 1.2 2009/06/16 21:37:40 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.2  2009/06/16 21:37:40  mjk
+# display needs :
+#
 # Revision 1.1  2009/06/10 02:12:50  mjk
 # *** empty log message ***
 #
@@ -78,5 +81,5 @@ class Command(command):
 			nodes n, tiles t where t.node=n.id""")
 
 		for row in self.db.fetchall():
-			self.dump('add tile %s host=%s x=%s y=%s' % row)
+			self.dump('add tile :%s host=%s x=%s y=%s' % row)
 
