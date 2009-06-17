@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.19 2009/05/01 19:07:30 mjk Exp $
+# $Id: Makefile,v 1.20 2009/06/17 20:17:10 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.20  2009/06/17 20:17:10  mjk
+# *** empty log message ***
+#
 # Revision 1.19  2009/05/01 19:07:30  mjk
 # chimi con queso
 #
@@ -121,7 +124,6 @@ REDHAT.ROOT	= $(PWD)/../../
 include Rules.mk
 
 
-DRIVER = NVIDIA-Linux-$(NVIDIA_ARCH)-$(NVIDIA_VERSION).run
 DRIVER_OPTIONS = --no-network -s
 
 build:
@@ -135,7 +137,8 @@ install:: install-driver
 	mkdir -p $(ROOT)/$(PKGROOT)/bin
 	mkdir -p $(ROOT)/$(PKGROOT)/drivers/nvidia
 	mkdir -p $(ROOT)/etc/rc.d/init.d
-	install $(DRIVER)		$(ROOT)/$(PKGROOT)/drivers/nvidia
+	install $(NVIDIA_DRIVER)	$(ROOT)/$(PKGROOT)/drivers/nvidia.run
+	install $(CUDA_DIRVER)		$(ROOT)/$(PKGROOT)/drivers/cuda.run
 	install install-driver		$(ROOT)/$(PKGROOT)/drivers/nvidia
 	install etc/rc.d/init.d/nvidia	$(ROOT)/etc/rc.d/init.d/
 	(							\
