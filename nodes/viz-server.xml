@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.54  2009/06/17 19:47:11  mjk
+	add default tile appliance attributes
+	
 	Revision 1.53  2009/06/16 22:22:23  mjk
 	added rocks-pylib-viz
 	
@@ -287,10 +290,14 @@
 /opt/rocks/bin/rocks add appliance tile \
 	membership=Tile node=viz-tile
 
-/opt/rocks/bin/rocks set attr HideBezels false
-
 /opt/rocks/bin/rocks set appliance attr tile x11 true
 
+/opt/rocks/bin/rocks set appliance attr tile viz_graphics_driver   cuda
+/opt/rocks/bin/rocks set appliance attr tile viz_tile_resolution   1920x1200
+/opt/rocks/bin/rocks set appliance attr tile viz_tile_left_bezel   100
+/opt/rocks/bin/rocks set appliance attr tile viz_tile_right_bezel  100
+/opt/rocks/bin/rocks set appliance attr tile viz_tile_top_bezel    80
+/opt/rocks/bin/rocks set appliance attr tile viz_tile_bottom_bezel 80
 </post>
 
 </kickstart>
