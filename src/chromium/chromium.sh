@@ -1,5 +1,5 @@
 #
-# $Id: chromium.sh,v 1.7 2009/05/01 19:07:24 mjk Exp $
+# $Id: chromium.sh,v 1.8 2009/06/17 18:33:02 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,9 @@
 #
 #
 # $Log: chromium.sh,v $
+# Revision 1.8  2009/06/17 18:33:02  mjk
+# add 32 support
+#
 # Revision 1.7  2009/05/01 19:07:24  mjk
 # chimi con queso
 #
@@ -70,8 +73,8 @@
 #
 
 if [ ${#LD_LIBRARY_PATH} -ne 0 ] ; then
-	export LD_LIBRARY_PATH=$HOME/.crlibs:$LD_LIBRARY_PATH
+	export LD_LIBRARY_PATH=$HOME/.crlibs:$HOME/.crlibs32:$LD_LIBRARY_PATH
 else
-	export LD_LIBRARY_PATH=$HOME/.crlibs
+	export LD_LIBRARY_PATH=$HOME/.crlibs:$HOME/.crlibs32
 fi
 	

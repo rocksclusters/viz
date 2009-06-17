@@ -1,5 +1,5 @@
 #
-# $Id: chromium.csh,v 1.7 2009/05/01 19:07:24 mjk Exp $
+# $Id: chromium.csh,v 1.8 2009/06/17 18:33:02 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: chromium.csh,v $
+# Revision 1.8  2009/06/17 18:33:02  mjk
+# add 32 support
+#
 # Revision 1.7  2009/05/01 19:07:24  mjk
 # chimi con queso
 #
@@ -69,7 +72,7 @@
 #
 
 if ( ${?LD_LIBRARY_PATH} ) then 
-	setenv LD_LIBRARY_PATH ${HOME}/.crlibs:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${HOME}/.crlibs:${HOME}/.crlibs32:${LD_LIBRARY_PATH}
 else
-	setenv LD_LIBRARY_PATH ${HOME}/.crlibs 
+	setenv LD_LIBRARY_PATH ${HOME}/.crlibs:${HOME}/.crlibs32 
 endif
