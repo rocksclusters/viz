@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.20 2009/06/17 20:17:10 mjk Exp $
+# $Id: Makefile,v 1.21 2009/06/17 21:11:16 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,11 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.21  2009/06/17 21:11:16  mjk
+# - no more 32 bit
+# - install nvidia and cuda driver
+# - attrs used for driver name (user selectable version)
+#
 # Revision 1.20  2009/06/17 20:17:10  mjk
 # *** empty log message ***
 #
@@ -123,9 +128,6 @@ REDHAT.ROOT	= $(PWD)/../../
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 
-
-DRIVER_OPTIONS = --no-network -s
-
 build:
 	tar -xzf nvidia-xconfig-1.0.tar.gz
 	(							\
@@ -133,29 +135,18 @@ build:
 		make;						\
 	)
 
-install:: install-driver
+install:: 
 	mkdir -p $(ROOT)/$(PKGROOT)/bin
-	mkdir -p $(ROOT)/$(PKGROOT)/drivers/nvidia
+	mkdir -p $(ROOT)/$(PKGROOT)/drivers
 	mkdir -p $(ROOT)/etc/rc.d/init.d
 	install $(NVIDIA_DRIVER)	$(ROOT)/$(PKGROOT)/drivers/nvidia.run
-	install $(CUDA_DIRVER)		$(ROOT)/$(PKGROOT)/drivers/cuda.run
-	install install-driver		$(ROOT)/$(PKGROOT)/drivers/nvidia
-	install etc/rc.d/init.d/nvidia	$(ROOT)/etc/rc.d/init.d/
+	install $(CUDA_DRIVER)		$(ROOT)/$(PKGROOT)/drivers/cuda.run
+	install nvidia			$(ROOT)/etc/rc.d/init.d/
 	(							\
 		cd nvidia-xconfig-1.0;				\
 		make prefix=$(ROOT)/$(PKGROOT) install;		\
 	)
 	
 	
-install-driver:
-	echo "#!/bin/bash" > $@
-	echo "if [ -e /usr/src/linux-2.6 ]" >> $@
-	echo "then" >> $@
-	echo "    ln -s /usr/src/linux-2.6 /usr/src/linux" >> $@
-	echo "fi" >> $@
-	echo "$(PKGROOT)/drivers/nvidia/$(DRIVER) $(DRIVER_OPTIONS) > /dev/null" >> $@
-	
-
-
 clean::
-	rm -rf install-driver nvidia-xconfig-1.0
+	rm -rf nvidia-xconfig-1.0

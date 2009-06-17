@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# $Id: nvidia,v 1.16 2009/05/01 19:07:30 mjk Exp $
+# $Id: nvidia,v 1.1 2009/06/17 21:11:16 mjk Exp $
 #
 # chkconfig: 5 01 01
 # description: Install NVIDIA driver
@@ -59,6 +59,11 @@
 # @Copyright@
 #
 # $Log: nvidia,v $
+# Revision 1.1  2009/06/17 21:11:16  mjk
+# - no more 32 bit
+# - install nvidia and cuda driver
+# - attrs used for driver name (user selectable version)
+#
 # Revision 1.16  2009/05/01 19:07:30  mjk
 # chimi con queso
 #
@@ -108,6 +113,10 @@
 # *** empty log message ***
 #
 
+if [ -f /etc/sysconfig/nvidia ]; then
+	. /etc/sysconfig/nvidia
+fi
+
 . /etc/init.d/functions
 
 case "$1" in
@@ -115,7 +124,13 @@ case "$1" in
 	if [ -x /usr/bin/nvidia-xconfig ]; then
 		exit 0
 	fi
-        action $"Loading nVidia Driver" /opt/viz/drivers/nvidia/install-driver
+	if [ -e /usr/src/linux-2.6 ]; then
+        	ln -s /usr/src/linux-2.6 /usr/src/linux
+	fi
+        $DRIVER $DRIVER_OPTIONS
+	if [ -d /usr/share/doc/NVIDIA_GLX-1.0/include/GL ]; then
+        	cp /usr/share/doc/NVIDIA_GLX-1.0/include/GL/*.h /usr/include/GL/
+	fi
         RETVAL=$?
         ;;
     stop)
