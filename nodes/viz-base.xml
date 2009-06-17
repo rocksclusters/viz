@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.42  2009/06/17 21:09:50  mjk
+	attr controlled driver version
+	
 	Revision 1.41  2009/06/11 23:26:56  mjk
 	- 32bit chromium support
 	- QT4 and other google earth prereqs
@@ -246,6 +249,19 @@
 
 <post>
 
+<!--
+Attributes are used to select the driver name (and version)
+
+viz_nvidia_driver - pathname to nVidia .run script
+viz_nvidia_driver_options - flags passed to .run script
+-->
+
+<file name="/etc/sysconfig/nvidia">
+DRIVER=&viz_nvidia_driver;
+DRIVER_OPTIONS="&viz_nvidia_driver_options;"
+</file>
+
+
 <!-- Create the viz account on each node (avoid 411) -->
 /usr/sbin/useradd -M -u402 -c "Viz X11 Owner" -d /opt/viz/etc viz
 
@@ -279,14 +295,6 @@ ln -s /opt/viz/lib/libcrfaker.so libGL.so.1
 cd /opt/viz/lib32/cr
 ln -s /opt/viz/lib32/libcrfaker.so libGL.so
 ln -s /opt/viz/lib32/libcrfaker.so libGL.so.1
-
-
-<!-- Copy NVIDIA header files over if present -->
-
-if [ -d /usr/share/doc/NVIDIA_GLX-1.0/include/GL ]
-then
-        cp /usr/share/doc/NVIDIA_GLX-1.0/include/GL/*.h /usr/include/GL/
-fi
 
 
 <!-- make dvd device readable so that users can play dvds -->
