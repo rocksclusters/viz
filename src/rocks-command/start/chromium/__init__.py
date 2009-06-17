@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.15 2009/06/03 01:23:23 mjk Exp $
+# $Id: __init__.py,v 1.16 2009/06/17 18:07:04 mjk Exp $
 #
 # This script began life as the autodmx.conf mothersip configuration from 
 # the Chromium source code, and inherits the following copyright.
@@ -62,6 +62,10 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.16  2009/06/17 18:07:04  mjk
+# - viz commands gone
+# - tile commands now
+#
 # Revision 1.15  2009/06/03 01:23:23  mjk
 # - Now using the idea of modes for the wall (e.g. simple, sage, cglx)
 # - Simple (chromium) and Sage modes work
@@ -177,7 +181,7 @@ class Command(rocks.commands.start.command):
 		mothershipPort	= int(mothershipPort)
 		mtu		= int(mtu)
 
-		layout = eval(self.command('report.viz.wall'))
+		layout = eval(self.command('report.tile'))
 
 		localHostname = self.db.getHostname()
 

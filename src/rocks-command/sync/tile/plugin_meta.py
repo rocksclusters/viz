@@ -1,4 +1,4 @@
-# $Id: plugin_meta.py,v 1.1 2009/06/09 23:51:46 mjk Exp $
+# $Id: plugin_meta.py,v 1.2 2009/06/17 18:07:04 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: plugin_meta.py,v $
+# Revision 1.2  2009/06/17 18:07:04  mjk
+# - viz commands gone
+# - tile commands now
+#
 # Revision 1.1  2009/06/09 23:51:46  mjk
 # *** empty log message ***
 #
@@ -63,9 +67,9 @@
 
 import os
 import string
-import rocks.commands.sync.viz
+import rocks.commands.sync.tile
 
-class Plugin(rocks.commands.sync.viz.Plugin):
+class Plugin(rocks.commands.sync.tile.Plugin):
 	"""
 	Meta Mode Plugin
 
