@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.43  2009/06/18 18:51:33  mjk
+	default mode is 1024x768
+	
 	Revision 1.42  2009/06/17 21:09:50  mjk
 	attr controlled driver version
 	
@@ -304,9 +307,9 @@ if [ -e /dev/dvd ]; then
 fi
 </file>
 
-<!-- install the nvidia driver before the node boots -->
+<!-- set a default xorg.conf -->
 
-/opt/viz/bin/nvidia-xconfig
+/opt/viz/bin/nvidia-xconfig --mode 1024x768
 
 </post>
 
