@@ -1,4 +1,4 @@
-# $Id: plugin_tile.py,v 1.1 2009/06/10 02:51:14 mjk Exp $
+# $Id: plugin_tile.py,v 1.2 2009/06/18 20:03:35 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: plugin_tile.py,v $
+# Revision 1.2  2009/06/18 20:03:35  mjk
+# fix namespace
+#
 # Revision 1.1  2009/06/10 02:51:14  mjk
 # - Everything is now tile oriented (no more viz keywords)
 # - Can control everything on a per tile (host, x11server, display) basis
@@ -71,7 +74,7 @@ class Plugin(rocks.commands.Plugin):
 		self.owner.db.execute("""select n.name, t.name from
 			nodes n, tiles t where t.node=n.id and n.name='%s'""" %
 			host)
-		for (server, display) in self.fetchall():
+		for (server, display) in self.owner.db.fetchall():
 			tile = '%s:%s' % (server, display)
-			self.owner.command('remove.tile', tile)
+			self.owner.command('remove.tile', [ tile ] )
 
