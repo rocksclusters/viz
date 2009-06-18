@@ -20,6 +20,9 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.28  2009/06/18 20:32:27  mjk
+	fix cuda cond
+	
 	Revision 1.27  2009/06/18 18:08:03  mjk
 	- setup nvidia driver on frontend
 	- fix roll deps in usersguide
@@ -117,7 +120,8 @@
 		<tail>viz-server</tail>
 	</order>
 
-	<edge from="base" to="viz-cuda" cond="viz_cuda"/>
+	<edge from="client"     to="viz-cuda" cond="cuda"/>
+	<edge from="viz-server" to="viz-cuda"/>
 
 	<edge from="server" to="viz-server"/>
 
