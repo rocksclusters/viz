@@ -14,6 +14,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.45  2009/06/18 22:24:24  mjk
+	set 1024x768 for frontend only
+	
 	Revision 1.44  2009/06/18 20:05:48  mjk
 	*** empty log message ***
 	
@@ -311,7 +314,7 @@ fi
 
 <!-- set a default xorg.conf -->
 
-/opt/viz/bin/nvidia-xconfig --mode 1024x768
+/opt/viz/bin/nvidia-xconfig 
 
 </post>
 

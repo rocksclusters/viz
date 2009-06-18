@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.59  2009/06/18 22:24:24  mjk
+	set 1024x768 for frontend only
+	
 	Revision 1.58  2009/06/18 20:30:24  mjk
 	use nvidia (not beta cuda) driver
 	
@@ -317,6 +320,8 @@
 DRIVER=/opt/viz/drivers/nvidia.run
 DRIVER_OPTIONS="--no-network -s"
 </file>
+
+/opt/viz/bin/nvidia-xconfig --mode 1024x768
 
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_resolution   1920x1200
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_left_bezel   100
