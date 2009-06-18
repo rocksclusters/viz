@@ -15,6 +15,10 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.57  2009/06/18 18:08:04  mjk
+	- setup nvidia driver on frontend
+	- fix roll deps in usersguide
+	
 	Revision 1.56  2009/06/18 17:38:08  mjk
 	no docs until finished
 	
@@ -306,11 +310,18 @@
 /opt/rocks/bin/rocks set appliance attr tile \
 	viz_nvidia_driver_options "--no-network -s"
 
+<file name="/etc/sysconfig/nvidia">
+DRIVER=/opt/viz/drivers/cuda.run
+DRIVER_OPTIONS="--no-network -s"
+</file>
+
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_resolution   1920x1200
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_left_bezel   100
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_right_bezel  100
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_top_bezel    80
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_bottom_bezel 80
+
+
 </post>
 
 </kickstart>

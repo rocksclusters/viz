@@ -20,6 +20,10 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.27  2009/06/18 18:08:03  mjk
+	- setup nvidia driver on frontend
+	- fix roll deps in usersguide
+	
 	Revision 1.26  2009/06/18 15:57:28  mjk
 	- added cuda (not just for tiles)
 	
@@ -107,6 +111,10 @@
 
 	<order head="database-data">
 		<tail>viz-db</tail>
+	</order>
+
+	<order head="viz-base">
+		<tail>viz-server</tail>
 	</order>
 
 	<edge from="base" to="viz-cuda" cond="viz_cuda"/>
