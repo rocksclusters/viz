@@ -2,7 +2,6 @@
 
 <kickstart interface="public">
 
-
 	<description>
 	Visualization Cluster support
 	</description>
@@ -15,6 +14,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.44  2009/06/18 20:05:48  mjk
+	*** empty log message ***
+	
 	Revision 1.43  2009/06/18 18:51:33  mjk
 	default mode is 1024x768
 	
