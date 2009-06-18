@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.58  2009/06/18 20:30:24  mjk
+	use nvidia (not beta cuda) driver
+	
 	Revision 1.57  2009/06/18 18:08:04  mjk
 	- setup nvidia driver on frontend
 	- fix roll deps in usersguide
@@ -306,12 +309,12 @@
 /opt/rocks/bin/rocks set appliance attr tile cuda true
 
 /opt/rocks/bin/rocks set appliance attr tile \
-	viz_nvidia_driver /opt/viz/drivers/cuda.run
+	viz_nvidia_driver /opt/viz/drivers/nvidia.run
 /opt/rocks/bin/rocks set appliance attr tile \
 	viz_nvidia_driver_options "--no-network -s"
 
 <file name="/etc/sysconfig/nvidia">
-DRIVER=/opt/viz/drivers/cuda.run
+DRIVER=/opt/viz/drivers/nvidia.run
 DRIVER_OPTIONS="--no-network -s"
 </file>
 
