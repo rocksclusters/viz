@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.56  2009/06/18 17:38:08  mjk
+	no docs until finished
+	
 	Revision 1.55  2009/06/18 15:57:28  mjk
 	- added cuda (not just for tiles)
 	
@@ -243,7 +246,9 @@
 	<package>libidn</package>
 	<package>libidn-devel</package>
 	<package>rocks-command-viz</package>
+<!--
 	<package>roll-viz-usersguide</package>
+-->
 	<package>viz-insert-ethers</package>
 	<package>joystick</package>
 	<package>joy2key</package>
