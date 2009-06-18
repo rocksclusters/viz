@@ -20,6 +20,9 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.26  2009/06/18 15:57:28  mjk
+	- added cuda (not just for tiles)
+	
 	Revision 1.25  2009/05/01 19:07:24  mjk
 	chimi con queso
 	
@@ -105,6 +108,8 @@
 	<order head="database-data">
 		<tail>viz-db</tail>
 	</order>
+
+	<edge from="base" to="viz-cuda" cond="viz_cuda"/>
 
 	<edge from="server" to="viz-server"/>
 

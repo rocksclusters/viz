@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.55  2009/06/18 15:57:28  mjk
+	- added cuda (not just for tiles)
+	
 	Revision 1.54  2009/06/17 19:47:11  mjk
 	add default tile appliance attributes
 	
@@ -291,8 +294,13 @@
 	membership=Tile node=viz-tile
 
 /opt/rocks/bin/rocks set appliance attr tile x11 true
+/opt/rocks/bin/rocks set appliance attr tile cuda true
 
-/opt/rocks/bin/rocks set appliance attr tile viz_graphics_driver   cuda
+/opt/rocks/bin/rocks set appliance attr tile \
+	viz_nvidia_driver /opt/viz/drivers/cuda.run
+/opt/rocks/bin/rocks set appliance attr tile \
+	viz_nvidia_driver_options "--no-network -s"
+
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_resolution   1920x1200
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_left_bezel   100
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_right_bezel  100
