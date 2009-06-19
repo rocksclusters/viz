@@ -1,10 +1,13 @@
 <!--
-$Id: installing.sgml,v 1.16 2009/06/11 23:34:02 mjk Exp $
+$Id: installing.sgml,v 1.17 2009/06/19 23:39:33 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.17  2009/06/19 23:39:33  mjk
+*** empty log message ***
+
 Revision 1.16  2009/06/11 23:34:02  mjk
 - 32/64 bit chromium
 - cleaning up the usersguide
@@ -154,7 +157,7 @@ been installed your wall should look like the following.
 <title>Multi-Display Support</title>
 
 <para>
-The Viz Roll supports the construction of walls with either a single LCD display per machine or multiple displays per machine.  Multiple displays can be grouped together as a single X11 display using TwinView with or without Xinerama, or each display can be an independent X11 display.  The choice of whether to group a host's physical displays together or not is controlled by the <xref linkend="rocks-sync-tile"> command.
+The Viz Roll supports the construction of walls with either a single LCD display per machine or multiple displays per machine.  Multiple displays can be grouped together as a single X11 display using TwinView with or without Xinerama, or each display can be an independent X11 display.  The choice of whether to group a host's physical displays together or not is controlled by the <computeroutput>rocks sync tile</computeroutput> command.
 </para>
 
 <para>

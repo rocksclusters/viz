@@ -1,10 +1,13 @@
 <!-- 
-$Id: using.sgml,v 1.7 2009/06/11 23:34:02 mjk Exp $
+$Id: using.sgml,v 1.8 2009/06/19 23:39:33 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.8  2009/06/19 23:39:33  mjk
+*** empty log message ***
+
 Revision 1.7  2009/06/11 23:34:02  mjk
 - 32/64 bit chromium
 - cleaning up the usersguide
@@ -24,37 +27,56 @@ cleanup manual
 <section>
 <title>ConfigSetting LCD Bezels Height and Width</title>
 
-<para>
-The Viz Roll supports control over hiding of pixels behind LCD mullions 
-(bezels) for both Chromium, and SAGE.
 
-The default is to not hide the bezels.
-In this mode all images rendered on the wall will display all pixels.
-This effect can be distracting for movies and other moving images.  
-The <computeroutput>rocks enable hidebezels</computeroutput> and
-<computeroutput>rocks disable hidebezels</computeroutput> commands can be 
-used to control this behavior.
+<section>
+<title>Chromium</title>
+
+<para>
+Chromium is used to display the OpenGL frame of applications on the wall.  Applications must be dynamically linked to the libGL.so library and can be either 64-bit or 32-bit binaries.  Although the Viz Roll does include a 32-bit version of Chromium other application libraries may be missing. 
+Some newer applications may contain code written to a later OpenGL 
+specification than is supported by Chromium, however, most application work
+without any source code changes.  
+</para>
+  
+<section>
+<title>Enabling and Disabling</title>
+
+<para>
+Enabling and disabling Chromium is done on per use basis and is not a global setting for all users.  In the default disabled state all OpenGL applications started on the frontend of the cluster will display normally in the frotend's X11 display.  If Chromium is enable the application will draw the non-OpenGL components (and window frame) on the frontend display and the OpenGL frame will be rendered across all the tiles in the wall.  Chromium is enabled and disabled using the following commands:
+</para>
+
+<para>
+<computeroutput>rocks enable chromium</computeroutput>
+</para>
+
+<para>
+<computeroutput>rocks disable chromium</computeroutput>
+</para>
+</section>
+
+
+<section>
+<title>Controlling Bezels</title>
+
+<para> 
+The Viz Roll supports control over hiding of pixels behind LCD mullions 
+(bezels) while using Chromium.  The default is to not hide the bezels. 
+In this mode all images rendered on the wall will display all pixels. 
+This effect can be distracting for movies and other moving images.   
+The <computeroutput>rocks enable chromium hidebezels</computeroutput> and
+<computeroutput>rocks disable chromium hidebezels</computeroutput> commands can be used to control this behavior.
 </para>
 
 </section>
 
 <section>
-<title>Chromium</title>
+<title>Application Notes</title>
 
-<subsection>Controlling Bezels</subsection>
-The Viz Rolls supports hiding of pixels behind the LCD mulli
+<section><title>Google Earth</title>
 <para>
-Chromium is used to display OpenGL applications on the wall.  
-It can be used both with and without DMX (next section).  
-Chromium support is controlled by the 
-<computeroutput>rocks enable chromium</computeroutput> and 
-<computeroutput>rocks disable chromium</computeroutput> commands.  
-Once enabled all dynamically linked OpenGL application will use the 
-Chromium GL libraries.  
-Some newer applications may contain code written to a later OpenGL 
-specification than is supported by Chromium, however, most application work
-without any source code changes.
+Google Earth is a 32-bit application and may require extra 32-bit libraries installed on the frontend of the cluster (not the tile nodes).  Recent version of Google Earth work well under Chromium with the "atmosphere" effects turned off.  If the compas does not appear resize the application window on the frontend to set the correct aspect ratio to allow the drawing of the compas.
 </para>
+</section>
 
 </section>
 
@@ -62,18 +84,31 @@ without any source code changes.
 <title>SAGE</title>
 
 <para>
-SAGE can be started and stopped using the 
-<computeroutput>rocks start sage</computeroutput> and 
-<computeroutput>rocks stop sage</computeroutput> commands.  
-The Rocks integration of SAGE differs from the standard EVL practices of
-deploying SAGE in two ways.  
-First, starting SAGE will create a per-user copy of /opt/sage in ~/.sage and 
-all configuration files will be  generated into this user directory.  
-Second, the <computeroutput>rocks stop sage</computeroutput> command is used 
-by the GUI to kill all SAGE processes, this new kill behavior can 
-take several seconds to track done orphaned SAGE processes.
+SAGE requires every user to have a complete personal copy of the SAGE binaries and libraries, and does not allow the sharing of the application in a common directory.  Where a user first starts SAGE a local copy of the SAGE distribution is made in ~/.sage.  All configuration files refered to in the EVL SAGE documentation are in this user specific ~/.sage directory.
+</para> 
+
+
+<section>
+<title>Starting and Stopping</title>
+
+<para>
+SAGE can be started and stopped using the following command.  However the SAGE UI shutdown button is the preferred way to exit SAGE.
 </para>
 
+<para>
+<computeroutput>rocks start sage</computeroutput>
+Starting SAGE will create the ~/.sage directory if one does not exists and will generate all the SAGE configuration files based on the tile layout stored in the Rocks database.
+</para>
+
+<para>
+<computeroutput>rocks stop sage</computeroutput>
+Stopping SAGE can be a slow process.  The Viz Roll changes the normal SAGE shutdown process to track down all orphaned SAGE processes on the cluster.  While the is not fool-proof it does improve issues of orphaned SAGE applications prevented SAGE from starting.
+</para>
+
+</section>
+
+</section>
+</section>
 </section>
 
 
