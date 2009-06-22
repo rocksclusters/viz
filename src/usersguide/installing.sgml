@@ -1,10 +1,13 @@
 <!--
-$Id: installing.sgml,v 1.17 2009/06/19 23:39:33 mjk Exp $
+$Id: installing.sgml,v 1.18 2009/06/22 18:44:32 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.18  2009/06/22 18:44:32  mjk
+checkpoint
+
 Revision 1.17  2009/06/19 23:39:33  mjk
 *** empty log message ***
 
@@ -185,37 +188,33 @@ connector.  This is a requirement of the SAGE software.
 	non-twinview section above.
 	</para>
 
-	<para>
-	Here is the relevant portion of tilelayout.xml:
-	</para>
-
 	<screen>
 	&lt;wall&gt;
 
 		&lt;col&gt;
-			&lt;display host="tile-0-0"/&gt;
-			&lt;display host="tile-0-1"/&gt;
-			&lt;display host="tile-0-2"/&gt;
+			&lt;display host="tile-0-0:0.0"/&gt;
+			&lt;display host="tile-0-1:0.0"/&gt;
+			&lt;display host="tile-0-2:0.0"/&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-0-0"/&gt;
-			&lt;display host="tile-0-1"/&gt;
-			&lt;display host="tile-0-2"/&gt;
+			&lt;display host="tile-0-0:0.1"/&gt;
+			&lt;display host="tile-0-1:0.1"/&gt;
+			&lt;display host="tile-0-2:0.1"/&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-1-0"/&gt;
-			&lt;display host="tile-1-1"/&gt;
-			&lt;display host="tile-1-2"/&gt;
+			&lt;display host="tile-1-0:0.0"/&gt;
+			&lt;display host="tile-1-1:0.0"/&gt;
+			&lt;display host="tile-1-2:0.0"/&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-1-0"/&gt;
-			&lt;display host="tile-1-1"/&gt;
-			&lt;display host="tile-1-2"/&gt;
+			&lt;display host="tile-1-0:0.1"/&gt;
+			&lt;display host="tile-1-1:0.1"/&gt;
+			&lt;display host="tile-1-2:0.1"/&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-2-0"/&gt;
-			&lt;display host="tile-2-1"/&gt;
-			&lt;display host="tile-2-2"/&gt;
+			&lt;display host="tile-2-0:0.0"/&gt;
+			&lt;display host="tile-2-1:0.0"/&gt;
+			&lt;display host="tile-2-2:0.0"/&gt;
 		&lt;/col&gt;
 	&lt;/wall&gt;
 	</screen>
@@ -237,7 +236,7 @@ connector.  This is a requirement of the SAGE software.
 	</para>
 
 	<screen>
-	# rocks sync viz mode=meta
+	# rocks sync tile mode=meta
 	</screen>
 
 	<para>

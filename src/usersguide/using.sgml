@@ -1,10 +1,13 @@
 <!-- 
-$Id: using.sgml,v 1.8 2009/06/19 23:39:33 mjk Exp $
+$Id: using.sgml,v 1.9 2009/06/22 18:44:32 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.9  2009/06/22 18:44:32  mjk
+checkpoint
+
 Revision 1.8  2009/06/19 23:39:33  mjk
 *** empty log message ***
 
@@ -25,8 +28,109 @@ cleanup manual
 <title>Using</title>
 
 <section>
-<title>ConfigSetting LCD Bezels Height and Width</title>
+<title>Attributes</title>
 
+<section>
+<title>Resolution</title>
+
+<para>
+After the layout is configured and the <computeroutput>rocks sync tile</computeroutput> command is run the resolution of each tile display defaults to the preferred probed value from the nVidia driver.  
+Probing the display requires a DVI connection and may fail on a VGA connect display.  
+If the probed value is not correct you can modify the resolution using the <computeroutput>viz_tile_resolution</computeroutput> attribute.
+For example to set the resolution of all the tile to 1920x1200 use the command <computeroutput>rocks set appliance attr tile viz_tile_resolution 1920x1200</computeroutput>, followup by a <computeroutput>rocks sync tile</computeroutput> command.
+</para>
+
+</section>
+
+<section>
+<title>Bezels Height and Width</title>
+
+<para>
+The Viz Roll supports the hiding of pixels behind LCD mullions (bezels).
+Without bezel hiding all images rendered on the wall will display all pixels, 
+This effect can be distracting for movies and other moving images, but is
+beneficial for static images and text.
+Bezel hiding is performed at the visualization middle-ware layer.
+Because this is controlled at the middle-ware layer Chromium and SAGE behave slightly differently, with Chromium allowing the enabling and disabling of bezel hiding, and SAGE only supporting bezel hiding.
+Despite these differences the following common set of attributes are used to set the bezel height and width.
+</para>
+
+<variablelist>
+	<varlistentry>
+     	<term>viz_tile_left_bezel</term>
+		<listitem>
+			<para>The size (in pixels) of the left-hand side LCD bezel.</para>
+		</listitem>
+     </varlistentry>
+	<varlistentry>
+     	<term>viz_tile_right_bezel</term>
+		<listitem>
+			<para>The size (in pixels) of the right-hand side LCD bezel.</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+     	<term>viz_tile_top_bezel</term>
+		<listitem>
+			<para>The size (in pixels) of the top LCD bezel.</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+     	<term>viz_tile_bottom_bezel</term>
+		<listitem>
+			<para>The size (in pixels) of the bottom LCD bezel.</para>
+		</listitem>
+	</varlistentry>
+</variablelist>
+
+<para>
+The Viz Roll default for the the left and right side bezels is 100 pixels, and the default for the top and bottom bezels is 80 pixel.  These defaults are a reasonable starting point, but fine tuning will be required for your specific monitors.  Since the units of the bezels measurements are in pixels, of you change the resolution of the displays you will need to update the bezels settings as well.
+</para>
+
+<para>
+You can use the <computeroutput>rocks set appliance attr</computeroutput> command to set the bezel attributes.  For example, to change the left side bezel to 200 pixels use the command <computeroutput>rocks set appliance attr tile viz_tile_left_bezel 200</computeroutput>.  If you have non-uniform displays you can also set the bezel sizes on a host basis, although not all middle-ware understands non-uniform tiled display walls.  For example, to change the right side bezel of tile-0-0:0.0 to 0 pixels use the command <computeroutput>rocks set host attr tile-0-0:0.0 viz_tile_right_bezel 0</computeroutput>.
+</para>
+
+</section>
+
+<section>
+<title>Video Driver</title>
+
+<para>
+The Viz Roll includes the latest (at time of release) production nVidia driver and the latest (at time of release) beta-version of the CUDA-enabled driver.  The CUDA driver is a superset of the standard driver and simply adds CUDA support to the existing OpenGL rendering support.
+Standard nVidia drivers are released as <computeroutput>.run</computeroutput> files and the Viz Roll installs these onto the tile nodes runs the driver file on first boot to build and install the driver.
+The following attributes control the selection of the driver:
+</para>
+
+<variablelist>
+	<varlistentry>
+      	<term>viz_nvidia_driver</term>
+		<listitem>
+			<para>
+Full pathname to the <computeroutput>.run</computeroutput> driver file.
+The Viz Roll installs the production driver at <computeroutput>/opt/viz/drivers/nvidia.run</computeroutput>, and the beta-CUDA driver at <computeroutput>/opt/viz/drivers/nvidia.run</computeroutput>.
+			</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+      	<term>viz_nvidia_driver_options</term>
+		<listitem>
+			<para>
+Command line flags used when executing the <computeroutput>.run</computeroutput> driver file.
+The defaults are <computeroutput>--no-network -s</computeroutput>.
+These setting work for both drivers included with the Viz Roll and should not
+but modified.
+			</para>
+		</listitem>
+	</varlistentry>
+</variablelist>
+
+<para>
+To change to the CUDA driver for all tile use the command <computeroutput>rocks set appliance attr viz_nvidia_driver /opt/viz/drivers/cuda.run</computeroutput> and re-install the all the tile machines.  You can also issue this command before integrating any machine to avoid a second installation.
+</para>
+
+</section>
+
+</section>
 
 <section>
 <title>Chromium</title>
@@ -59,10 +163,7 @@ Enabling and disabling Chromium is done on per use basis and is not a global set
 <title>Controlling Bezels</title>
 
 <para> 
-The Viz Roll supports control over hiding of pixels behind LCD mullions 
-(bezels) while using Chromium.  The default is to not hide the bezels. 
-In this mode all images rendered on the wall will display all pixels. 
-This effect can be distracting for movies and other moving images.   
+The default for Chromium is to not hide the bezels. 
 The <computeroutput>rocks enable chromium hidebezels</computeroutput> and
 <computeroutput>rocks disable chromium hidebezels</computeroutput> commands can be used to control this behavior.
 </para>
@@ -107,7 +208,6 @@ Stopping SAGE can be a slow process.  The Viz Roll changes the normal SAGE shutd
 
 </section>
 
-</section>
 </section>
 </section>
 
