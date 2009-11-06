@@ -1,4 +1,4 @@
-# $Id: plugin_user.py,v 1.2 2009/06/17 18:07:04 mjk Exp $
+# $Id: plugin_user.py,v 1.3 2009/11/06 16:14:04 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: plugin_user.py,v $
+# Revision 1.3  2009/11/06 16:14:04  mjk
+# fix mode=user
+#
 # Revision 1.2  2009/06/17 18:07:04  mjk
 # - viz commands gone
 # - tile commands now
@@ -88,6 +91,7 @@ class Plugin(rocks.commands.sync.tile.Plugin):
 		return 'user'
 
 	def configureHost(self, owner, host):
+		src = '%s-user-%s' % (self.getXConfPath(), host)
 		if os.path.isfile(src):
 			self.sendXConf(host, 'user')
 		else:
