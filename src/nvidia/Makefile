@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.21 2009/06/17 21:11:16 mjk Exp $
+# $Id: Makefile,v 1.22 2009/11/13 20:19:36 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.22  2009/11/13 20:19:36  mjk
+# new drivers
+#
 # Revision 1.21  2009/06/17 21:11:16  mjk
 # - no more 32 bit
 # - install nvidia and cuda driver
@@ -140,7 +143,6 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/drivers
 	mkdir -p $(ROOT)/etc/rc.d/init.d
 	install $(NVIDIA_DRIVER)	$(ROOT)/$(PKGROOT)/drivers/nvidia.run
-	install $(CUDA_DRIVER)		$(ROOT)/$(PKGROOT)/drivers/cuda.run
 	install nvidia			$(ROOT)/etc/rc.d/init.d/
 	(							\
 		cd nvidia-xconfig-1.0;				\
