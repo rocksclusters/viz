@@ -2,7 +2,7 @@
 #
 # This file should remain OS independent
 #
-# $Id: bootstrap.sh,v 1.18 2009/05/01 19:07:24 mjk Exp $
+# $Id: bootstrap.sh,v 1.19 2009/12/03 17:38:00 bruno Exp $
 #
 # @Copyright@
 # 
@@ -58,6 +58,9 @@
 # @Copyright@
 #
 # $Log: bootstrap.sh,v $
+# Revision 1.19  2009/12/03 17:38:00  bruno
+# typo
+#
 # Revision 1.18  2009/05/01 19:07:24  mjk
 # chimi con queso
 #
@@ -131,7 +134,7 @@ install glut-devel
 install joy2key
 install joystick
 
-compute_and_install cmake
+compile_and_install cmake
 
 compile_and_install foundation-sdl
 compile_and_install foundation-sdl-image
