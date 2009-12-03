@@ -2,7 +2,7 @@
 #
 # This file should remain OS independent
 #
-# $Id: bootstrap.sh,v 1.19 2009/12/03 17:38:00 bruno Exp $
+# $Id: bootstrap.sh,v 1.20 2009/12/03 19:14:37 bruno Exp $
 #
 # @Copyright@
 # 
@@ -58,6 +58,9 @@
 # @Copyright@
 #
 # $Log: bootstrap.sh,v $
+# Revision 1.20  2009/12/03 19:14:37  bruno
+# another typo (thanks manson!).
+#
 # Revision 1.19  2009/12/03 17:38:00  bruno
 # typo
 #
@@ -157,7 +160,7 @@ compile_and_install ffmpeg
 compile_and_install mpeg2dec
 compile_and_install wx
 compile_and_install portaudio
-compile_add_install glew
+compile_and_install glew
 
 compile quanta
 install QUANTA
