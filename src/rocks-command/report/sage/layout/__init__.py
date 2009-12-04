@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.6 2009/06/10 02:51:14 mjk Exp $
+# $Id: __init__.py,v 1.7 2009/12/04 20:47:36 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.7  2009/12/04 20:47:36  mjk
+# *** empty log message ***
+#
 # Revision 1.6  2009/06/10 02:51:14  mjk
 # - Everything is now tile oriented (no more viz keywords)
 # - Can control everything on a per tile (host, x11server, display) basis
@@ -108,6 +111,11 @@ class Command(rocks.commands.report.command):
 		ppi = 100
 		maxX = 0
 		maxY = 0
+		maxTopBorder    = 0
+		maxBottomBorder = 0
+		maxLeftBorder   = 0
+		maxRightBorder  = 0
+		
 		tile = None
 		for tile in layout:
 
@@ -119,19 +127,29 @@ class Command(rocks.commands.report.command):
 				maxX = tile['x']
 			if tile['y'] > maxY:
 				maxY = tile['y']
+			if tile['topborder'] > maxTopBorder:
+				maxTopBorder = tile['topborder']
+			if tile['bottomborder'] > maxBottomBorder:
+				maxBottomBorder = tile['bottomborder']
+			if tile['leftborder'] > maxLeftBorder:
+				maxLeftBorder = tile['leftborder']
+			if tile['rightborder'] > maxRightBorder:
+				maxRightBorder = tile['rightborder']
+				
 
-		# Use the values from the last tile we saw for the
-		# SAGE global settings.  Future versions of SAGE will
-		# allow these to be display dependent.
+		# SAGE assumes the LCD are indentical, so we use the
+		# max mullion sizes as the global setting.  We need to
+		# find the maximum since the borders of the wall are
+		# set to 0 sized mullions.
 		
 		self.addText('TileDisplay\n')
 		self.addText('\tDimensions %d %d\n' % (maxX+1, maxY+1))
 		if tile:
 			self.addText('\tMullions %.3f %.3f %.3f %.3f\n' %
-			 	(float(tile['topborder'])   / ppi,
-				float(tile['bottomborder']) / ppi, 
-				float(tile['leftborder'])   / ppi,
-				float(tile['rightborder']   / ppi)))
+			 	(float(maxTopBorder)   / ppi,
+				float(maxBottomBorder) / ppi, 
+				float(maxLeftBorder)   / ppi,
+				float(maxRightBorder)  / ppi))
 			self.addText('\tResolution %d %d\n' % 
 				(tile['xres'], tile['yres']))
 		self.addText('\tPPI %d\n' % ppi)
