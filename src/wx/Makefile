@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.21 2009/05/01 19:07:32 mjk Exp $
+# $Id: Makefile,v 1.22 2009/12/08 01:56:25 bruno Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.22  2009/12/08 01:56:25  bruno
+# set the library path for foundation libraries in the base roll.
+#
 # Revision 1.21  2009/05/01 19:07:32  mjk
 # chimi con queso
 #
@@ -135,12 +138,6 @@ build:
 
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)
-	mkdir -p $(ROOT)/etc/ld.so.conf.d
-	echo /lib           >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo /lib64         >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo /usr/lib       >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo /usr/lib64     >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
-	echo $(PKGROOT)/lib >> $(ROOT)/etc/ld.so.conf.d/$(NAME)-$(ARCH).conf
 	(							\
 		cd wxPython-src-$(VERSION)/bld;			\
 		make prefix=$(ROOT)/$(PKGROOT) install;		\
