@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.63  2009/12/14 21:41:56  bruno
+	comment caused an XML error
+	
 	Revision 1.62  2009/12/08 18:57:21  mjk
 	do not config dispay on frontend
 	
@@ -327,12 +330,6 @@
 DRIVER=/opt/viz/drivers/nvidia.run
 DRIVER_OPTIONS="--no-network -s"
 </file>
-
-<!--
-/opt/viz/bin/nvidia-xconfig --force-generate \
-	--no-xinerama --separate-x-screens --no-twinview --only-one-x-screen \
-	--mode 1024x768
--->
 
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_resolution   1920x1200
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_left_bezel   100
