@@ -1,4 +1,4 @@
-# $Id: plugin_meta.py,v 1.2 2009/06/17 18:07:04 mjk Exp $
+# $Id: plugin_meta.py,v 1.3 2010/02/23 18:37:59 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: plugin_meta.py,v $
+# Revision 1.3  2010/02/23 18:37:59  mjk
+# DPMS back in (cglx needs this)
+#
 # Revision 1.2  2009/06/17 18:07:04  mjk
 # - viz commands gone
 # - tile commands now
@@ -121,9 +124,7 @@ class Plugin(rocks.commands.sync.tile.Plugin):
 		display = -1
 		for line in fin.readlines():
 			line = line.replace('RightOf', orientation)
-			if line.find('Option         "DPMS"') != -1:
-				line = '\tOption\t"DPMS"\t"False"\n'
-			elif line.find('Section "Screen"') != -1:
+			if line.find('Section "Screen"') != -1:
 				display += 1
 			elif line.find('Option         "MetaModes"') != -1:
 				line = '\tOption\t"MetaModes" "%sx%s,%sx%s"\n'\

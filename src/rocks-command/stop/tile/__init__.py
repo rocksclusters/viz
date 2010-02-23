@@ -1,5 +1,5 @@
-# $Id: plugin_simple.py,v 1.3 2010/02/23 18:37:59 mjk Exp $
-# 
+# $Id: __init__.py,v 1.1 2010/02/23 18:37:59 mjk Exp $
+#
 # @Copyright@
 # 
 # 				Rocks(r)
@@ -51,65 +51,42 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# @Copyright@
+# @Copyright@ 
 #
-# $Log: plugin_simple.py,v $
-# Revision 1.3  2010/02/23 18:37:59  mjk
+# $Log: __init__.py,v $
+# Revision 1.1  2010/02/23 18:37:59  mjk
 # DPMS back in (cglx needs this)
 #
-# Revision 1.2  2009/06/17 18:07:04  mjk
-# - viz commands gone
-# - tile commands now
-#
-# Revision 1.1  2009/06/09 23:51:46  mjk
-# *** empty log message ***
-#
-# Revision 1.1  2009/06/06 00:56:30  mjk
-# *** empty log message ***
-#
+
+import rocks.tile
+import rocks.commands
+
+class command(rocks.tile.TileCommand, 
+	rocks.tile.TileArgumentProcessor,
+	rocks.commands.start.command):
+	pass
+
+class Command(command):
+	"""
+	Turn off tiles using power management.
+	
+	<example cmd='stop tile'>
+	</example>
+	"""
+
+	def run(self, params, args):
+
+		for (name, display) in self.getTileNames(args):
+			self.db.execute("""select n.name, t.name, t.x, t.y from
+				nodes n, tiles t where
+				n.id=t.node and n.name='%s' and t.name='%s'
+				order by t.x, t.y""" % (name, display))
+
+			print row[0], row[1:]
+			
 
 
-import os
-import rocks.commands.sync.tile
+	
 
 
-class Plugin(rocks.commands.sync.tile.Plugin):
-
-	def provides(self):
-		return 'simple'
-
-	def configureHost(self, owner, host):
-		tiles = self.getHostTiles(host)
-
-		flags =  '--force-generate'
-		flags += ' --no-xinerama --separate-x-screens --no-twinview'
-		if len(tiles) > 1:
-			flags += ' -a'
-		else:
-			flags += ' --only-one-x-screen '
-
-		xconf = '%s-simple-%s' % (self.getXConfPath(), host)
-		os.system('ssh -x %s "/opt/viz/bin/nvidia-xconfig %s"' %
-		      	(host, flags))
-		self.getFileFromHost(host, self.getXConfPath(), xconf)
-
-		list = []
-		fin  = open(xconf, 'r')
-		display = -1
-		for line in fin.readlines():
-			if line.find('Section "Screen"') != -1:
-				display += 1
-			elif line.find('SubSection     "Display"') != -1:
-				line += '\tModes\t"%sx%s"\n' % \
-					(tiles[display]['xres'],
-					 tiles[display]['yres'])
-			elif line.find('Section "Device"') != -1:
-				line += '\tOption\t"UseDisplayDevice" "DFP, CRT"\n'
-			list.append(line)
-		fin.close()
-		fout = open(xconf, 'w')
-		for line in list:
-			fout.write(line)
-		fout.close()
-
-		self.sendXConf(host, 'simple')
+	
