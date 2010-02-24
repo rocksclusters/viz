@@ -1,4 +1,4 @@
-# $Id: plugin_simple.py,v 1.3 2010/02/23 18:37:59 mjk Exp $
+# $Id: plugin_simple.py,v 1.4 2010/02/24 00:49:11 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,18 @@
 # @Copyright@
 #
 # $Log: plugin_simple.py,v $
+# Revision 1.4  2010/02/24 00:49:11  mjk
+# - nvidia driver auto updates, but still works fine if the cluster is
+#   not on the network.  Each node polls/pulls from nvidia.com the latest
+#   driver.  User can disable and control the driver manually.
+#   No more Roll updates to refresh the nvidia driver
+# - X11 modules controlled by viz_x11_modules attribute
+# - DPMS added back in
+# - rocks start|stop tile to turn wall on|off
+# - usersguide fixes (still needs work)
+# - add nvidia driver version to tile-banner
+# - bump version to 5.3.1
+#
 # Revision 1.3  2010/02/23 18:37:59  mjk
 # DPMS back in (cglx needs this)
 #
@@ -96,8 +108,21 @@ class Plugin(rocks.commands.sync.tile.Plugin):
 		list = []
 		fin  = open(xconf, 'r')
 		display = -1
+
+		attr = self.owner.db.getHostAttr(host, 'viz_x11_modules')
+		modules = ''
+		if attr:
+			for e in attr.split():
+				modules += '    Load           "%s"\n' % e
+
 		for line in fin.readlines():
-			if line.find('Section "Screen"') != -1:
+			if line.find('Section "Module"') != -1:
+				list.append(line)
+				list.append(modules)
+				continue
+			elif line.find('    Load') != -1 and modules:
+				continue
+			elif line.find('Section "Screen"') != -1:
 				display += 1
 			elif line.find('SubSection     "Display"') != -1:
 				line += '\tModes\t"%sx%s"\n' % \

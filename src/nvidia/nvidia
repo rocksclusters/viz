@@ -1,8 +1,8 @@
 #! /bin/sh
 #
-# $Id: nvidia,v 1.1 2009/06/17 21:11:16 mjk Exp $
+# $Id: nvidia,v 1.2 2010/02/24 00:49:11 mjk Exp $
 #
-# chkconfig: 5 01 01
+# chkconfig: 5 11 11
 # description: Install NVIDIA driver
 #
 # @Copyright@
@@ -59,6 +59,18 @@
 # @Copyright@
 #
 # $Log: nvidia,v $
+# Revision 1.2  2010/02/24 00:49:11  mjk
+# - nvidia driver auto updates, but still works fine if the cluster is
+#   not on the network.  Each node polls/pulls from nvidia.com the latest
+#   driver.  User can disable and control the driver manually.
+#   No more Roll updates to refresh the nvidia driver
+# - X11 modules controlled by viz_x11_modules attribute
+# - DPMS added back in
+# - rocks start|stop tile to turn wall on|off
+# - usersguide fixes (still needs work)
+# - add nvidia driver version to tile-banner
+# - bump version to 5.3.1
+#
 # Revision 1.1  2009/06/17 21:11:16  mjk
 # - no more 32 bit
 # - install nvidia and cuda driver
@@ -113,24 +125,29 @@
 # *** empty log message ***
 #
 
-if [ -f /etc/sysconfig/nvidia ]; then
-	. /etc/sysconfig/nvidia
-fi
-
 . /etc/init.d/functions
 
 case "$1" in
     start)
-	if [ -x /usr/bin/nvidia-xconfig ]; then
-		exit 0
+        if [ -e /usr/src/linux-2.6 ]; then
+		if [ ! -e /usr/src/linux ]; then
+                	ln -s /usr/src/linux-2.6 /usr/src/linux
+		fi
+        fi
+	# Install driver from the Roll
+        if [ -x /opt/viz/drivers/nvidia.run ]; then
+                /opt/viz/drivers/nvidia.run --no-network -s
+                /bin/rm /opt/viz/drivers/nvidia.run
+        fi
+	# Try to update the driver over the network
+	# If we cannot contact nvidia this silently fails and
+	# the original driver is used.
+	if [ -x /opt/viz/drivers/nvidia-update.run ]; then
+		/opt/viz/drivers/nvidia-update.run
 	fi
-	if [ -e /usr/src/linux-2.6 ]; then
-        	ln -s /usr/src/linux-2.6 /usr/src/linux
-	fi
-        $DRIVER $DRIVER_OPTIONS
-	if [ -d /usr/share/doc/NVIDIA_GLX-1.0/include/GL ]; then
-        	cp /usr/share/doc/NVIDIA_GLX-1.0/include/GL/*.h /usr/include/GL/
-	fi
+        if [ -d /usr/share/doc/NVIDIA_GLX-1.0/include/GL ]; then
+                cp /usr/share/doc/NVIDIA_GLX-1.0/include/GL/*.h /usr/include/GL/
+        fi
         RETVAL=$?
         ;;
     stop)

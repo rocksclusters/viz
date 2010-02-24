@@ -1,6 +1,6 @@
 #!/opt/rocks/bin/python
 #
-# $Id: tile-banner.py,v 1.19 2009/06/10 02:56:02 mjk Exp $
+# $Id: tile-banner.py,v 1.20 2010/02/24 00:49:11 mjk Exp $
 #
 # @Copyright@
 # 
@@ -56,6 +56,18 @@
 # @Copyright@
 #
 # $Log: tile-banner.py,v $
+# Revision 1.20  2010/02/24 00:49:11  mjk
+# - nvidia driver auto updates, but still works fine if the cluster is
+#   not on the network.  Each node polls/pulls from nvidia.com the latest
+#   driver.  User can disable and control the driver manually.
+#   No more Roll updates to refresh the nvidia driver
+# - X11 modules controlled by viz_x11_modules attribute
+# - DPMS added back in
+# - rocks start|stop tile to turn wall on|off
+# - usersguide fixes (still needs work)
+# - add nvidia driver version to tile-banner
+# - bump version to 5.3.1
+#
 # Revision 1.19  2009/06/10 02:56:02  mjk
 # - can enable/disable tile banner per display
 # - nuke sample xml files
@@ -174,23 +186,23 @@ class App(rocks.app.Application):
 		
 		self.label = []
 		self.res = []
-		self.mode = []
 		self.release = []
+		self.driver = []
 		self.box = []
 		
 		for i in range(0, 6):
 			self.label.append(gtk.Label())
 			self.res.append(gtk.Label())
-			self.mode.append(gtk.Label())
 			self.release.append(gtk.Label())
+			self.driver.append(gtk.Label())
 
 		for i in range(0, 6):
 			self.box.append(gtk.VBox())
 			self.box[i].pack_start(logo[(i+3)%6])
 			self.box[i].pack_start(self.label[i])
 			self.box[i].pack_start(self.res[i])
-			self.box[i].pack_start(self.mode[i])
 			self.box[i].pack_start(self.release[i])
+			self.box[i].pack_start(self.driver[i])
 
 
 	def loop(self):
@@ -265,9 +277,9 @@ class App(rocks.app.Application):
 			gtk.gdk.color_parse('#%06x' % notrgb))
 		self.res[index].modify_fg(gtk.STATE_NORMAL, 
 			gtk.gdk.color_parse('#%06x' % notrgb))
-		self.mode[index].modify_fg(gtk.STATE_NORMAL, 
-			gtk.gdk.color_parse('#%06x' % notrgb))
 		self.release[index].modify_fg(gtk.STATE_NORMAL, 
+			gtk.gdk.color_parse('#%06x' % notrgb))
+		self.driver[index].modify_fg(gtk.STATE_NORMAL,
 			gtk.gdk.color_parse('#%06x' % notrgb))
 
 		self.window.show_all()
@@ -290,6 +302,15 @@ class App(rocks.app.Application):
 			release = 'unknown release'
 		release = release.lower()
 		release = release.replace('rocks release', '').strip()
+
+		try:
+			fin = open('/proc/driver/nvidia/version')
+			driver = fin.readline()
+			fin.close()
+		except:
+			driver = 'no nvidia driver'
+		driver = driver.split(':', 1)[1]
+		driver = driver.lower()	
 
 		self.visible = 1
 
@@ -323,17 +344,16 @@ class App(rocks.app.Application):
 				'%s</span>' % display)
 			self.res[i].set_markup(
 				'<span weight="bold" size="32000">'\
-				'%s</span>' % res)
-			self.mode[i].set_markup(
-				'<span weight="bold" size="32000">'\
-				'%s</span>' % mode)
+				'%s - %s</span>' % (res, mode))
 			self.release[i].set_markup(
 				'<span weight="bold" size="16000">'\
 				'%s</span>' % release)
-
+			self.driver[i].set_markup(
+				'<span weight="bold" size="16000">'\
+				'%s</span>' % driver)
+			
 		gobject.timeout_add(10000, callback, self)
 		gtk.main()
-
 
 
 def callback(o):

@@ -15,6 +15,18 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.64  2010/02/24 00:49:11  mjk
+	- nvidia driver auto updates, but still works fine if the cluster is
+	  not on the network.  Each node polls/pulls from nvidia.com the latest
+	  driver.  User can disable and control the driver manually.
+	  No more Roll updates to refresh the nvidia driver
+	- X11 modules controlled by viz_x11_modules attribute
+	- DPMS added back in
+	- rocks start|stop tile to turn wall on|off
+	- usersguide fixes (still needs work)
+	- add nvidia driver version to tile-banner
+	- bump version to 5.3.1
+	
 	Revision 1.63  2009/12/14 21:41:56  bruno
 	comment caused an XML error
 	
@@ -319,17 +331,12 @@
 	membership=Tile node=viz-tile
 
 /opt/rocks/bin/rocks set appliance attr tile x11 true
-/opt/rocks/bin/rocks set appliance attr tile cuda true
 
-/opt/rocks/bin/rocks set appliance attr tile \
-	viz_nvidia_driver /opt/viz/drivers/nvidia.run
-/opt/rocks/bin/rocks set appliance attr tile \
-	viz_nvidia_driver_options "--no-network -s"
 
-<file name="/etc/sysconfig/nvidia">
-DRIVER=/opt/viz/drivers/nvidia.run
-DRIVER_OPTIONS="--no-network -s"
-</file>
+/opt/rocks/bin/rocks set appliance attr tile viz_use_cuda    true
+/opt/rocks/bin/rocks set appliance attr tile viz_use_nvidia  true
+/opt/rocks/bin/rocks set appliance attr tile viz_x11_modules "dbe extmod type1 freetype glx"
+
 
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_resolution   1920x1200
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_left_bezel   100

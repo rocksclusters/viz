@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.22 2009/11/13 20:19:36 mjk Exp $
+# $Id: Makefile,v 1.23 2010/02/24 00:49:11 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,18 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.23  2010/02/24 00:49:11  mjk
+# - nvidia driver auto updates, but still works fine if the cluster is
+#   not on the network.  Each node polls/pulls from nvidia.com the latest
+#   driver.  User can disable and control the driver manually.
+#   No more Roll updates to refresh the nvidia driver
+# - X11 modules controlled by viz_x11_modules attribute
+# - DPMS added back in
+# - rocks start|stop tile to turn wall on|off
+# - usersguide fixes (still needs work)
+# - add nvidia driver version to tile-banner
+# - bump version to 5.3.1
+#
 # Revision 1.22  2009/11/13 20:19:36  mjk
 # new drivers
 #
@@ -142,7 +154,8 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/bin
 	mkdir -p $(ROOT)/$(PKGROOT)/drivers
 	mkdir -p $(ROOT)/etc/rc.d/init.d
-	install $(NVIDIA_DRIVER)	$(ROOT)/$(PKGROOT)/drivers/nvidia.run
+	install -m755 $(NVIDIA_DRIVER)	$(ROOT)/$(PKGROOT)/drivers/nvidia.run
+	install -m755 nvidia-update.run	$(ROOT)/$(PKGROOT)/drivers/
 	install nvidia			$(ROOT)/etc/rc.d/init.d/
 	(							\
 		cd nvidia-xconfig-1.0;				\

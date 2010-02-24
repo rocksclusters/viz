@@ -1,10 +1,22 @@
 <!--
-$Id: installing.sgml,v 1.18 2009/06/22 18:44:32 mjk Exp $
+$Id: installing.sgml,v 1.19 2010/02/24 00:49:11 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.19  2010/02/24 00:49:11  mjk
+- nvidia driver auto updates, but still works fine if the cluster is
+  not on the network.  Each node polls/pulls from nvidia.com the latest
+  driver.  User can disable and control the driver manually.
+  No more Roll updates to refresh the nvidia driver
+- X11 modules controlled by viz_x11_modules attribute
+- DPMS added back in
+- rocks start|stop tile to turn wall on|off
+- usersguide fixes (still needs work)
+- add nvidia driver version to tile-banner
+- bump version to 5.3.1
+
 Revision 1.18  2009/06/22 18:44:32  mjk
 checkpoint
 
@@ -192,29 +204,29 @@ connector.  This is a requirement of the SAGE software.
 	&lt;wall&gt;
 
 		&lt;col&gt;
-			&lt;display host="tile-0-0:0.0"/&gt;
-			&lt;display host="tile-0-1:0.0"/&gt;
-			&lt;display host="tile-0-2:0.0"/&gt;
+			&lt;display&gt;tile-0-2:0.0&lt;/display&gt;
+			&lt;display&gt;tile-0-1:0.0&lt;/display&gt;
+			&lt;display&gt;tile-0-0:0.0&lt;/display&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-0-0:0.1"/&gt;
-			&lt;display host="tile-0-1:0.1"/&gt;
-			&lt;display host="tile-0-2:0.1"/&gt;
+			&lt;display&gt;tile-0-2:0.1&lt;/display&gt;
+			&lt;display&gt;tile-0-1:0.1&lt;/display&gt;
+			&lt;display&gt;tile-0-0:0.1&lt;/display&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-1-0:0.0"/&gt;
-			&lt;display host="tile-1-1:0.0"/&gt;
-			&lt;display host="tile-1-2:0.0"/&gt;
+			&lt;display&gt;tile-1-2:0.0&lt;/display&gt;
+			&lt;display&gt;tile-1-1:0.0&lt;/display&gt;
+			&lt;display&gt;tile-1-0:0.0&lt;/display&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-1-0:0.1"/&gt;
-			&lt;display host="tile-1-1:0.1"/&gt;
-			&lt;display host="tile-1-2:0.1"/&gt;
+			&lt;display&gt;tile-1-2:0.1&lt;/display&gt;
+			&lt;display&gt;tile-1-1:0.1&lt;/display&gt;
+			&lt;display&gt;tile-1-0:0.1&lt;/display&gt;
 		&lt;/col&gt;
 		&lt;col&gt;
-			&lt;display host="tile-2-0:0.0"/&gt;
-			&lt;display host="tile-2-1:0.0"/&gt;
-			&lt;display host="tile-2-2:0.0"/&gt;
+			&lt;display&gt;tile-2-2:0.0&lt;/display&gt;
+			&lt;display&gt;tile-2-1:0.0&lt;/display&gt;
+			&lt;display&gt;tile-2-0:0.0&lt;/display&gt;
 		&lt;/col&gt;
 	&lt;/wall&gt;
 	</screen>
@@ -226,6 +238,7 @@ connector.  This is a requirement of the SAGE software.
 	</para>
 
 	<screen>
+	# rocks remove tile
 	# rocks add tile layout layout.xml
 	</screen>
 </listitem>

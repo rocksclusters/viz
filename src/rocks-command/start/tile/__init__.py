@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2010/02/24 00:49:11 mjk Exp $
+# $Id: __init__.py,v 1.1 2010/02/24 00:49:11 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,7 +54,7 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
-# Revision 1.2  2010/02/24 00:49:11  mjk
+# Revision 1.1  2010/02/24 00:49:11  mjk
 # - nvidia driver auto updates, but still works fine if the cluster is
 #   not on the network.  Each node polls/pulls from nvidia.com the latest
 #   driver.  User can disable and control the driver manually.
@@ -76,14 +76,14 @@ import rocks.commands
 
 class command(rocks.tile.TileCommand, 
 	rocks.tile.TileArgumentProcessor,
-	rocks.commands.stop.command):
+	rocks.commands.start.command):
 	pass
 
 class Command(command):
 	"""
-	Turn off tiles using power management.
+	Turn on tiles using power management.
 	
-	<example cmd='stop tile'>
+	<example cmd='start tile'>
 	</example>
 	"""
 
@@ -96,5 +96,4 @@ class Command(command):
 				order by t.x, t.y""" % (name, display))
 
 			for row in self.db.fetchall():
-				os.system('ssh -xf %s xset -display :%s dpms force off' % (row[0], row[1]))
-	
+				os.system('ssh -xf %s xset -display :%s dpms force on' % (row[0], row[1]))	

@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2009/06/09 23:51:46 mjk Exp $
+# $Id: __init__.py,v 1.2 2010/02/24 00:49:11 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,18 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.2  2010/02/24 00:49:11  mjk
+# - nvidia driver auto updates, but still works fine if the cluster is
+#   not on the network.  Each node polls/pulls from nvidia.com the latest
+#   driver.  User can disable and control the driver manually.
+#   No more Roll updates to refresh the nvidia driver
+# - X11 modules controlled by viz_x11_modules attribute
+# - DPMS added back in
+# - rocks start|stop tile to turn wall on|off
+# - usersguide fixes (still needs work)
+# - add nvidia driver version to tile-banner
+# - bump version to 5.3.1
+#
 # Revision 1.1  2009/06/09 23:51:46  mjk
 # *** empty log message ***
 #
@@ -216,7 +228,9 @@ class Command(command):
 
 	def run(self, params, args):
 
-		(mode, ) = self.fillParams([ ('mode', 'simple') ])
+		(mode, ) = self.fillParams([
+			('mode', 'simple'),
+		        ])
 
 		# Build a list of hostnames that are connected to the
 		# specified tiles, and a list of fully qualified display
@@ -242,12 +256,5 @@ class Command(command):
 		args.append('x11=false')
 		args.append('killall gdm-binary')
 		self.command('run.host', args)
-
-
-
-
-
-
-
 
 

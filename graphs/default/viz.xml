@@ -20,6 +20,18 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.29  2010/02/24 00:49:11  mjk
+	- nvidia driver auto updates, but still works fine if the cluster is
+	  not on the network.  Each node polls/pulls from nvidia.com the latest
+	  driver.  User can disable and control the driver manually.
+	  No more Roll updates to refresh the nvidia driver
+	- X11 modules controlled by viz_x11_modules attribute
+	- DPMS added back in
+	- rocks start|stop tile to turn wall on|off
+	- usersguide fixes (still needs work)
+	- add nvidia driver version to tile-banner
+	- bump version to 5.3.1
+	
 	Revision 1.28  2009/06/18 20:32:27  mjk
 	fix cuda cond
 	
@@ -120,7 +132,9 @@
 		<tail>viz-server</tail>
 	</order>
 
-	<edge from="client"     to="viz-cuda" cond="cuda"/>
+	<edge from="client"     to="viz-cuda"   cond="viz_use_cuda"/>
+	<edge from="base"	to="viz-nvidia" cond="viz_use_nvidia"/>
+
 	<edge from="viz-server" to="viz-cuda"/>
 
 	<edge from="server" to="viz-server"/>

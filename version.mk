@@ -1,4 +1,5 @@
 ROLLNAME	= viz
+VERSION		= 5.3.1
 RELEASE		= 0
 COLOR		= RosyBrown
 

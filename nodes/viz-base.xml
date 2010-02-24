@@ -14,6 +14,18 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.46  2010/02/24 00:49:11  mjk
+	- nvidia driver auto updates, but still works fine if the cluster is
+	  not on the network.  Each node polls/pulls from nvidia.com the latest
+	  driver.  User can disable and control the driver manually.
+	  No more Roll updates to refresh the nvidia driver
+	- X11 modules controlled by viz_x11_modules attribute
+	- DPMS added back in
+	- rocks start|stop tile to turn wall on|off
+	- usersguide fixes (still needs work)
+	- add nvidia driver version to tile-banner
+	- bump version to 5.3.1
+	
 	Revision 1.45  2009/06/18 22:24:24  mjk
 	set 1024x768 for frontend only
 	
@@ -219,7 +231,6 @@
 	</changelog>
 
 	<package>rocks-viz</package>
-	<package>nvidia-driver</package>
 	<package>freeglut</package>
 	<package>chromium</package>
 	<package>Cg</package>
@@ -257,26 +268,11 @@
 
 <post>
 
-<!--
-Attributes are used to select the driver name (and version)
-
-viz_nvidia_driver - pathname to nVidia .run script
-viz_nvidia_driver_options - flags passed to .run script
--->
-
-<file name="/etc/sysconfig/nvidia">
-DRIVER=&viz_nvidia_driver;
-DRIVER_OPTIONS="&viz_nvidia_driver_options;"
-</file>
-
-
 <!-- Create the viz account on each node (avoid 411) -->
 /usr/sbin/useradd -M -u402 -c "Viz X11 Owner" -d /opt/viz/etc viz
 
 chown -R viz.viz /opt/viz/etc
 
-
-/sbin/chkconfig --add  nvidia 
 
 <!--
 The next two hacks setup the default runlevel to 5
@@ -311,10 +307,6 @@ if [ -e /dev/dvd ]; then
 	chmod ugo+rx /dev/dvd
 fi
 </file>
-
-<!-- set a default xorg.conf -->
-
-/opt/viz/bin/nvidia-xconfig 
 
 </post>
 
