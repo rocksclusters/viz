@@ -1,3 +1,3 @@
 NAME	= rocks-command-viz
-RELEASE	= 0
+RELEASE	= 1
 RPM.REQUIRES = rocks-command
