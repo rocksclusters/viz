@@ -1,10 +1,13 @@
 <!--
-$Id: preface.sgml,v 1.5 2008/07/21 21:23:28 mjk Exp $
+$Id: preface.sgml,v 1.6 2010/03/11 03:08:33 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: preface.sgml,v $
+Revision 1.6  2010/03/11 03:08:33  mjk
+let's see if we can update this roll
+
 Revision 1.5  2008/07/21 21:23:28  mjk
 docs good
 
@@ -26,32 +29,9 @@ Traditional Rocks-based compute clusters consist of a single Frontend
 machine and several back end Compute machines.  However, a Rocks-based 
 visualization cluster is composed of Tile machines instead of Compute 
 machines.  A Tile machine must have an nVidia graphics card and may drive 
-one or two LCD monitors (or projectors).  The major visualization-middleware 
-components are <ulink url="http://dmx.sourceforge.net/">DMX</ulink>,
-<ulink url="http://chromium.sourceforge.net/">Chromium</ulink> and 
-<ulink url="http://www.evl.uic.edu/cavern/sage/">SAGE</ulink>.
-</para>
-
-<para>
-DMX is part of the XFree86 project and has origins in the Xinerama
-code used to create a single X11 root window that spans across two 
-physical monitors.  DMX extends this to create a single root window (desktop)
-that spans across a rectangular wall of monitors or projectors.  Although
-DMX can display OpenGL applications, it is recommended that Chromium 
-be used with DMX for all OpenGL code.  This Roll supports the
-use of DMX with and without Chromium support.  It also supports Chromium in
-stand-alone mode for use without DMX.
-</para>
-
-<para>
-SAGE (Scalable Adaptive Graphics Environment) is developed by the Cavern
-Group at the Electronic Visualization Laboratory (EVL) at the Univeristy
-of Illinois Chicago (UIC).  SAGE can display both OpenGL and raw pixel
-blasting applications at full speed on large-scale tile displays.  
-Applications must be written specifically for the SAGE environment, unlike
-DMX and Chromium.  However, applications such as the SAGE version of
-mplayer can play HD qualities movies over a 60 tile wall at full speed,
-which is not possible using DMX (or Chromium).
+one or two LCD monitors (or projectors).  The major visualization middleware 
+components are <ulink url="http://chromium.sourceforge.net/">Chromium</ulink>
+and <ulink url="http://www.evl.uic.edu/cavern/sage/">SAGE</ulink>.
 </para>
 
 </preface>

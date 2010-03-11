@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.65  2010/03/11 03:08:33  mjk
+	let's see if we can update this roll
+	
 	Revision 1.64  2010/02/24 00:49:11  mjk
 	- nvidia driver auto updates, but still works fine if the cluster is
 	  not on the network.  Each node polls/pulls from nvidia.com the latest
@@ -344,6 +347,12 @@
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_top_bezel    80
 /opt/rocks/bin/rocks set appliance attr tile viz_tile_bottom_bezel 80
 
+<!--
+Add CGLX multicast route
+- default range is in 225.0.0.0/255.255.255.0 
+- default to route over private network (eth0)
+-->
+/opt/rocks/bin/rocks add route 225.0.0.0 eth0 netmask=255.255.255.0
 
 </post>
 

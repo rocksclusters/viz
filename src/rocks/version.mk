@@ -1,2 +1,2 @@
 NAME	= rocks-viz
-RELEASE	= 0
+RELEASE	= 1

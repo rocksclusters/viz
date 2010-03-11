@@ -1,10 +1,13 @@
 <!--
-$Id: attr.sgml,v 1.1 2009/06/22 19:05:46 mjk Exp $
+$Id: attr.sgml,v 1.2 2010/03/11 03:08:33 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: attr.sgml,v $
+Revision 1.2  2010/03/11 03:08:33  mjk
+let's see if we can update this roll
+
 Revision 1.1  2009/06/22 19:05:46  mjk
 *** empty log message ***
 
@@ -25,21 +28,6 @@ Revision 1.1  2009/06/22 19:05:46  mjk
 				<entry>Name</entry>
 				<entry>Type</entry>
 				<entry>Default</entry>
-			</row>
-			<row>
-				<entry>cuda</entry>
-				<entry>bool</entry>
-				<entry>false</entry>
-			</row>
-			<row>
-				<entry>viz_nvidia_driver_options</entry>
-				<entry>string</entry>
-				<entry>--no-network -s</entry>
-			</row>
-			<row>
-				<entry>viz_nvidia_driver</entry>
-				<entry>string</entry>
-				<entry>/opt/viz/drivers/nvidia.run</entry>
 			</row>
 			<row>
 				<entry>viz_tile_bottom_bezel</entry>
@@ -67,6 +55,21 @@ Revision 1.1  2009/06/22 19:05:46  mjk
 				<entry>80</entry>
 			</row>
 			<row>
+				<entry>viz_use_cuda</entry>
+				<entry>bool</entry>
+				<entry>true</entry>
+			</row>
+			<row>
+				<entry>viz_use_nvidia</entry>
+				<entry>bool</entry>
+				<entry>true</entry>
+			</row>
+			<row>
+				<entry>viz_x11_modules</entry>
+				<entry>string</entry>
+				<entry>dbe extmod type1 freetype glx</entry>
+			</row>
+			<row>
 				<entry>x11</entry>
 				<entry>bool</entry>
 				<entry>true</entry>
@@ -78,35 +81,6 @@ Revision 1.1  2009/06/22 19:05:46  mjk
 
 
 <variablelist>
-	<varlistentry>
-    		<term>cuda</term>
-		<listitem>
-			<para>
-If set to True all host with this attribute will have the CUDA toolkit included int the packages installed on the machine.  
-If the host is already installed this will take affect on the next re-installation.  
-Enabling this does not automatically set the nVidia driver to be the CUDA driver, and may required the viz_nvidia_driver attribute to also be changed.
-			</para>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-		<term>viz_nvidia_driver_options</term>
-		<listitem>
-			<para>
-The command line arguments passed to the nVidia driver installation script.
-The default values work for all drivers included in the Viz Roll, and the
-attribute should not be modified unless needed.
-			</para>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-		<term>viz_nvidia_driver</term>
-		<listitem>
-			<para>
-The full pathname of the nVidia driver installation script.
-The Viz Roll installs both the production nVidia driver and beta-CUDA driver installation script.  This attribute is used to select which driver is installed on first boot after a tile node is first installed (or re-installed).
-			</para>
-		</listitem>
-	</varlistentry>
 	<varlistentry>
 	    	<term>viz_tile_bottom_bezel</term>
 		<listitem>
@@ -144,6 +118,39 @@ The size in pixels of the tile's right edge bezel (mullion).
 		<listitem>
 			<para>
 The size in pixels of the tile's top edge bezel (mullion).
+			</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+    		<term>viz_use_cuda</term>
+		<listitem>
+			<para>
+If set to True all host with this attribute will have the CUDA toolkit 
+included int the packages installed on the machine.  
+If the host is already installed this will take affect on the next 
+re-installation.  
+			</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+    		<term>viz_use_nvidia</term>
+		<listitem>
+			<para>
+If set to True all host with this attribute will have the nVidia driver
+installed and tools installed.
+If the host is already installed this will take affect on the next 
+re-installation.  
+			</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+    		<term>viz_x11_modules</term>
+		<listitem>
+			<para>
+A space delimited list of X11 module names to be loaded when X11 is
+started.
+This attribute is used by the "rocks sync tile" command when generating
+the xorg.conf file on the tiles.
 			</para>
 		</listitem>
 	</varlistentry>
