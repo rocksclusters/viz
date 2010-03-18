@@ -1,0 +1,46 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+	<description>
+	nvidia driver
+	</description>
+
+	<copyright>
+	Copyright (c) 2000 - 2009 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.2 www.rocksclusters.org
+	</copyright>
+
+	<changelog>
+	$Log: viz-nvidia.xml,v $
+	Revision 1.1  2010/03/18 21:38:08  mjk
+	*** empty log message ***
+	
+	Revision 1.1  2009/06/18 15:57:28  mjk
+	- added cuda (not just for tiles)
+	
+	</changelog>
+
+	<package>nvidia-driver</package>
+
+<post>
+
+<!--
+Turn off graphical boot. So we can install the nvidia
+driver after the network comes up
+-->
+
+<file name="/etc/sysconfig/init" mode="append">
+GRAPHICAL=no
+</file>
+
+/sbin/chkconfig --add  nvidia
+
+<!-- set a default xorg.conf -->
+
+/opt/viz/bin/nvidia-xconfig
+
+</post>
+
+</kickstart>
