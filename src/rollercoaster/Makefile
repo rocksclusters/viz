@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.14 2009/05/01 19:07:32 mjk Exp $
+# $Id: Makefile,v 1.15 2010/06/22 21:43:58 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.15  2010/06/22 21:43:58  mjk
+# remove ROCKSROOT
+#
 # Revision 1.14  2009/05/01 19:07:32  mjk
 # chimi con queso
 #
@@ -106,7 +109,6 @@
 
 PKGROOT		= /opt/viz/demos
 REDHAT.ROOT     = $(PWD)/../../
-ROCKSROOT       = ../../../../..
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
 

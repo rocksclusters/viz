@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.10 2009/05/01 19:07:24 mjk Exp $
+# $Id: Makefile,v 1.11 2010/06/22 21:43:58 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.11  2010/06/22 21:43:58  mjk
+# remove ROCKSROOT
+#
 # Revision 1.10  2009/05/01 19:07:24  mjk
 # chimi con queso
 #
@@ -88,7 +91,6 @@
 
 PKGROOT		= /opt/$(NAME)
 REDHAT.ROOT	= $(PWD)/../../
-ROCKSROOT	= ../../../../..
 MAKE.iscontrib	= 1
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
