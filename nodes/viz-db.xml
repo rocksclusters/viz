@@ -15,6 +15,10 @@
 
 	<changelog>
 	$Log: viz-db.xml,v $
+	Revision 1.21  2010/07/31 01:02:03  bruno
+	first stab at putting in 'shadow' values in the database that non-root
+	and non-apache users can't read
+	
 	Revision 1.20  2009/06/10 02:56:22  mjk
 	- new schema
 	
@@ -95,12 +99,19 @@ CREATE TABLE tiles (
         PRIMARY KEY (ID)
 ) TYPE=MyISAM;
 
+grant select on cluster.tiles to ''@'localhost';
+grant select on cluster.tiles to ''@'%.local';
+
 DROP TABLE IF EXISTS tile_attributes;
 CREATE TABLE tile_attributes (
 	Tile	int(11) NOT NULL default '0',
 	Attr	varchar(128) default NULL,
 	Value	text
 ) TYPE=MyISAM;
+
+grant select on cluster.tile_attributes to ''@'localhost';
+grant select on cluster.tile_attributes to ''@'%.local';
+
 </file>
 
 /opt/rocks/bin/mysql --user=root --password='' cluster &lt; /tmp/viz-tables.sql
