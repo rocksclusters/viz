@@ -8,13 +8,16 @@
 	</description>
 
 	<copyright>
-	Copyright (c) 2000 - 2009 The Regents of the University of California.
-	All rights reserved. Rocks(r) v5.2 www.rocksclusters.org
+	Copyright (c) 2000 - 2010 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.4 www.rocksclusters.org
 	
 	</copyright>
 
 	<changelog>
 	$Log: viz-client.xml,v $
+	Revision 1.16  2010/09/07 23:53:26  bruno
+	star power for gb
+	
 	Revision 1.15  2009/06/03 01:23:23  mjk
 	- Now using the idea of modes for the wall (e.g. simple, sage, cglx)
 	- Simple (chromium) and Sage modes work

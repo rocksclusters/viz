@@ -8,12 +8,16 @@
 	</description>
 
 	<copyright>
-	Copyright (c) 2000 - 2009 The Regents of the University of California.
-	All rights reserved. Rocks(r) v5.2 www.rocksclusters.org
+	Copyright (c) 2000 - 2010 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.4 www.rocksclusters.org
+	
 	</copyright>
 
 	<changelog>
 	$Log: viz-cuda.xml,v $
+	Revision 1.2  2010/09/07 23:53:26  bruno
+	star power for gb
+	
 	Revision 1.1  2009/06/18 15:57:28  mjk
 	- added cuda (not just for tiles)
 	

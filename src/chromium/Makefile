@@ -1,13 +1,13 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.34 2009/06/11 22:57:52 mjk Exp $
+# $Id: Makefile,v 1.35 2010/09/07 23:53:26 bruno Exp $
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		       version 5.2 (Chimichanga)
+# 		         version 5.4 (Maverick)
 # 
-# Copyright (c) 2000 - 2009 The Regents of the University of California.
+# Copyright (c) 2000 - 2010 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.35  2010/09/07 23:53:26  bruno
+# star power for gb
+#
 # Revision 1.34  2009/06/11 22:57:52  mjk
 # - Build chromium 64bit and 32bit libs
 # - Google Earth now runs on a 64bit wall

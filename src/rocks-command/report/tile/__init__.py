@@ -1,12 +1,12 @@
-# $Id: __init__.py,v 1.3 2009/06/10 02:51:14 mjk Exp $
+# $Id: __init__.py,v 1.4 2010/09/07 23:53:30 bruno Exp $
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		       version 5.2 (Chimichanga)
+# 		         version 5.4 (Maverick)
 # 
-# Copyright (c) 2000 - 2009 The Regents of the University of California.
+# Copyright (c) 2000 - 2010 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.4  2010/09/07 23:53:30  bruno
+# star power for gb
+#
 # Revision 1.3  2009/06/10 02:51:14  mjk
 # - Everything is now tile oriented (no more viz keywords)
 # - Can control everything on a per tile (host, x11server, display) basis

@@ -1,13 +1,13 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.16 2008/10/18 00:56:20 mjk Exp $
+# $Id: Makefile,v 1.17 2010/09/07 23:53:28 bruno Exp $
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		           version 5.1  (VI)
+# 		         version 5.4 (Maverick)
 # 
-# Copyright (c) 2000 - 2008 The Regents of the University of California.
+# Copyright (c) 2000 - 2010 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.17  2010/09/07 23:53:28  bruno
+# star power for gb
+#
 # Revision 1.16  2008/10/18 00:56:20  mjk
 # copyright 5.1
 #
