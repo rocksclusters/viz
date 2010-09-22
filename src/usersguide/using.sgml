@@ -1,10 +1,16 @@
 <!-- 
-$Id: using.sgml,v 1.9 2009/06/22 18:44:32 mjk Exp $
+$Id: using.sgml,v 1.10 2010/09/22 21:13:53 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.10  2010/09/22 21:13:53  mjk
+- viz roll doc fix
+- added DESCRIPTION for git (feel free to change these oneliners)
+- added OWNER for git (do not change these)
+see git.rocksclusters.org
+
 Revision 1.9  2009/06/22 18:44:32  mjk
 checkpoint
 
@@ -185,6 +191,15 @@ Google Earth is a 32-bit application and may require extra 32-bit libraries inst
 <title>SAGE</title>
 
 <para>
+A CGLX Roll is available to simplify the installation of CGLX on a Rocks Viz Wall.  This Roll can be installed during initial cluster build, or later after the cluster is deployed.  In both cases adjustments to the multi-case routing may be required.
+</para>
+
+</section>
+
+<section>
+<title>SAGE</title>
+
+<para>
 SAGE requires every user to have a complete personal copy of the SAGE binaries and libraries, and does not allow the sharing of the application in a common directory.  Where a user first starts SAGE a local copy of the SAGE distribution is made in ~/.sage.  All configuration files refered to in the EVL SAGE documentation are in this user specific ~/.sage directory.
 </para> 
 
@@ -203,7 +218,11 @@ Starting SAGE will create the ~/.sage directory if one does not exists and will 
 
 <para>
 <computeroutput>rocks stop sage</computeroutput>
-Stopping SAGE can be a slow process.  The Viz Roll changes the normal SAGE shutdown process to track down all orphaned SAGE processes on the cluster.  While the is not fool-proof it does improve issues of orphaned SAGE applications prevented SAGE from starting.
+Stopping SAGE can be a slow process.  
+The Viz Roll changes the normal SAGE shutdown process to track down
+all orphaned SAGE processes on the cluster.  
+While this is not fool-proof it does improve issues of orphaned SAGE 
+applications preventing SAGE from starting.
 </para>
 
 </section>
