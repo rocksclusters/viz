@@ -1,4 +1,4 @@
-# $Id: tile.py,v 1.2 2010/09/07 23:53:30 bruno Exp $
+# $Id: tile.py,v 1.3 2010/10/07 19:47:12 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,10 @@
 # @Copyright@
 #
 # $Log: tile.py,v $
+# Revision 1.3  2010/10/07 19:47:12  mjk
+# - added support for Google's Liquid Galaxy
+# - remove sage and some of the deps
+#
 # Revision 1.2  2010/09/07 23:53:30  bruno
 # star power for gb
 #
@@ -79,7 +83,8 @@ class TileCommand:
 
 		self.db.execute("""select a.attr, a.value from 
 			tile_attributes a, tiles t, nodes n where
-			t.node=n.id and n.name='%s' and t.name='%s'""" %
+			a.tile=t.id and t.node=n.id and n.name='%s' 
+			and t.name='%s'""" %
 			(server, display))
 		for (a, v) in self.db.fetchall():
 			if showsource:

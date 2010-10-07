@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.44 2010/09/07 23:53:28 bruno Exp $
+# $Id: Makefile,v 1.45 2010/10/07 19:47:12 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,10 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.45  2010/10/07 19:47:12  mjk
+# - added support for Google's Liquid Galaxy
+# - remove sage and some of the deps
+#
 # Revision 1.44  2010/09/07 23:53:28  bruno
 # star power for gb
 #
@@ -210,16 +214,25 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/etc/.ssh
 	mkdir -p $(ROOT)/$(PKGROOT)/etc/.gnome2
 	mkdir -p $(ROOT)/$(PKGROOT)/etc/.fvwm
+	mkdir -p $(ROOT)/$(PKGROOT)/etc/.config/Google
 	mkdir -p $(ROOT)/$(PKGROOT)/sbin
 	mkdir -p $(ROOT)/$(PKGROOT)/lib/images
 	mkdir -p $(ROOT)/etc/ld.so.conf.d
 	echo $(PKGROOT)/lib >> $(ROOT)/etc/ld.so.conf.d/viz.conf
+	install -m744 viz/etc/start-google-earth.py \
+		$(ROOT)/$(PKGROOT)/etc/start-google-earth
+	install -m744 viz/etc/stop-google-earth.sh \
+		$(ROOT)/$(PKGROOT)/etc/stop-google-earth
 	install -m744 viz/etc/Xclients		\
 		$(ROOT)/$(PKGROOT)/etc/.Xclients
 	install -m744 viz/etc/invisible-cursor.xbm	\
 		$(ROOT)/$(PKGROOT)/etc/
 	install -m544 viz/etc/gnome2/gdm	\
 		$(ROOT)/$(PKGROOT)/etc/.gnome2/gdm
+	install -m 644 viz/etc/GECommonSettings.conf \
+		$(ROOT)/$(PKGROOT)/etc/.config/Google/
+	install -m 644 viz/etc/GoogleEarthPlus.conf \
+		$(ROOT)/$(PKGROOT)/etc/.config/Google/
 	touch	$(ROOT)/$(PKGROOT)/etc/.ssh/id_rsa.pub
 	install -m755 tile-banner		$(ROOT)/$(PKGROOT)/sbin
 	install -m755 tile-reset		$(ROOT)/$(PKGROOT)/sbin
