@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.3 2010/09/07 23:53:30 bruno Exp $
+# $Id: __init__.py,v 1.4 2010/10/07 19:41:47 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,12 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.4  2010/10/07 19:41:47  mjk
+# - use dpi instead of pixels to measure offsets
+# - added horizontal|vertical shift attrs to deal with uneven walls (ours)
+# - removed sage
+# - added support for Google's liquid galaxy
+#
 # Revision 1.3  2010/09/07 23:53:30  bruno
 # star power for gb
 #
@@ -154,7 +160,7 @@ class Plugin(rocks.commands.Plugin):
 
 	def sendFileToHost(self, src, host, dst=None):
 		if not os.path.isfile(src):
-			self.addText('warning - file %s does not exist\n' % src)
+			self.owner.addText('warning - file %s does not exist\n' % src)
 			return
 
 		if dst == None:
@@ -240,13 +246,13 @@ class Command(command):
 		# names.
 
 		hosts = []
-		tiles = []
+		self.tiles = []
 		for (server, display) in self.getTileNames(args):
 			if server not in hosts:
 				hosts.append(server)
-			tiles.append('%s:%s' % (server, display))
+			self.tiles.append('%s:%s' % (server, display))
 
-		layout  = eval(self.command('report.tile', tiles))
+		layout  = eval(self.command('report.tile', self.tiles))
 		methods = {}
 
 		self.runPlugins([self, layout, methods])

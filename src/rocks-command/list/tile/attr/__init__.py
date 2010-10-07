@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2010/09/07 23:53:29 bruno Exp $
+# $Id: __init__.py,v 1.3 2010/10/07 19:41:46 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,12 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.3  2010/10/07 19:41:46  mjk
+# - use dpi instead of pixels to measure offsets
+# - added horizontal|vertical shift attrs to deal with uneven walls (ours)
+# - removed sage
+# - added support for Google's liquid galaxy
+#
 # Revision 1.2  2010/09/07 23:53:29  bruno
 # star power for gb
 #
@@ -85,16 +91,14 @@ class Command(rocks.commands.list.tile.command):
 		self.beginOutput()
 		
 		for (host, display) in self.getTileNames(args):
-			attrs = self.getTileAttrs('%s:%s' % (host, display),
-				showsource=True)
+			tile = '%s:%s' % (host, display)
+			attrs = self.getTileAttrs(tile, showsource=True)
 			keys = attrs.keys()
 			keys.sort()
 			for key in keys:		
-				self.addOutput(host,
-					(display, key, 
-					attrs[key][0], attrs[key][1]))
+				self.addOutput(tile, (key, attrs[key][0], attrs[key][1]))
 
-		self.endOutput(header=['host', 'display', 
+		self.endOutput(header=['tile', 
 			'attr', 'value', 'source' ],
 			trimOwner=False)
 

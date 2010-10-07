@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2010/09/07 23:53:29 bruno Exp $
+# $Id: __init__.py,v 1.3 2010/10/07 19:41:46 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,12 @@
 # @Copyright@ 
 #
 # $Log: __init__.py,v $
+# Revision 1.3  2010/10/07 19:41:46  mjk
+# - use dpi instead of pixels to measure offsets
+# - added horizontal|vertical shift attrs to deal with uneven walls (ours)
+# - removed sage
+# - added support for Google's liquid galaxy
+#
 # Revision 1.2  2010/09/07 23:53:29  bruno
 # star power for gb
 #
@@ -81,21 +87,23 @@ class Command(command):
 
 		self.beginOutput()
 
+		# Build a list of tuples and let python sort by x and -y so the
+		# output will correspond to the physical view of the wall.
+		# Matches layout.xml ordering.
+
+		list = []
 		for (name, display) in self.getTileNames(args):
 			self.db.execute("""select n.name, t.name, t.x, t.y from
 				nodes n, tiles t where
 				n.id=t.node and n.name='%s' and t.name='%s'
-				order by t.x, t.y""" % (name, display))
-
-			for row in self.db.fetchall():
-				self.addOutput(row[0], row[1:])
-			
-		self.endOutput(header=['host', 'display', 'x', 'y'],
-			trimOwner=False)
-			
-
-
+				""" % (name, display))
+			for (server, display, x, y) in self.db.fetchall():
+				list.append((x, -y, '%s:%s' % (server, display)))
+		
+		list.sort()
+		for (x, y, tile) in list:
+			self.addOutput(tile, (x,-y))
 	
-
+		self.endOutput(header=['tile', 'x', 'y'], trimOwner=False)
 
 	

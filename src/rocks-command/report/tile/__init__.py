@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2010/09/07 23:53:30 bruno Exp $
+# $Id: __init__.py,v 1.5 2010/10/07 19:41:47 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,12 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.5  2010/10/07 19:41:47  mjk
+# - use dpi instead of pixels to measure offsets
+# - added horizontal|vertical shift attrs to deal with uneven walls (ours)
+# - removed sage
+# - added support for Google's liquid galaxy
+#
 # Revision 1.4  2010/09/07 23:53:30  bruno
 # star power for gb
 #
@@ -99,17 +105,17 @@ class Command(command):
 
 
 	def getXOffset(self, wall, x, y):
-		offset = wall[x][y]['leftborder']
+		offset = wall[x][y]['leftborder'] + wall[x][y]['leftoffset']
 		for i in range(0, x):
 			t = wall[i][y]
-			offset += t['xres'] + t['leftborder'] + t['rightborder']
+			offset += t['xres'] + t['leftborder'] + t['rightborder'] + t['leftoffset']
 		return offset
 
 	def getYOffset(self, wall, x, y):
-		offset = wall[x][y]['bottomborder']
+		offset = wall[x][y]['bottomborder'] + wall[x][y]['bottomoffset']
 		for i in range(0, y):
 			t = wall[x][i]
-			offset += t['yres'] + t['bottomborder'] + t['topborder']
+			offset += t['yres'] + t['bottomborder'] + t['topborder'] + t['bottomoffset']
 		return offset
 
 
@@ -153,14 +159,21 @@ class Command(command):
 			tile['xoffset']	= 0
 			tile['yoffset']	= 0
 
+	
 			res = attrs['viz_tile_resolution'].split('x')
 			tile['xres'] = int(res[0])
 			tile['yres'] = int(res[1])
 
-			tile['leftborder']   = int(attrs['viz_tile_left_bezel'])
-			tile['rightborder']  = int(attrs['viz_tile_left_bezel'])
-			tile['topborder']    = int(attrs['viz_tile_left_bezel'])
-			tile['bottomborder'] = int(attrs['viz_tile_left_bezel'])
+			dpi = tile['xres'] / float(attrs['viz_tile_width'])
+			tile['leftborder']  = int(round( float(attrs['viz_tile_left_bezel']) * dpi )) 
+			tile['rightborder'] = int(round( float(attrs['viz_tile_right_bezel']) * dpi ))
+			tile['leftoffset']  = int(round( float(attrs['viz_tile_horizontal_shift']) * dpi ))
+
+			dpi = tile['yres'] / float(attrs['viz_tile_height'])
+			tile['topborder']     = int(round( float(attrs['viz_tile_top_bezel']) * dpi ))
+			tile['bottomborder']  = int(round( float(attrs['viz_tile_bottom_bezel']) * dpi ))
+			tile['bottomoffset']  = int(round( float(attrs['viz_tile_vertical_shift']) * dpi ))
+
 			if not hideBezels:
 				tile['leftborder']   = 0
 				tile['rightborder']  = 0
