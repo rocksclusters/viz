@@ -2,7 +2,7 @@
 #
 # This file should remain OS independent
 #
-# $Id: bootstrap.sh,v 1.21 2010/09/07 23:53:26 bruno Exp $
+# $Id: bootstrap.sh,v 1.22 2010/10/15 00:49:56 mjk Exp $
 #
 # @Copyright@
 # 
@@ -58,6 +58,9 @@
 # @Copyright@
 #
 # $Log: bootstrap.sh,v $
+# Revision 1.22  2010/10/15 00:49:56  mjk
+# more trimming
+#
 # Revision 1.21  2010/09/07 23:53:26  bruno
 # star power for gb
 #
@@ -131,29 +134,14 @@
 
 install_os_packages viz-server
 
-install libdmx
-install libdmx-devel
-
-compile SRPMS
 install glut
 install glut-devel
-install joy2key
-install joystick
-
-compile_and_install cmake
-
-compile_and_install foundation-sdl
-compile_and_install foundation-sdl-image
-compile_and_install foundation-sdl-mixer
-compile_and_install foundation-sdl-net
-compile_and_install foundation-sdl-ttf
 
 compile_and_install chromium
 compile_and_install libraw1394
 compile_and_install openal
 compile_and_install freealut
 compile_and_install plib
-compile_and_install SimGear
 
 compile_and_install libmad
 compile_and_install libdvdread
@@ -161,10 +149,6 @@ compile_and_install faac
 compile_and_install faad2
 compile_and_install ffmpeg
 compile_and_install mpeg2dec
-compile_and_install wx
-compile_and_install portaudio
 compile_and_install glew
 
-compile quanta
-install QUANTA
 

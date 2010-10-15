@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.67  2010/10/15 00:49:56  mjk
+	more trimming
+	
 	Revision 1.66  2010/09/07 23:53:26  bruno
 	star power for gb
 	
@@ -334,7 +337,7 @@
 <post>
 
 /opt/rocks/bin/rocks add appliance tile \
-	membership=Tile node=viz-tile
+	membership=Tile node=viz-client
 
 /opt/rocks/bin/rocks set appliance attr tile x11 true
 

@@ -20,6 +20,9 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.31  2010/10/15 00:49:56  mjk
+	more trimming
+	
 	Revision 1.30  2010/09/07 23:53:26  bruno
 	star power for gb
 	
@@ -138,11 +141,10 @@
 	<edge from="client"     to="viz-cuda"   cond="viz_use_cuda"/>
 	<edge from="base"	to="viz-nvidia" cond="viz_use_nvidia"/>
 
-	<edge from="viz-server" to="viz-cuda"/>
-
 	<edge from="server" to="viz-server"/>
 
 	<edge from="viz-server">
+		<to>viz-cuda</to>
 		<to>viz-base</to>
 		<to>viz-db</to>
 	</edge>
@@ -154,16 +156,10 @@
 
 	<edge from="viz-base">
 		<to>viz-sysctl</to>
-		<to>viz-sdl</to>
-		<to>viz-sage</to>
 	</edge>
 
 	<edge from="viz-tile">
 		<to>viz-client</to>
 	</edge>
 
-	<edge from="xen-base">
-		<to>viz-nvidia-xen</to>
-	</edge>
-	
 </graph>
