@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.69  2010/10/25 18:58:01  mjk
+	missing attrs
+	
 	Revision 1.68  2010/10/15 01:14:34  mjk
 	*** empty log message ***
 	
@@ -357,6 +360,8 @@
 /opt/rocks/bin/rocks add appliance attr tile viz_tile_width        20.43
 /opt/rocks/bin/rocks add appliance attr tile viz_tile_height       12.77
 
+/opt/rocks/bin/rocks add appliance attr tile viz_tile_horizontal_shift 0
+/opt/rocks/bin/rocks add appliance attr tile viz_tile_vertical_shift   0
 
 
 <!--
