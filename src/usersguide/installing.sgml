@@ -1,10 +1,13 @@
 <!--
-$Id: installing.sgml,v 1.19 2010/02/24 00:49:11 mjk Exp $
+$Id: installing.sgml,v 1.20 2010/10/25 18:59:31 bruno Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.20  2010/10/25 18:59:31  bruno
+doc tweaks
+
 Revision 1.19  2010/02/24 00:49:11  mjk
 - nvidia driver auto updates, but still works fine if the cluster is
   not on the network.  Each node polls/pulls from nvidia.com the latest
@@ -177,7 +180,7 @@ The Viz Roll supports the construction of walls with either a single LCD display
 
 <para>
 The default configuration for Rocks is a single physical display per machine.  If this is your configuration skip to the next section.  If your wall has
-multiple displays per host you will need to create an XML an XML file that describes the physical layout of your wall.  
+multiple displays per host you will need to create an XML file that describes the physical layout of your wall.  
 The syntax is very simple and the XML itself maps to the 
 dimensions of the wall.  Each <emphasis>col</emphasis> tag describes a vertical
 column of the wall, with the nodes listed top to bottom.  The very first
@@ -195,7 +198,7 @@ connector.  This is a requirement of the SAGE software.
 
 <listitem>
 	<para>
-	This simplest method to create you layout XML is to start from
+	This simplest method to create your XML layout is to start from
 	scratch rather than modifying the defaults as is documented in the
 	non-twinview section above.
 	</para>
