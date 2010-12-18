@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-server.xml,v $
+	Revision 1.70  2010/12/18 00:27:33  mjk
+	*** empty log message ***
+	
 	Revision 1.69  2010/10/25 18:58:01  mjk
 	missing attrs
 	
@@ -289,6 +292,7 @@
 	
 	</changelog>
 
+	<package>nvidia-driver</package>
 	<package>rocks-pylib-viz</package>
 	<package>curl</package>
 	<package>curl-devel</package>

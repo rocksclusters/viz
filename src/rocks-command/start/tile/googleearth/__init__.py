@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2010/09/07 23:53:28 bruno Exp $
+# $Id: __init__.py,v 1.1 2010/12/18 00:27:34 mjk Exp $
 #
 # @Copyright@
 # 
@@ -51,56 +51,32 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# @Copyright@
+# @Copyright@ 
 #
 # $Log: __init__.py,v $
-# Revision 1.2  2010/09/07 23:53:28  bruno
-# star power for gb
-#
-# Revision 1.1  2009/06/03 20:15:31  mjk
-# - kill gdm-binary to reset X server
-# - bezel commands are chromium specific
-#
-# Revision 1.8  2009/05/30 00:02:26  mjk
+# Revision 1.1  2010/12/18 00:27:34  mjk
 # *** empty log message ***
-#
-# Revision 1.7  2009/05/01 19:07:31  mjk
-# chimi con queso
-#
-# Revision 1.6  2008/10/18 00:56:20  mjk
-# copyright 5.1
-#
-# Revision 1.5  2008/07/03 01:14:12  mjk
-# - fix path to xrandr
-# - call xrandr twice (current mode, desired mode)
-#   otherwise it fails to set the desired mode
-# - sage respects the hidebezels mode
-#
-# Revision 1.4  2008/03/06 23:42:02  mjk
-# copyright storm on
-#
-# Revision 1.3  2007/10/03 22:19:58  mjk
-# *** empty log message ***
-#
-# Revision 1.2  2007/09/19 13:28:58  mjk
-# Swiss Viss
-#
-# Revision 1.1  2007/09/19 11:35:08  mjk
-# more swiss changes
 #
 
-import rocks.commands.disable.chromium
 import os
+import shutil
+import rocks.tile
+import rocks.commands
 
-class Command(rocks.commands.disable.chromium.command):
+class Command(rocks.commands.start.tile.command):
 	"""
-	Disable Bezel Hiding mode.
+	Start Google Earth on all of the specified tiles.
 	
-	<example cmd="disable hidebezels">
+	<example cmd='start tile googleearth'>
 	</example>
 	"""
-	
+
+	MustBeRoot = 0
+
 	def run(self, params, args):
-	
-		os.system('/bin/rm ~/.hidebezels')
+
+		for (host, display) in self.getTileNames(args):
+			cmd = '/opt/viz/etc/start-google-earth %s' % display
+			os.system('ssh -f -x %s %s' % (host, cmd))
+
 

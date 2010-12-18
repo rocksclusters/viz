@@ -1,10 +1,13 @@
 <!-- 
-$Id: using.sgml,v 1.10 2010/09/22 21:13:53 mjk Exp $
+$Id: using.sgml,v 1.11 2010/12/18 00:27:34 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.11  2010/12/18 00:27:34  mjk
+*** empty log message ***
+
 Revision 1.10  2010/09/22 21:13:53  mjk
 - viz roll doc fix
 - added DESCRIPTION for git (feel free to change these oneliners)
@@ -180,50 +183,35 @@ The <computeroutput>rocks enable chromium hidebezels</computeroutput> and
 <title>Application Notes</title>
 
 <section><title>Google Earth</title>
+
 <para>
-Google Earth is a 32-bit application and may require extra 32-bit libraries installed on the frontend of the cluster (not the tile nodes).  Recent version of Google Earth work well under Chromium with the "atmosphere" effects turned off.  If the compas does not appear resize the application window on the frontend to set the correct aspect ratio to allow the drawing of the compas.
+Google Earth must be downloaded and installed on the frotend and all
+of the tile nodes.
+Rocks makes it easy for you to create an RPM, rebuild the software
+distribution, and re-installed the tile nodes.
+To download Google Earth start firefox on the Frontend and go to
+earth.google.com, the save binary should be named
+GoogleEarthLinux.bin.
+Next install this into your home directory 
+The following procedure will install Goo
 </para>
 </section>
 
 </section>
 
 <section>
-<title>SAGE</title>
+<title>CGLX</title>
 
 <para>
-A CGLX Roll is available to simplify the installation of CGLX on a Rocks Viz Wall.  This Roll can be installed during initial cluster build, or later after the cluster is deployed.  In both cases adjustments to the multi-case routing may be required.
+A CGLX Roll is available to simplify the installation of CGLX on a
+Rocks Viz Wall.
+This Roll can be installed during initial cluster build, or later
+after the cluster is 
+deployed.  
+In both cases adjustments to the multicast routing may be required.
 </para>
 
 </section>
-
-<section>
-<title>SAGE</title>
-
-<para>
-SAGE requires every user to have a complete personal copy of the SAGE binaries and libraries, and does not allow the sharing of the application in a common directory.  Where a user first starts SAGE a local copy of the SAGE distribution is made in ~/.sage.  All configuration files refered to in the EVL SAGE documentation are in this user specific ~/.sage directory.
-</para> 
-
-
-<section>
-<title>Starting and Stopping</title>
-
-<para>
-SAGE can be started and stopped using the following command.  However the SAGE UI shutdown button is the preferred way to exit SAGE.
-</para>
-
-<para>
-<computeroutput>rocks start sage</computeroutput>
-Starting SAGE will create the ~/.sage directory if one does not exists and will generate all the SAGE configuration files based on the tile layout stored in the Rocks database.
-</para>
-
-<para>
-<computeroutput>rocks stop sage</computeroutput>
-Stopping SAGE can be a slow process.  
-The Viz Roll changes the normal SAGE shutdown process to track down
-all orphaned SAGE processes on the cluster.  
-While this is not fool-proof it does improve issues of orphaned SAGE 
-applications preventing SAGE from starting.
-</para>
 
 </section>
 

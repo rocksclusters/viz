@@ -1,11 +1,18 @@
 #! /opt/rocks/bin/python
 #
-# Start one instance of Google Earth on each display
+# Start Google Earth on the specified display using a unique HOME directory for the
+# cache and configuration files.  The lock file is still shared between instances which
+# is wrong but not a real problem.  Google Earth is like Firefox in that it trys hard to
+# have only one instance per user.  By lying about the HOME directory we can get away
+# with this.
 #
 # @Copyright@
 # @Copyright@
 #
 # $Log: start-google-earth.py,v $
+# Revision 1.2  2010/12/18 00:27:34  mjk
+# *** empty log message ***
+#
 # Revision 1.1  2010/10/07 19:47:12  mjk
 # - added support for Google's Liquid Galaxy
 # - remove sage and some of the deps
@@ -13,27 +20,39 @@
 
 
 import os
+import sys
+import pwd
+import shutil
+import socket
 import string
 
-displays = []
 
-for file in os.listdir('/opt/google-earth'):
-	tokens = file.split(':')
-	if len(tokens) == 2:
-		if tokens[0] == 'drivers.ini':
-			displays.append(tokens[1])
+display = sys.argv[1]
 
-for display in displays:
-	dir = 'google-earth:%s' % display
+dir = os.path.join(os.sep, 'tmp',
+		   'ge-%s-%s:%s' % (pwd.getpwuid(os.getuid()).pw_name,
+				    socket.gethostname(), display))
+
+# Clone the google-earth directory so we can have a unique drivers.ini file,
+# just doing lndir will not work.
 	
-	os.system('rm -rf %s' % dir)
-	os.system('mkdir %s' % dir)
-	os.system('cp -r /opt/google-earth/* %s' % dir)
-	os.system('rm %s/drivers.ini' % dir)
-	os.system('cp %s/drivers.ini:%s %s/drivers.ini' % (dir, display, dir))
+if not os.path.exists(dir):
+	shutil.copytree('/opt/google-earth', dir)
 
-	os.chdir(dir)
-	os.system('DISPLAY=:%s ./googleearth --fullscreen &' % display)
-	os.chdir('..')
+# Copy config files from the viz user account to turn off layer that we want
+# turned on for the frontend.
+	
+if not os.path.exists(os.path.join(dir, '.config')):
+	shutil.copytree(os.path.join(os.sep, 'opt', 'viz', 'etc', '.config'),
+			os.path.join(dir, '.config'))
+
+# Copy tile specific drivers.ini file.  This is where the offsets for the
+# display are specified.  Original files created by rocks sync tile googleearth
+	
+shutil.copyfile(os.path.join('/opt/google-earth', 'drivers.ini:%s' % display),
+		os.path.join(dir, 'drivers.ini'))
+
+
+os.system('DISPLAY=:%s HOME=%s %s/googleearth --fullscreen &' % (display, dir, dir))
 
 

@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.5 2010/10/07 19:41:47 mjk Exp $
+# $Id: __init__.py,v 1.6 2010/12/18 00:27:34 mjk Exp $
 #
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.6  2010/12/18 00:27:34  mjk
+# *** empty log message ***
+#
 # Revision 1.5  2010/10/07 19:41:47  mjk
 # - use dpi instead of pixels to measure offsets
 # - added horizontal|vertical shift attrs to deal with uneven walls (ours)
@@ -126,12 +129,10 @@ class Command(command):
 			self.addText('%s' % [])
 			return
 
-		if os.path.isfile(os.path.join(os.environ['HOME'], 
-			'.hidebezels')):
-			hideBezels = True
-		else:
-			hideBezels = False
-
+		# Removed bezel hiding toggle, just define the bezels to zero to not hide
+		# bezels.
+		
+		hideBezels = True
 
 		self.db.execute('select max(x), max(y) from tiles')
 		maxX, maxY = self.db.fetchone()

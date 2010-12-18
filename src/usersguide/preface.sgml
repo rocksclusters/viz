@@ -1,10 +1,13 @@
 <!--
-$Id: preface.sgml,v 1.6 2010/03/11 03:08:33 mjk Exp $
+$Id: preface.sgml,v 1.7 2010/12/18 00:27:34 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: preface.sgml,v $
+Revision 1.7  2010/12/18 00:27:34  mjk
+*** empty log message ***
+
 Revision 1.6  2010/03/11 03:08:33  mjk
 let's see if we can update this roll
 
@@ -29,9 +32,14 @@ Traditional Rocks-based compute clusters consist of a single Frontend
 machine and several back end Compute machines.  However, a Rocks-based 
 visualization cluster is composed of Tile machines instead of Compute 
 machines.  A Tile machine must have an nVidia graphics card and may drive 
-one or two LCD monitors (or projectors).  The major visualization middleware 
-components are <ulink url="http://chromium.sourceforge.net/">Chromium</ulink>
-and <ulink url="http://www.evl.uic.edu/cavern/sage/">SAGE</ulink>.
+one or two LCD monitors (or projectors).
+</para>
+
+<para>
+The only included visualization middleware is 
+<ulink url="http://chromium.sourceforge.net/">Chromium</ulink>.
+CGLX can be installed from its Roll, and SAGE can be installed
+manually.
 </para>
 
 </preface>

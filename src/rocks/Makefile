@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.45 2010/10/07 19:47:12 mjk Exp $
+# $Id: Makefile,v 1.46 2010/12/18 00:27:33 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.46  2010/12/18 00:27:33  mjk
+# *** empty log message ***
+#
 # Revision 1.45  2010/10/07 19:47:12  mjk
 # - added support for Google's Liquid Galaxy
 # - remove sage and some of the deps
@@ -219,9 +222,9 @@ install::
 	mkdir -p $(ROOT)/$(PKGROOT)/lib/images
 	mkdir -p $(ROOT)/etc/ld.so.conf.d
 	echo $(PKGROOT)/lib >> $(ROOT)/etc/ld.so.conf.d/viz.conf
-	install -m744 viz/etc/start-google-earth.py \
+	install -m755 viz/etc/start-google-earth.py \
 		$(ROOT)/$(PKGROOT)/etc/start-google-earth
-	install -m744 viz/etc/stop-google-earth.sh \
+	install -m755 viz/etc/stop-google-earth.sh \
 		$(ROOT)/$(PKGROOT)/etc/stop-google-earth
 	install -m744 viz/etc/Xclients		\
 		$(ROOT)/$(PKGROOT)/etc/.Xclients

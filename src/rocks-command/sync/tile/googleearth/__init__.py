@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.1 2010/10/07 19:41:47 mjk Exp $
+# $Id: __init__.py,v 1.2 2010/12/18 00:27:34 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.2  2010/12/18 00:27:34  mjk
+# *** empty log message ***
+#
 # Revision 1.1  2010/10/07 19:41:47  mjk
 # - use dpi instead of pixels to measure offsets
 # - added horizontal|vertical shift attrs to deal with uneven walls (ours)
@@ -62,6 +65,7 @@
 #
 
 import os
+import shutil
 import string
 import rocks.commands.sync.tile
 
@@ -75,12 +79,49 @@ class Command(rocks.commands.sync.tile.command):
         </example>
         """
 
+	def configureMaster(self):
+		"""Patch the drivers.ini file that came with Google Earth to add the
+		required ViewSync directives.  A backup of this file remains in /etc/X11,
+		and the original is updated.
+		"""
+		
+		fin  = open('/opt/google-earth/drivers.ini', 'r')
+		fout = open('/etc/X11/ge-drivers.ini',      'w')
+		
+		for line in fin.readlines():
+			fout.write(line)
+			if line.find('SETTINGS {') != 0:
+				continue
+			fout.write('\tViewSync/send = true\n')
+			fout.write('\tViewSync/receive = false\n')
+
+			fout.write('\tViewSync/hostname = %s\n' %
+				   self.db.getHostAttr('localhost',
+						       'Kickstart_PrivateBroadcast'))
+                        fout.write('\tViewSync/port = 21567\n')
+			fout.write('\n')
+			fout.write('\tViewSync/horizFov    = 60\n')
+                        fout.write('\tViewSync/rollOffset  = 0\n')
+                        fout.write('\tViewSync/yawOffset   = 0\n')
+			fout.write('\tViewSync/pitchOffset = 0\n')
+			fout.write('\n')
+
+
+		fin.close()
+		fout.close()
+
+		shutil.copy('/etc/X11/ge-drivers.ini', '/opt/google-earth/drivers.ini')
+
+		
 	def configureTile(self, tile, yawOffset, pitchOffset):
 		(host, display) = tile.split(':')
 		
 		attrs = self.getTileAttrs(tile)
 
-		fin = open('/opt/google-earth/drivers.ini', 'r')
+		if not os.path.exists('/etc/X11/ge-drivers.ini'):
+			self.configureMaster()
+			
+		fin = open('/etc/X11/ge-drivers.ini', 'r')
 		list = []
 		for line in fin.readlines():
 
@@ -172,7 +213,6 @@ class Command(rocks.commands.sync.tile.command):
 #			p2 = float(yoffset) / yres		# pitch of bezels only
 #			pitchOffset = float(pm)/yres + p1 + p2
 
-			print tile, yawOffset, pitchOffset
 
 			self.configureTile(tile, yawOffset, pitchOffset)
 			
