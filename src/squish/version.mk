@@ -1,4 +1,0 @@
-NAME = squish
-VERSION = 1.10
-RELEASE = 1
-

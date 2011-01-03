@@ -1,10 +1,15 @@
 <!-- 
-$Id: using.sgml,v 1.11 2010/12/18 00:27:34 mjk Exp $
+$Id: using.sgml,v 1.12 2011/01/03 20:27:14 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.12  2011/01/03 20:27:14  mjk
+- Working (and documented) Google Earth procedure
+- Simplified docs / commands for TwinView and Bezel hiding
+- Removed old SAGE prereqs (better not to conflict w/ CentOS)
+
 Revision 1.11  2010/12/18 00:27:34  mjk
 *** empty log message ***
 
@@ -37,17 +42,28 @@ cleanup manual
 <title>Using</title>
 
 <section>
-<title>Attributes</title>
+<title>Video Configuration</title>
 
 <section>
 <title>Resolution</title>
 
 <para>
-After the layout is configured and the <computeroutput>rocks sync tile</computeroutput> command is run the resolution of each tile display defaults to the preferred probed value from the nVidia driver.  
-Probing the display requires a DVI connection and may fail on a VGA connect display.  
-If the probed value is not correct you can modify the resolution using the <computeroutput>viz_tile_resolution</computeroutput> attribute.
-For example to set the resolution of all the tile to 1920x1200 use the command <computeroutput>rocks set appliance attr tile viz_tile_resolution 1920x1200</computeroutput>, followup by a <computeroutput>rocks sync tile</computeroutput> command.
+After the layout is configured and the 
+<computeroutput>rocks sync tile</computeroutput> 
+command is run the resolution of each tile display defaults the value
+of the 
+ <computeroutput>viz_tile_resoulation</computeroutput>
+attribute.
+You can alter the video resolution by changing this attribute and
+re-syncing the video wall.  For example:
+
+<screen>
+# rocks set appliance attr tile viz_tile_resolution 1920x1200
+# rocks sync tile
+</screen>
+
 </para>
+
 
 </section>
 
@@ -60,92 +76,106 @@ Without bezel hiding all images rendered on the wall will display all pixels,
 This effect can be distracting for movies and other moving images, but is
 beneficial for static images and text.
 Bezel hiding is performed at the visualization middle-ware layer.
-Because this is controlled at the middle-ware layer Chromium and SAGE behave slightly differently, with Chromium allowing the enabling and disabling of bezel hiding, and SAGE only supporting bezel hiding.
-Despite these differences the following common set of attributes are used to set the bezel height and width.
-</para>
-
-<variablelist>
-	<varlistentry>
-     	<term>viz_tile_left_bezel</term>
-		<listitem>
-			<para>The size (in pixels) of the left-hand side LCD bezel.</para>
-		</listitem>
-     </varlistentry>
-	<varlistentry>
-     	<term>viz_tile_right_bezel</term>
-		<listitem>
-			<para>The size (in pixels) of the right-hand side LCD bezel.</para>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-     	<term>viz_tile_top_bezel</term>
-		<listitem>
-			<para>The size (in pixels) of the top LCD bezel.</para>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-     	<term>viz_tile_bottom_bezel</term>
-		<listitem>
-			<para>The size (in pixels) of the bottom LCD bezel.</para>
-		</listitem>
-	</varlistentry>
-</variablelist>
-
-<para>
-The Viz Roll default for the the left and right side bezels is 100 pixels, and the default for the top and bottom bezels is 80 pixel.  These defaults are a reasonable starting point, but fine tuning will be required for your specific monitors.  Since the units of the bezels measurements are in pixels, of you change the resolution of the displays you will need to update the bezels settings as well.
+The Viz Roll directly supports bezel hiding for Chromium and Google
+Earth, other middleware packages have their own configuration steps to
+accomplish the same thing.
 </para>
 
 <para>
-You can use the <computeroutput>rocks set appliance attr</computeroutput> command to set the bezel attributes.  For example, to change the left side bezel to 200 pixels use the command <computeroutput>rocks set appliance attr tile viz_tile_left_bezel 200</computeroutput>.  If you have non-uniform displays you can also set the bezel sizes on a host basis, although not all middle-ware understands non-uniform tiled display walls.  For example, to change the right side bezel of tile-0-0:0.0 to 0 pixels use the command <computeroutput>rocks set host attr tile-0-0:0.0 viz_tile_right_bezel 0</computeroutput>.
+All of this is controlled with attributes.  It is recommended you
+carefully measure the LCD display in millimeters and record the
+height and width of the viewable area, and the size of the
+non-viewable bezels.  You may also use different unites (e.g. inches)
+but must be consisted accross all measurements.  The viewable portion
+of the monitor is represented by the 
+<computeroutput>viz_tile_width</computeroutput>, and
+<computeroutput>viz_tile_height</computeroutput> attributes.  The
+bezel portion of the monitor is represented by the
+<computeroutput>viz_tile_left_bezel</computeroutput>,
+<computeroutput>viz_tile_right_bezel</computeroutput>,
+<computeroutput>viz_tile_top_bezel</computeroutput>, and
+<computeroutput>viz_tile_bottom_bezel</computeroutput> attributes.
 </para>
+
+<para>
+If the bezel attribute are non-zero then bezel hiding is enabled.  If
+you wish to disable this and render all pixels to show the bezels then
+set the attributes to zero.  For example:
+
+<screen>
+# rocks set appliance attr tile viz_tile_left_bezel 0
+# rocks set appliance attr tile viz_tile_right_bezel 0
+# rocks set appliance attr tile viz_tile_top_bezel 0
+# rocks set appliance attr tile viz_tile_bottom_bezel 0
+</screen>
+
+</para>
+
+<section>
+<title>Simple vs. Meta mode</title>
+
+<para>
+For walls with more than one display per tile node Rocks supports two
+different methods for running X11 servers.  These modes
+are <emphasis>simple</emphasis> and <emphasis>meta</emphasis>.  In
+simple mode (the default) every display on a single tile node runs its
+own X11 server.  In meta mode all the displays on a node are
+aggregated together to form a single display.  If you have two display
+per node this will configure the displays using nVidia's TwinView
+extension.  If you have four nodes per display this will configure two
+sets of TwinView displays and use the X11 Xinerama extension to join
+these into a single X11 server.
+</para>
+
+<para>
+Both Chromium and Google Earth require simple mode and will not
+function correctly in meta mode.  Both CGLX and Sage prefer meta
+mode.  To switch to meta mode do the following:
+
+<screen>
+# rocks sync tile mode=meta
+</screen>
+
+</para>
+
+<mediaobject>
+	<imageobject>
+	<imagedata fileref="images/wall-twin.png" scale=20>
+	</imageobject>
+	<caption><para>
+	Meta mode resulting in a TwinView visualization wall.
+	</para></caption>
+</mediaobject>
+
+
+</section>
+
 
 </section>
 
 <section>
-<title>Video Driver</title>
+<title>Driver</title>
 
 <para>
-The Viz Roll includes the latest (at time of release) production nVidia driver and the latest (at time of release) beta-version of the CUDA-enabled driver.  The CUDA driver is a superset of the standard driver and simply adds CUDA support to the existing OpenGL rendering support.
-Standard nVidia drivers are released as <computeroutput>.run</computeroutput> files and the Viz Roll installs these onto the tile nodes runs the driver file on first boot to build and install the driver.
-The following attributes control the selection of the driver:
-</para>
-
-<variablelist>
-	<varlistentry>
-      	<term>viz_nvidia_driver</term>
-		<listitem>
-			<para>
-Full pathname to the <computeroutput>.run</computeroutput> driver file.
-The Viz Roll installs the production driver at <computeroutput>/opt/viz/drivers/nvidia.run</computeroutput>, and the beta-CUDA driver at <computeroutput>/opt/viz/drivers/nvidia.run</computeroutput>.
-			</para>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-      	<term>viz_nvidia_driver_options</term>
-		<listitem>
-			<para>
-Command line flags used when executing the <computeroutput>.run</computeroutput> driver file.
-The defaults are <computeroutput>--no-network -s</computeroutput>.
-These setting work for both drivers included with the Viz Roll and should not
-but modified.
-			</para>
-		</listitem>
-	</varlistentry>
-</variablelist>
-
-<para>
-To change to the CUDA driver for all tile use the command <computeroutput>rocks set appliance attr viz_nvidia_driver /opt/viz/drivers/cuda.run</computeroutput> and re-install the all the tile machines.  You can also issue this command before integrating any machine to avoid a second installation.
+The Viz Roll includes the latest (at time of release) production
+nVidia driver.  If your system is connected to the Internet then
+everytime you install a tile node it will automatically download and
+install the latest nVidia driver.  There is no longer any need to
+update the video driver manually.
 </para>
 
 </section>
-
 </section>
+
+<section>
+<title>Application Notes</title>
 
 <section>
 <title>Chromium</title>
 
 <para>
-Chromium is used to display the OpenGL frame of applications on the wall.  Applications must be dynamically linked to the libGL.so library and can be either 64-bit or 32-bit binaries.  Although the Viz Roll does include a 32-bit version of Chromium other application libraries may be missing. 
+Chromium is used to display the OpenGL frame of applications on the wall. 
+Applications must be 64-bit and dynamically linked to the libGL.so.
 Some newer applications may contain code written to a later OpenGL 
 specification than is supported by Chromium, however, most application work
 without any source code changes.  
@@ -155,32 +185,29 @@ without any source code changes.
 <title>Enabling and Disabling</title>
 
 <para>
-Enabling and disabling Chromium is done on per use basis and is not a global setting for all users.  In the default disabled state all OpenGL applications started on the frontend of the cluster will display normally in the frotend's X11 display.  If Chromium is enable the application will draw the non-OpenGL components (and window frame) on the frontend display and the OpenGL frame will be rendered across all the tiles in the wall.  Chromium is enabled and disabled using the following commands:
+Enabling and disabling Chromium is done on per use basis and is not a
+global setting for all users. 
+In the default disabled state all OpenGL applications started on the
+frontend of the cluster will display normally in the frotend's X11
+display.  
+If Chromium is enable the application will draw the non-OpenGL
+components (and window frame) on the frontend display and the OpenGL
+frame will be rendered across all the tiles in the wall.  
+Chromium is enabled and disabled using the following commands:
 </para>
 
 <para>
-<computeroutput>rocks enable chromium</computeroutput>
+<computeroutput>$ rocks enable chromium</computeroutput>
 </para>
 
 <para>
-<computeroutput>rocks disable chromium</computeroutput>
+<computeroutput>$ rocks disable chromium</computeroutput>
 </para>
 </section>
 
-
-<section>
-<title>Controlling Bezels</title>
-
-<para> 
-The default for Chromium is to not hide the bezels. 
-The <computeroutput>rocks enable chromium hidebezels</computeroutput> and
-<computeroutput>rocks disable chromium hidebezels</computeroutput> commands can be used to control this behavior.
-</para>
-
 </section>
 
-<section>
-<title>Application Notes</title>
+
 
 <section><title>Google Earth</title>
 
@@ -192,12 +219,80 @@ distribution, and re-installed the tile nodes.
 To download Google Earth start firefox on the Frontend and go to
 earth.google.com, the save binary should be named
 GoogleEarthLinux.bin.
-Next install this into your home directory 
-The following procedure will install Goo
+Next install this using Google's GUI into your home directory and install the software
+into the directory <computeroutput>google-earth</computeroutput> in your home
+directory.
 </para>
-</section>
+
+<orderedlist>
+
+<listitem>
+
+	<para>
+	Using the installed Google Earth directory create an RPM, and
+	add it to the cluster software distribution.
+	</para>
+
+	<screen>
+	$ cd ~
+	$ su
+	# rocks create package `pwd`/google-earth/ google-earth prefix=/opt/google-earth
+	# cp google-earth-*.rpm /export/rocks/install/contrib/5.4/x86_64/RPMS/
+	# cd /export/rocks/install
+	# rocks create distr
+	</screen>
+
+</listitem>
+
+<listitem>
+
+	<para>
+	Now install the RPM on the frontend, and re-install all the
+	tile nodes.
+	</para>
+
+	<screen>
+	# rpm -Uhv /export/rocks/install/contrib/5.4/x86_64/RPMS/google-earth-*.rpm
+	# rocks run host tile /boot/kickstart/cluster-kickstart
+	</screen>
+
+</listitem>
+
+<listitem>
+
+	<para>
+	Next as root sync the tile layout to all the nodes so Google
+	Earth can use each display as a slave for the master instance
+	running on the Frontend.
+	</para>
+
+	<screen>
+	# rocks sync tile googleearth
+	</screen>
+
+</listitem>
+
+<listitem>
+
+	<para>
+	Finally start Google Earth (not as root) on the Frontend machine.  This is
+	your master display, and all the tile nodes will track all
+	movements on the instance of Google Earth.  You can stop and
+	start Google Earth on the tile nodes using the following
+	commands.
+	</para>
+
+	<screen>
+	$ rocks start tile googleearth
+	$ rocks stop tile googleearth
+	</screen>
+
+</listitem>
+
+</orderedlist>
 
 </section>
+
 
 <section>
 <title>CGLX</title>
@@ -212,11 +307,9 @@ In both cases adjustments to the multicast routing may be required.
 </para>
 
 </section>
-
 </section>
 
-</section>
-</section>
+
 
 
 </chapter>

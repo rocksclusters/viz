@@ -1,4 +1,0 @@
-NAME = plib
-VERSION = 1.8.4
-RELEASE = 1
-

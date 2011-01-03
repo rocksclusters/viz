@@ -1,10 +1,15 @@
 <!--
-$Id: installing.sgml,v 1.20 2010/10/25 18:59:31 bruno Exp $
+$Id: installing.sgml,v 1.21 2011/01/03 20:27:14 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.21  2011/01/03 20:27:14  mjk
+- Working (and documented) Google Earth procedure
+- Simplified docs / commands for TwinView and Bezel hiding
+- Removed old SAGE prereqs (better not to conflict w/ CentOS)
+
 Revision 1.20  2010/10/25 18:59:31  bruno
 doc tweaks
 
@@ -252,26 +257,13 @@ connector.  This is a requirement of the SAGE software.
 	</para>
 
 	<screen>
-	# rocks sync tile mode=meta
+	# rocks sync tile
 	</screen>
 
 	<para>
 	This will generate xorg.conf files for each tile node,
-	copy them to the tile nodes, then restart the X11 server.  Once the
-	Tile nodes restart X11 your wall should look like the following 
-	picture.
-	Note that each display is labeled according the connected Tile
-	node.
+	copy them to the tile nodes, then restart the X11 server.
 	</para>
-	
-	<mediaobject>
-		<imageobject>
-		<imagedata fileref="images/wall-twin.png" scale=20>
-		</imageobject>
-		<caption><para>
-		Completed installation for a TwinView visualization wall.
-		</para></caption>
-	</mediaobject>
 
 </listitem>
 

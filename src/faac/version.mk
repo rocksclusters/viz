@@ -1,4 +1,0 @@
-NAME = faac
-VERSION = 1.26
-RELEASE = 1
-

@@ -1,4 +1,0 @@
-NAME = libmad
-VERSION = 0.15.1b
-RELEASE = 1
-
