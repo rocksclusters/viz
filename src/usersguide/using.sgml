@@ -1,10 +1,14 @@
 <!-- 
-$Id: using.sgml,v 1.12 2011/01/03 20:27:14 mjk Exp $
+$Id: using.sgml,v 1.13 2011/01/03 20:55:38 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.13  2011/01/03 20:55:38  mjk
+- DOCS: added init mode description
+- FIX: turn off GE compass (again)
+
 Revision 1.12  2011/01/03 20:27:14  mjk
 - Working (and documented) Google Earth procedure
 - Simplified docs / commands for TwinView and Bezel hiding
@@ -112,11 +116,16 @@ set the attributes to zero.  For example:
 </para>
 
 <section>
-<title>Simple vs. Meta mode</title>
+<title>Init, Simple, &amp; Meta mode</title>
 
 <para>
-For walls with more than one display per tile node Rocks supports two
-different methods for running X11 servers.  These modes
+For walls with more than one display per tile node Rocks supports three
+different methods for running X11 servers.  
+The first mode <emphasis>init</emphasis> is the mode used when a tile
+node is first installed.
+It is not possible to run any application while the tile is in this
+mode and you must set the wall another mode prior to use.
+The two outher modes
 are <emphasis>simple</emphasis> and <emphasis>meta</emphasis>.  In
 simple mode (the default) every display on a single tile node runs its
 own X11 server.  In meta mode all the displays on a node are
@@ -147,6 +156,16 @@ mode.  To switch to meta mode do the following:
 	</para></caption>
 </mediaobject>
 
+<para>
+It is recommended you leave your wall in simple mode unless otherwise
+required.
+To configure the wall for simple mode do the following:
+
+<screen>
+# rocks sync tile
+</screen>
+
+</para>
 
 </section>
 
