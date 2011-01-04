@@ -1,3 +1,3 @@
 NAME = nvidia-cuda
-RELEASE = 1
+RELEASE = 3.2.16
 

@@ -1,5 +1,5 @@
 # --------------------------------------------------- -*- Makefile -*- --
-# $Id: Makefile,v 1.2 2010/09/07 23:53:28 bruno Exp $
+# $Id: Makefile,v 1.3 2011/01/04 22:48:18 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,9 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.3  2011/01/04 22:48:18  mjk
+# *** empty log message ***
+#
 # Revision 1.2  2010/09/07 23:53:28  bruno
 # star power for gb
 #
@@ -71,6 +74,4 @@ build:
 
 install:: 
 	mkdir -p $(ROOT)/$(PKGROOT)
-	sh cudatoolkit_2.2_linux_64_rhel5.3.run -- --prefix=$(ROOT)/$(PKGROOT)
-	sh cudagdb_2.2_linux_64_rhel5.3.run -- --prefix=$(ROOT)/$(PKGROOT)
-	
+	sh cudatoolkit_$(VERSION)_linux_64_rhel5.5.run -- --prefix=$(ROOT)/$(PKGROOT)
