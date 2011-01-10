@@ -20,6 +20,9 @@
 
 	<changelog>
 	$Log: viz.xml,v $
+	Revision 1.33  2011/01/10 18:50:42  mjk
+	*** empty log message ***
+	
 	Revision 1.32  2010/10/15 01:14:34  mjk
 	*** empty log message ***
 	
@@ -141,13 +144,14 @@
 		<tail>viz-server</tail>
 	</order>
 
-	<edge from="client"     to="viz-cuda"   cond="viz_cuda"/>
-	<edge from="base"	to="viz-nvidia" cond="viz_nvidia"/>
+	<edge from="base" to="viz-cuda"   cond="viz_cuda"/>
+	<edge from="base" to="viz-nvidia" cond="viz_nvidia"/>
+
+	<edge from="server" to="viz-cuda-sdk" cond="viz_cuda"/>
 
 	<edge from="server" to="viz-server"/>
 
 	<edge from="viz-server">
-		<to>viz-cuda</to>
 		<to>viz-db</to>
 		<to>viz-base</to>
 	</edge>

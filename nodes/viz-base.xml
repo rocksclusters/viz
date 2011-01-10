@@ -14,6 +14,9 @@
 
 	<changelog>
 	$Log: viz-base.xml,v $
+	Revision 1.48  2011/01/10 18:50:42  mjk
+	*** empty log message ***
+	
 	Revision 1.47  2010/09/07 23:53:26  bruno
 	star power for gb
 	
@@ -236,38 +239,11 @@
 	<package>rocks-viz</package>
 	<package>freeglut</package>
 	<package>chromium</package>
-	<package>Cg</package>
-	<package>wx</package>
 
-	<package>alsa-lib</package>
-	<package>alsa-lib-devel</package>
-	<package>alsa-utils</package>
-	<package>portaudio</package>
 	<package>glew</package>
 	<package>libtool-ltdl-devel</package>
 
 	<package>xorg-x11-Mesa-libGL</package>
-
-	<package>foundation-mplayer</package>
-	<package>libmad</package>
-	<package>libdvbpsi</package>
-	<package>libdvdcss</package>
-	<package>libdvdplay</package>
-	<package>libdvdread</package>
-	<package>faad2</package>
-	<package>faac</package>
-	<package>ffmpeg</package>
-	<package>vlc</package>
-
-<!--
-	<package>QUANTA</package>
-	<package>sage</package>
-	<package>sage-mplayer</package>
-	<package>MagicCarpet</package>
--->
-	<package>vtk</package>
-	<package>fltk</package>
-
 
 <post>
 

@@ -1,10 +1,13 @@
 <!-- 
-$Id: using.sgml,v 1.13 2011/01/03 20:55:38 mjk Exp $
+$Id: using.sgml,v 1.14 2011/01/10 18:51:11 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.14  2011/01/10 18:51:11  mjk
+*** empty log message ***
+
 Revision 1.13  2011/01/03 20:55:38  mjk
 - DOCS: added init mode description
 - FIX: turn off GE compass (again)
@@ -116,7 +119,40 @@ set the attributes to zero.  For example:
 </para>
 
 <section>
-<title>Init, Simple, &amp; Meta mode</title>
+<title>Modes</title>
+
+<section>
+<title>Init</title>
+
+<para>
+When a tile node is first installed, or re-installed, it is
+in <emphasis>init</emphasis> mode when the video resolution is
+automatically selected, and a single display X11 server is started.
+This mode is only for diagnostic purposes to verify the video driver
+functions correctly. 
+You must place switch to one of the following modes before using the
+video wall.
+</para>
+
+</section>
+
+<section>
+<title>Simple</title>
+
+<para>
+Simple mode is the default configuration.  For every
+display attached to a tile a single X11 display is configured, all
+running under the same X11 server.
+You can switch to <emphasis>simple</emphasis> mode with the following
+commands (run as root):
+
+<screen>
+# rocks sync tile
+</screen>
+</para>
+
+</section>
+
 
 <para>
 For walls with more than one display per tile node Rocks supports three
