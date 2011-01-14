@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-client.xml,v $
+	Revision 1.18  2011/01/14 18:52:44  mjk
+	New version on Google Earth (just released
+	
 	Revision 1.17  2010/10/15 00:49:56  mjk
 	more trimming
 	
@@ -134,6 +137,7 @@
 	
 	</changelog>
 
+	<package>google-earth-stable</package>
 
 <post>
 

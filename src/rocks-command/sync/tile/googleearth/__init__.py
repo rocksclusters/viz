@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2010/12/18 00:27:34 mjk Exp $
+# $Id: __init__.py,v 1.3 2011/01/14 18:52:45 mjk Exp $
 # 
 # @Copyright@
 # 
@@ -54,6 +54,9 @@
 # @Copyright@
 #
 # $Log: __init__.py,v $
+# Revision 1.3  2011/01/14 18:52:45  mjk
+# New version on Google Earth (just released
+#
 # Revision 1.2  2010/12/18 00:27:34  mjk
 # *** empty log message ***
 #
@@ -85,7 +88,7 @@ class Command(rocks.commands.sync.tile.command):
 		and the original is updated.
 		"""
 		
-		fin  = open('/opt/google-earth/drivers.ini', 'r')
+		fin  = open('/opt/google/earth/free/drivers.ini', 'r')
 		fout = open('/etc/X11/ge-drivers.ini',      'w')
 		
 		for line in fin.readlines():
@@ -110,7 +113,7 @@ class Command(rocks.commands.sync.tile.command):
 		fin.close()
 		fout.close()
 
-		shutil.copy('/etc/X11/ge-drivers.ini', '/opt/google-earth/drivers.ini')
+		shutil.copy('/etc/X11/ge-drivers.ini', '/opt/google/earth/free/drivers.ini')
 
 		
 	def configureTile(self, tile, yawOffset, pitchOffset):
@@ -167,7 +170,7 @@ class Command(rocks.commands.sync.tile.command):
 			fout.write(line)
 		fout.close()
 
-                os.system('scp -q %s %s:/opt/google-earth/drivers.ini:%s' % (filename, host, display))
+                os.system('scp -q %s %s:/opt/google/earth/free/drivers.ini:%s' % (filename, host, display))
 
 
         def run(self, params, args):

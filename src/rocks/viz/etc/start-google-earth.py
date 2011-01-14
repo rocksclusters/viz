@@ -10,6 +10,9 @@
 # @Copyright@
 #
 # $Log: start-google-earth.py,v $
+# Revision 1.3  2011/01/14 18:52:44  mjk
+# New version on Google Earth (just released
+#
 # Revision 1.2  2010/12/18 00:27:34  mjk
 # *** empty log message ***
 #
@@ -37,7 +40,7 @@ dir = os.path.join(os.sep, 'tmp',
 # just doing lndir will not work.
 	
 if not os.path.exists(dir):
-	shutil.copytree('/opt/google-earth', dir)
+	shutil.copytree('/opt/google/earth/free', dir)
 
 # Copy config files from the viz user account to turn off layer that we want
 # turned on for the frontend.
@@ -48,8 +51,9 @@ if not os.path.exists(os.path.join(dir, '.config')):
 
 # Copy tile specific drivers.ini file.  This is where the offsets for the
 # display are specified.  Original files created by rocks sync tile googleearth
-	
-shutil.copyfile(os.path.join('/opt/google-earth', 'drivers.ini:%s' % display),
+
+os.unlink(os.path.join(dir, 'drivers.ini')) 
+shutil.copyfile(os.path.join('/opt/google/earth/free', 'drivers.ini:%s' % display),
 		os.path.join(dir, 'drivers.ini'))
 
 
