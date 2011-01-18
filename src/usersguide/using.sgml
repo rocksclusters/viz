@@ -1,11 +1,11 @@
 <!-- 
-$Id: using.sgml,v 1.14 2011/01/10 18:51:11 mjk Exp $
+$Id: using.sgml,v 1.15 2011/01/18 18:51:54 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
-Revision 1.14  2011/01/10 18:51:11  mjk
+Revision 1.15  2011/01/18 18:51:54  mjk
 *** empty log message ***
 
 Revision 1.13  2011/01/03 20:55:38  mjk
@@ -65,6 +65,7 @@ You can alter the video resolution by changing this attribute and
 re-syncing the video wall.  For example:
 
 <screen>
+$ su
 # rocks set appliance attr tile viz_tile_resolution 1920x1200
 # rocks sync tile
 </screen>
@@ -110,6 +111,7 @@ you wish to disable this and render all pixels to show the bezels then
 set the attributes to zero.  For example:
 
 <screen>
+$ su
 # rocks set appliance attr tile viz_tile_left_bezel 0
 # rocks set appliance attr tile viz_tile_right_bezel 0
 # rocks set appliance attr tile viz_tile_top_bezel 0
@@ -117,6 +119,7 @@ set the attributes to zero.  For example:
 </screen>
 
 </para>
+</section>
 
 <section>
 <title>Modes</title>
@@ -125,7 +128,7 @@ set the attributes to zero.  For example:
 <title>Init</title>
 
 <para>
-When a tile node is first installed, or re-installed, it is
+ When a tile node is first installed, or re-installed, it is
 in <emphasis>init</emphasis> mode when the video resolution is
 automatically selected, and a single display X11 server is started.
 This mode is only for diagnostic purposes to verify the video driver
@@ -138,51 +141,35 @@ video wall.
 
 <section>
 <title>Simple</title>
-
 <para>
 Simple mode is the default configuration.  For every
 display attached to a tile a single X11 display is configured, all
 running under the same X11 server.
 You can switch to <emphasis>simple</emphasis> mode with the following
-commands (run as root):
-
+command (run as root):
+</para>
 <screen>
+$ su
 # rocks sync tile
 </screen>
-</para>
-
 </section>
 
-
+<section>
+<title>Meta</title>
 <para>
-For walls with more than one display per tile node Rocks supports three
-different methods for running X11 servers.  
-The first mode <emphasis>init</emphasis> is the mode used when a tile
-node is first installed.
-It is not possible to run any application while the tile is in this
-mode and you must set the wall another mode prior to use.
-The two outher modes
-are <emphasis>simple</emphasis> and <emphasis>meta</emphasis>.  In
-simple mode (the default) every display on a single tile node runs its
-own X11 server.  In meta mode all the displays on a node are
-aggregated together to form a single display.  If you have two display
-per node this will configure the displays using nVidia's TwinView
-extension.  If you have four nodes per display this will configure two
-sets of TwinView displays and use the X11 Xinerama extension to join
-these into a single X11 server.
+For walls with multiple (2, or 4) displays per
+tile <emphasis>meta</emphasis> mode is used to aggregate all the
+attached displays into a single X11 display.  For tiles with 2
+displays this is done using TwinView.  For tiles with 4 displays two
+sets of TwinView displays are created and Xinerama is then used to
+create a single display.
+You can switch to <emphasis>meta</emphasis> mode with the following
+command (run as root):
 </para>
-
-<para>
-Both Chromium and Google Earth require simple mode and will not
-function correctly in meta mode.  Both CGLX and Sage prefer meta
-mode.  To switch to meta mode do the following:
-
 <screen>
+$ su
 # rocks sync tile mode=meta
 </screen>
-
-</para>
-
 <mediaobject>
 	<imageobject>
 	<imagedata fileref="images/wall-twin.png" scale=20>
@@ -191,26 +178,29 @@ mode.  To switch to meta mode do the following:
 	Meta mode resulting in a TwinView visualization wall.
 	</para></caption>
 </mediaobject>
-
-<para>
-It is recommended you leave your wall in simple mode unless otherwise
-required.
-To configure the wall for simple mode do the following:
-
-<screen>
-# rocks sync tile
-</screen>
-
-</para>
-
 </section>
 
+<section>
+<title>User</title>
+<para>
+User mode allows you to provide your own X11 configuration file rather
+have Rocks manage it.  In <emphasis>user</emphasis> mode you must place
+each tiles configuration file in the
+directory <computeroutput>/etc/X11/xorg.conf-user-HOSTNAME</computeroutput>,
+where HOSTNAME is the name of the tile machine (e.g. tile-0-0).
+Once all the configuration files have been created switch
+to <emphasis>user</emphasis> mode.
+</para>
+<screen>
+$ su
+# rocks sync tile mode=user
+</screen>
+</section>
 
 </section>
 
 <section>
 <title>Driver</title>
-
 <para>
 The Viz Roll includes the latest (at time of release) production
 nVidia driver.  If your system is connected to the Internet then
@@ -218,8 +208,22 @@ everytime you install a tile node it will automatically download and
 install the latest nVidia driver.  There is no longer any need to
 update the video driver manually.
 </para>
-
 </section>
+
+<section>
+<title>Power Control</title>
+<para>
+Automatic power savings is disabled to prevent the wall from turning
+off during use.  You can explicitly turn of the displays with the
+following commands.
+</para>
+<screen>
+$ su
+# rocks stop tile
+# rocks start tile
+</screen>
+</section>
+
 </section>
 
 <section>
@@ -236,9 +240,6 @@ specification than is supported by Chromium, however, most application work
 without any source code changes.  
 </para>
   
-<section>
-<title>Enabling and Disabling</title>
-
 <para>
 Enabling and disabling Chromium is done on per use basis and is not a
 global setting for all users. 
@@ -258,7 +259,6 @@ Chromium is enabled and disabled using the following commands:
 <para>
 <computeroutput>$ rocks disable chromium</computeroutput>
 </para>
-</section>
 
 </section>
 
@@ -266,17 +266,13 @@ Chromium is enabled and disabled using the following commands:
 
 <section><title>Google Earth</title>
 
+<section><title>Installation</title>
+
 <para>
 Google Earth must be downloaded and installed on the frotend and all
 of the tile nodes.
-Rocks makes it easy for you to create an RPM, rebuild the software
-distribution, and re-installed the tile nodes.
-To download Google Earth start firefox on the Frontend and go to
-earth.google.com, the save binary should be named
-GoogleEarthLinux.bin.
-Next install this using Google's GUI into your home directory and install the software
-into the directory <computeroutput>google-earth</computeroutput> in your home
-directory.
+Download 64bit Fedora RPM of Google Earth from earth.google.com and
+save it in your home directory and do the following:
 </para>
 
 <orderedlist>
@@ -284,17 +280,16 @@ directory.
 <listitem>
 
 	<para>
-	Using the installed Google Earth directory create an RPM, and
-	add it to the cluster software distribution.
+	Add the RPM to the cluster software distribution.
 	</para>
 
 	<screen>
 	$ cd ~
 	$ su
-	# rocks create package `pwd`/google-earth/ google-earth prefix=/opt/google-earth
-	# cp google-earth-*.rpm /export/rocks/install/contrib/5.4/x86_64/RPMS/
+	# cp google-earth-stable*.rpm /export/rocks/install/contrib/5.4/x86_64/RPMS/
 	# cd /export/rocks/install
-	# rocks create distr
+	# rocks create distro
+	# exit
 	</screen>
 
 </listitem>
@@ -302,13 +297,16 @@ directory.
 <listitem>
 
 	<para>
-	Now install the RPM on the frontend, and re-install all the
+	Install the RPM on the frontend, and re-install all the
 	tile nodes.
 	</para>
 
 	<screen>
-	# rpm -Uhv /export/rocks/install/contrib/5.4/x86_64/RPMS/google-earth-*.rpm
+	$ cd ~
+	$ su
+	# rpm -Uhv --nodeps google-earth-stable*.rpm
 	# rocks run host tile /boot/kickstart/cluster-kickstart
+	# exit
 	</screen>
 
 </listitem>
@@ -322,29 +320,37 @@ directory.
 	</para>
 
 	<screen>
+	$ su
 	# rocks sync tile googleearth
+	# exit
 	</screen>
 
 </listitem>
-
-<listitem>
-
-	<para>
-	Finally start Google Earth (not as root) on the Frontend machine.  This is
-	your master display, and all the tile nodes will track all
-	movements on the instance of Google Earth.  You can stop and
-	start Google Earth on the tile nodes using the following
-	commands.
-	</para>
-
-	<screen>
-	$ rocks start tile googleearth
-	$ rocks stop tile googleearth
-	</screen>
-
-</listitem>
-
 </orderedlist>
+</section>
+
+<section><title>Running</title>
+
+<para>
+Each X11 display needs to run its own instance of Google Earth, this
+is true even for walls with multiple displays per node.  First make
+sure the wall of configured in <emphasis>simple</emphasis> mode, and
+then start Google Earth all the tile nodes and the frontend.
+<screen>
+$ rocks start tile googleearth
+$ /opt/google/earth/free/googleearth
+</screen>
+</para>
+
+<para>
+To exit close the controlling window on the Frontend console, and shut
+down the tile node instances.
+<screen>
+$ rocks stop tile googleearth
+</screen>
+</para>
+
+</section>
 
 </section>
 
@@ -365,6 +371,5 @@ In both cases adjustments to the multicast routing may be required.
 </section>
 
 
-
-
 </chapter>
+

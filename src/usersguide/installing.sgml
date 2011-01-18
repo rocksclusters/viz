@@ -1,10 +1,13 @@
 <!--
-$Id: installing.sgml,v 1.21 2011/01/03 20:27:14 mjk Exp $
+$Id: installing.sgml,v 1.22 2011/01/18 18:51:54 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.22  2011/01/18 18:51:54  mjk
+*** empty log message ***
+
 Revision 1.21  2011/01/03 20:27:14  mjk
 - Working (and documented) Google Earth procedure
 - Simplified docs / commands for TwinView and Bezel hiding
@@ -122,6 +125,26 @@ starting new manual
 			fileref="images/ssh.png" scale=50>
 		</imageobject>
 	</mediaobject>
+	</para>
+</listitem>
+
+<listitem>
+	<para>
+	If your Frontend has an nVidia card installed you will need to
+	configure the X11 driver.  Log in as root and switch the
+	runlevel 3.
+<screen>
+# /sbin/init 3
+</screen>
+	</para>
+	<para>
+	Now log in again as root at the text console, install the
+	nVidia driver, and reboot the node.
+<screen>
+# service nvidia start
+# nvidia-xconfig
+# /sbin/init 6
+</screen>
 	</para>
 </listitem>
 
