@@ -1,10 +1,13 @@
 <!-- 
-$Id: index.sgml,v 1.10 2011/01/18 18:51:54 mjk Exp $
+$Id: index.sgml,v 1.11 2011/01/18 22:25:20 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: index.sgml,v $
+Revision 1.11  2011/01/18 22:25:20  mjk
+*** empty log message ***
+
 Revision 1.10  2011/01/18 18:51:54  mjk
 *** empty log message ***
 
@@ -83,7 +86,7 @@ starting new manual
 &source_attr;
 &source_installing;
 &source_using;
-<!-- &source_roll-commands; -->
+&source_roll-commands;
 &source_appendix;
 
 </book>
