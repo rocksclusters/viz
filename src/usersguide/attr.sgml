@@ -1,10 +1,13 @@
 <!--
-$Id: attr.sgml,v 1.4 2011/01/10 18:51:11 mjk Exp $
+$Id: attr.sgml,v 1.5 2011/01/27 17:00:17 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: attr.sgml,v $
+Revision 1.5  2011/01/27 17:00:17  mjk
+added src column
+
 Revision 1.4  2011/01/10 18:51:11  mjk
 *** empty log message ***
 
@@ -31,75 +34,101 @@ Revision 1.1  2009/06/22 19:05:46  mjk
 <table>
 	<title>Tile Appliance</title>
 	<tgroup cols="3">
-		<tbody>
+		<thead>
 			<row>
 				<entry>Name</entry>
 				<entry>Type</entry>
-				<entry>Default</entry>
+				<entry>Default Scope</entry>
+				<entry>Default Value</entry>
+			</row>
+		</thead>
+		<tbody>
+			<row>
+				<entry>kickstartable
+<footnote><para>
+Provided by Base Roll
+</para></footnote>
+				</entry>
+				<entry>bool</entry>
+				<entry>appliance=tile</entry>
+				<entry>yes</entry>
 			</row>
 			<row>
 				<entry>viz_cuda</entry>
 				<entry>bool</entry>
+				<entry>appliance=tile</entry>
 				<entry>true</entry>
 			</row>
 			<row>
 				<entry>viz_tile_bottom_bezel</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
 				<entry>viz_tile_height</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>12.77</entry>
 			</row>
 			<row>
 				<entry>viz_tile_horizontal_shift</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>0</entry>
 			</row>
 			<row>
 				<entry>viz_tile_left_bezel</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
 				<entry>viz_tile_resolution</entry>
 				<entry>string</entry>
+				<entry>appliance=tile</entry>
 				<entry>1920x1200</entry>
 			</row>
 			<row>
 				<entry>viz_tile_right_bezel</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
 				<entry>viz_tile_top_bezel</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
 				<entry>viz_tile_vertical_shift</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>0</entry>
 			</row>
 			<row>
 				<entry>viz_tile_width</entry>
 				<entry>float</entry>
+				<entry>appliance=tile</entry>
 				<entry>20.43</entry>
 			</row>
 			<row>
 				<entry>viz_nvidia</entry>
 				<entry>bool</entry>
+				<entry>appliance=tile</entry>
 				<entry>true</entry>
 			</row>
 			<row>
 				<entry>viz_x11_modules</entry>
 				<entry>string</entry>
+				<entry>appliance=tile</entry>
 				<entry>dbe extmod type1 freetype glx</entry>
 			</row>
 			<row>
 				<entry>x11</entry>
 				<entry>bool</entry>
+				<entry>appliance=tile</entry>
 				<entry>true</entry>
 			</row>
 		</tbody>
@@ -184,18 +213,7 @@ the xorg.conf file on the tiles.
 			</para>
 		</listitem>
 	</varlistentry>
-
-	<varlistentry>
-	    	<term>x11</term>
-		<listitem>
-			<para>
-If true one of more X11 displays are configured on the tile machine.
-This attribute is from the Rocks base and should not be changed.
-			</para>
-		</listitem>
-	</varlistentry>
 </variablelist>
-
 
 </section>
 
