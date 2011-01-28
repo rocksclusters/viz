@@ -1,10 +1,22 @@
 <!-- 
-$Id: index.sgml,v 1.11 2011/01/18 22:25:20 mjk Exp $
+$Id: index.sgml,v 1.12 2011/01/28 02:17:28 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: index.sgml,v $
+Revision 1.12  2011/01/28 02:17:28  mjk
+Docbook cleanup (using Viz Roll as proto-type)
+- consistent entity naming (no more mixing of '-' and '_')
+- roll compat page only lists specified rolls (version.mk)
+- added note about using all OS cds with non-core rolls (e.g. viz)
+- added entities for roll names, and bools
+- logical styles used instead of direct formatting
+  e.g. constant vs. emphasis
+Works for Viz (needs new devel env installed)
+TODO: Update Base Roll to further standardize (slow)
+TODO: Cleanup all other Rolls (fast)
+
 Revision 1.11  2011/01/18 22:25:20  mjk
 *** empty log message ***
 
@@ -45,27 +57,27 @@ starting new manual
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 	<!ENTITY % entities SYSTEM "entities.sgml">
 	%entities;
+	<!ENTITY TDW "Tile Display wall">
 ]>
 <book>
 
 <bookinfo>
 
-	<title>Viz Roll: Users Guide</title>
+	<title>&roll-viz; Users Guide</title>
 
 	<subtitle>
 		<inlinemediaobject>
 			<imageobject>
-				<imagedata fileref="images/resized-eye.png"
-					scale=50>
+				<imagedata fileref="images/resized-eye.png" scale=50>
 			</imageobject>
 		</inlinemediaobject>
 	</subtitle>
 
-	<edition>Version &document_version;</edition>
-	<pubdate>&document_pubdate;</pubdate>
+	<edition>&document-version;</edition>
+	<pubdate>&document-pubdate;</pubdate>
 	<copyright id="copyright" xreflabel="copyright">
-		<year>&document_year;</year>
-		<holder>&document_copyright;</holder>	
+		<year>&document-year;</year>
+		<holder>&document-copyright;</holder>	
 	</copyright>
 
 	<releaseinfo>
@@ -74,19 +86,19 @@ starting new manual
 
 	<legalnotice>
 		<para>
-		This document is subject to the Rocks License 
+		This document is subject to the &rocks; License 
 		(see <xref linkend="rocks-copyright">).
 		</para>
 	</legalnotice>
 
 </bookinfo>
 
-&source_preface;
-&source_roll-overview;
-&source_attr;
-&source_installing;
-&source_using;
-&source_roll-commands;
-&source_appendix;
+&source-preface;
+&source-roll-overview;
+&source-attr;
+&source-installing;
+&source-using;
+&source-roll-commands;
+&source-appendix;
 
 </book>

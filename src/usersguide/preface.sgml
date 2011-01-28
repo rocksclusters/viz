@@ -1,10 +1,22 @@
 <!--
-$Id: preface.sgml,v 1.8 2011/01/03 20:27:14 mjk Exp $
+$Id: preface.sgml,v 1.9 2011/01/28 02:17:28 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: preface.sgml,v $
+Revision 1.9  2011/01/28 02:17:28  mjk
+Docbook cleanup (using Viz Roll as proto-type)
+- consistent entity naming (no more mixing of '-' and '_')
+- roll compat page only lists specified rolls (version.mk)
+- added note about using all OS cds with non-core rolls (e.g. viz)
+- added entities for roll names, and bools
+- logical styles used instead of direct formatting
+  e.g. constant vs. emphasis
+Works for Viz (needs new devel env installed)
+TODO: Update Base Roll to further standardize (slow)
+TODO: Cleanup all other Rolls (fast)
+
 Revision 1.8  2011/01/03 20:27:14  mjk
 - Working (and documented) Google Earth procedure
 - Simplified docs / commands for TwinView and Bezel hiding
@@ -28,23 +40,36 @@ starting new manual
 -->
 
 <preface>
+
 <title>Preface</title>
 
-
 <para>
-The Viz Roll is used to build scientific visualization clusters with Rocks.  
-Traditional Rocks-based compute clusters consist of a single Frontend 
-machine and several back end Compute machines.  However, a Rocks-based 
-visualization cluster is composed of Tile machines instead of Compute 
-machines.  A Tile machine must have an nVidia graphics card and may drive 
-one, two, or four LCD monitors (or projectors).
+The most basic &rocks; clusters consist of a single <constant>frontend</constant> 
+machine and several back end <constant>compute</constant>
+or <constant>vm-container</constant> machines.
+The &roll-viz; roll adds a new <constant>tile</constant>
+appliance used to build &TDW;s.  
+Each <constant>tile</constant> of a wall can control one, two, or four
+displays using a single nVidia card.
+There is no support for other video cards, or support for multiple
+nVidia cards per machine.
 </para>
 
 <para>
-The only included visualization middleware is 
-<ulink url="http://chromium.sourceforge.net/">Chromium</ulink>.
-CGLX can be installed from its Roll, and SAGE can be installed
-manually.
+In addition to tools for configurating and managing &TDW;s, this &roll; includes 
+<ulink url="http://chromium.sourceforge.net/">Chromium</ulink>
+for running OpenGL applications.
+Other middleware such as
+<ulink url="http://vis.ucsd.edu/~cglx/">CGLX</ulink>
+can be installed from its own roll, and 
+<ulink url="http://www.sagecommons.org">SAGE</ulink>
+can be installed manually.
+</para>
+
+<para>
+The &roll-viz; roll also provides the CUDA drivers and SDK
+which can optionally be included on any appliance type,
+including <constant>compute</constant>s.
 </para>
 
 </preface>

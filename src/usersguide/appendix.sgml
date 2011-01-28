@@ -1,5 +1,5 @@
 <!-- 
-$Id: appendix.sgml,v 1.4 2011/01/03 20:27:14 mjk Exp $
+$Id: appendix.sgml,v 1.5 2011/01/28 02:17:28 mjk Exp $
 
 Appendix for Copyright and License notices
 
@@ -7,6 +7,18 @@ Appendix for Copyright and License notices
 @Copyright@
 
 $Log: appendix.sgml,v $
+Revision 1.5  2011/01/28 02:17:28  mjk
+Docbook cleanup (using Viz Roll as proto-type)
+- consistent entity naming (no more mixing of '-' and '_')
+- roll compat page only lists specified rolls (version.mk)
+- added note about using all OS cds with non-core rolls (e.g. viz)
+- added entities for roll names, and bools
+- logical styles used instead of direct formatting
+  e.g. constant vs. emphasis
+Works for Viz (needs new devel env installed)
+TODO: Update Base Roll to further standardize (slow)
+TODO: Cleanup all other Rolls (fast)
+
 Revision 1.4  2011/01/03 20:27:14  mjk
 - Working (and documented) Google Earth procedure
 - Simplified docs / commands for TwinView and Bezel hiding
@@ -24,18 +36,19 @@ starting new manual
 
 -->
 
-&source_roll-rocks-copyright;
+&source-roll-rocks-copyright;
 
 <appendix>
 	<title>Common Licenses</title>
 
-&source_roll-ggplv2-copyright;
+&source-roll-ggplv2-copyright;
 </appendix>
+
 
 <appendix>
 	<title>Package Licenses</title>
 
-&source_roll-copyright-disclaimer;
+&source-roll-copyright-disclaimer;
 
 
 <section><title>Cg</title><para><screen>

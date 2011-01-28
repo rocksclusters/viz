@@ -1,5 +1,5 @@
 # 
-# $Id: Makefile,v 1.21 2010/09/07 23:53:31 bruno Exp $
+# $Id: Makefile,v 1.22 2011/01/28 02:17:28 mjk Exp $
 #
 # @Copyright@
 # 
@@ -55,6 +55,18 @@
 # @Copyright@
 #
 # $Log: Makefile,v $
+# Revision 1.22  2011/01/28 02:17:28  mjk
+# Docbook cleanup (using Viz Roll as proto-type)
+# - consistent entity naming (no more mixing of '-' and '_')
+# - roll compat page only lists specified rolls (version.mk)
+# - added note about using all OS cds with non-core rolls (e.g. viz)
+# - added entities for roll names, and bools
+# - logical styles used instead of direct formatting
+#   e.g. constant vs. emphasis
+# Works for Viz (needs new devel env installed)
+# TODO: Update Base Roll to further standardize (slow)
+# TODO: Cleanup all other Rolls (fast)
+#
 # Revision 1.21  2010/09/07 23:53:31  bruno
 # star power for gb
 #
@@ -119,6 +131,9 @@
 # Revision 1.1  2004/10/14 20:51:29  mjk
 # docs start
 #
+
+# Need this for testing (KILLME)
+#ROCKSROOT	= /home/mjk/rocks/src/roll/base/src/devel/devel/
 
 PKGROOT		= /var/www/html/roll-documentation/viz/$(VERSION)
 REDHAT.ROOT	= $(PWD)/../../

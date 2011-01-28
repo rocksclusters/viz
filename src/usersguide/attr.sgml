@@ -1,10 +1,22 @@
 <!--
-$Id: attr.sgml,v 1.5 2011/01/27 17:00:17 mjk Exp $
+$Id: attr.sgml,v 1.6 2011/01/28 02:17:28 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: attr.sgml,v $
+Revision 1.6  2011/01/28 02:17:28  mjk
+Docbook cleanup (using Viz Roll as proto-type)
+- consistent entity naming (no more mixing of '-' and '_')
+- roll compat page only lists specified rolls (version.mk)
+- added note about using all OS cds with non-core rolls (e.g. viz)
+- added entities for roll names, and bools
+- logical styles used instead of direct formatting
+  e.g. constant vs. emphasis
+Works for Viz (needs new devel env installed)
+TODO: Update Base Roll to further standardize (slow)
+TODO: Cleanup all other Rolls (fast)
+
 Revision 1.5  2011/01/27 17:00:17  mjk
 added src column
 
@@ -28,108 +40,143 @@ Revision 1.1  2009/06/22 19:05:46  mjk
 
 <title>Attributes</title>
 
-<section>
-<title>Definitions</title>
-
 <table>
-	<title>Tile Appliance</title>
-	<tgroup cols="3">
+	<title>Roll Attributes</title>
+	<tgroup cols=3>
+		<colspec colname="name">
+		<colspec colname="type">
+		<colspec colname="value">
 		<thead>
 			<row>
 				<entry>Name</entry>
 				<entry>Type</entry>
-				<entry>Default Scope</entry>
-				<entry>Default Value</entry>
+				<entry>Default</entry>
 			</row>
 		</thead>
 		<tbody>
 			<row>
-				<entry>kickstartable
-<footnote><para>
-Provided by Base Roll
-</para></footnote>
+				<entry>
+				  <varname>kickstartable</varname>
+				  <footnote id="fn-base-attr">
+<para>Attribute from &roll-base; &roll; (see &rocks; Usersguide)</para>
+				  </footnote>
+				  ,
+				  <footnote id="fn-tile-appliance-attr">
+				    <para>
+Default value created using
+<command>rocks add appliance attr tile <varname>name</varname> <varname>value</varname></command>
+and only affects the <constant>tile</constant> appliances.
+				    </para>
+				  </footnote>
 				</entry>
 				<entry>bool</entry>
-				<entry>appliance=tile</entry>
-				<entry>yes</entry>
+				<entry>&true;</entry>
 			</row>
 			<row>
-				<entry>viz_cuda</entry>
+				<entry>
+				  <varname>viz_cuda</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>bool</entry>
-				<entry>appliance=tile</entry>
-				<entry>true</entry>
+				<entry>&true;</entry>
 			</row>
 			<row>
-				<entry>viz_tile_bottom_bezel</entry>
+				<entry>
+				  <varname>viz_tile_bottom_bezel</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
-				<entry>viz_tile_height</entry>
+				<entry>
+				  <varname>viz_tile_height</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>12.77</entry>
 			</row>
 			<row>
-				<entry>viz_tile_horizontal_shift</entry>
+				<entry>
+				  <varname>viz_tile_horizontal_shift</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>0</entry>
 			</row>
 			<row>
-				<entry>viz_tile_left_bezel</entry>
+				<entry>
+				  <varname>viz_tile_left_bezel</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
-				<entry>viz_tile_resolution</entry>
+				<entry>
+				  <varname>viz_tile_resolution</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>string</entry>
-				<entry>appliance=tile</entry>
 				<entry>1920x1200</entry>
 			</row>
 			<row>
-				<entry>viz_tile_right_bezel</entry>
+				<entry>
+				  <varname>viz_tile_right_bezel</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
-				<entry>viz_tile_top_bezel</entry>
+				<entry>
+				  <varname>viz_tile_top_bezel</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>0.8</entry>
 			</row>
 			<row>
-				<entry>viz_tile_vertical_shift</entry>
+				<entry>
+				  <varname>viz_tile_vertical_shift</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>0</entry>
 			</row>
 			<row>
-				<entry>viz_tile_width</entry>
+				<entry>
+				  <varname>viz_tile_width</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>float</entry>
-				<entry>appliance=tile</entry>
 				<entry>20.43</entry>
 			</row>
 			<row>
-				<entry>viz_nvidia</entry>
+				<entry>
+				  <varname>viz_nvidia</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>bool</entry>
-				<entry>appliance=tile</entry>
-				<entry>true</entry>
+				<entry>&true;</entry>
 			</row>
 			<row>
-				<entry>viz_x11_modules</entry>
+				<entry>
+				  <varname>viz_x11_modules</varname>
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>string</entry>
-				<entry>appliance=tile</entry>
 				<entry>dbe extmod type1 freetype glx</entry>
 			</row>
 			<row>
-				<entry>x11</entry>
+				<entry>
+				  <varname>x11</varname>
+				  <footnoteref linkend="fn-base-attr">
+				  ,
+				  <footnoteref linkend="fn-tile-appliance-attr">
+				</entry>
 				<entry>bool</entry>
-				<entry>appliance=tile</entry>
-				<entry>true</entry>
+				<entry>&true;</entry>
 			</row>
 		</tbody>
 	</tgroup>
@@ -140,40 +187,59 @@ Provided by Base Roll
 <variablelist>
 
 	<varlistentry>
-	    	<term>viz_cuda</term>
+	    	<term><varname>viz_cuda</varname></term>
 		<listitem>
 			<para>
-If true then install the nVidia CUDA compilers, libraries, and SDK.  
-The viz_nvidia attribute must also be set to true to enable the CUDA driver.
+If &true; then install the nVidia CUDA compilers, libraries, and SDK.  
+The <varname>viz_nvidia</varname> attribute must also be set to &true; to enable the CUDA driver.
 			</para>
 		</listitem>
 	</varlistentry>
 
 	<varlistentry>
-	    	<term>viz_tile_{bottom, top, left, right}_bezel</term>
+	    	<term>
+		  <varname>viz_tile_</varname>{<varname>bottom</varname>, 
+		  <varname>top</varname>, <varname>left</varname>, 
+		  <varname>right</varname>}<varname>_bezel</varname>
+		</term>
 		<listitem>
 			<para>
-The height and width in millimeters of the LCD bezels.
+The height and width in centimeters
+<footnote id="fn-measurements"><para>
+Because &rocks; uses only ratios of measurements, other
+measurement units are equally valid.  
+The only requirement is to use consistent units accross all
+of these attributes.
+</para></footnote>
+of the LCD bezels.
 To disable bezel hiding set all of these to zero.
 			</para>
 		</listitem>
 	</varlistentry>
 
 	<varlistentry>
-	    	<term>viz_tile_{height, width}</term>
+	    	<term>
+		  <varname>viz_tile_</varname>{<varname>height</varname>, 
+		  <varname>width</varname>}
+               </term>
 		<listitem>
 			<para>
-The height and width in millimeters of the viewable portion of the LCD
-panel.
+The height and width in
+centimeters<footnoteref linkend="fn-measurements"> of the viewable
+portion of the LCD  panel.
 			</para>
 		</listitem>
 	</varlistentry>
 
 	<varlistentry>
-	    	<term>viz_tile_{horizontal, vertical}_shift</term>
+	    	<term>
+		  <varname>viz_tile_</varname>{<varname>horizontal</varname>,
+		  <varname>vertical</varname>}<varname>_shift</varname>
+		</term>
 		<listitem>
 			<para>
-The shift in millimeters applied to a column or row of a wall.  This
+The shift in centimeters<footnoteref linkend="fn-measurements">
+ applied to a column or row of a wall.  This
 is only usefull for walls that are started to sag, or lean in one
 direction.  This offset can be used to re-aling the wall into a
 rectangle rather than repairing the wall.
@@ -182,7 +248,7 @@ rectangle rather than repairing the wall.
 	</varlistentry>
 
 	<varlistentry>
-	    	<term>viz_tile_resolution</term>
+	    	<term><varname>viz_tile_resolution</varname></term>
 		<listitem>
 			<para>
 The pixel resolution of the tile in the standard X11 format of COLxROW.
@@ -191,10 +257,10 @@ The pixel resolution of the tile in the standard X11 format of COLxROW.
 	</varlistentry>
 
 	<varlistentry>
-    		<term>viz_nvidia</term>
+    		<term><varname>viz_nvidia</varname></term>
 		<listitem>
 			<para>
-If true all host with this attribute will have the nVidia driver
+If &true; all host with this attribute will have the nVidia driver
 and tools installed.
 If the host is already installed this will take affect on the next 
 re-installation.  
@@ -203,18 +269,16 @@ re-installation.
 	</varlistentry>
 
 	<varlistentry>
-    		<term>viz_x11_modules</term>
+    		<term><varname>viz_x11_modules</varname></term>
 		<listitem>
 			<para>
 A space delimited list of X11 module names to be loaded when X11 is
 started.
-This attribute is used by the "rocks sync tile" command when generating
-the xorg.conf file on the tiles.
+This attribute is used by the <command>rocks sync tile</command>
+command when generating the <filename>xorg.conf</filename> file on the tiles.
 			</para>
 		</listitem>
 	</varlistentry>
 </variablelist>
-
-</section>
 
 </chapter>

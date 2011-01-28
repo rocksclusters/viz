@@ -1,10 +1,22 @@
 <!--
-$Id: installing.sgml,v 1.22 2011/01/18 18:51:54 mjk Exp $
+$Id: installing.sgml,v 1.23 2011/01/28 02:17:28 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: installing.sgml,v $
+Revision 1.23  2011/01/28 02:17:28  mjk
+Docbook cleanup (using Viz Roll as proto-type)
+- consistent entity naming (no more mixing of '-' and '_')
+- roll compat page only lists specified rolls (version.mk)
+- added note about using all OS cds with non-core rolls (e.g. viz)
+- added entities for roll names, and bools
+- logical styles used instead of direct formatting
+  e.g. constant vs. emphasis
+Works for Viz (needs new devel env installed)
+TODO: Update Base Roll to further standardize (slow)
+TODO: Cleanup all other Rolls (fast)
+
 Revision 1.22  2011/01/18 18:51:54  mjk
 *** empty log message ***
 
@@ -65,8 +77,8 @@ starting new manual
 
 <title>Installing</title>
 
-&source_roll-installing-standard;
-&source_roll-installing-not-onthefly;
+&source-roll-installing-standard;
+&source-roll-installing-not-onthefly;
 
 <section>
 
@@ -77,8 +89,8 @@ starting new manual
 <listitem>
 	<para>
 	After the frontend is installed and booted, you'll see an
-	X11-based login screen, as shown below.  Login as 'root' using 
-	the password you supplied during the frontend  installation.
+	X11-based login screen, as shown below.  Login as <command>root</command> using 
+	the password you supplied during the <constant>frontend</constant>  installation.
 	</para>
 
 	<para>
@@ -110,11 +122,13 @@ starting new manual
 <listitem>
 	<para>
 	Since this is the first root login you will send to set up your
-	ssh key.  This is identical to the standard behavior in Rocks,
-	however, since you are using the Viz Roll the first login is
+	ssh key.  This is identical to the standard behavior in &rocks;,
+	however, since you are using the &roll-viz; &roll; the first login is
 	graphical rather than text mode.
         Hit return to accept the default value
-	for the location of the key (/root/.ssh/id_rsa), next enter the
+	for the location of the key
+	(<filename>/root/.ssh/id_rsa</filename>), 
+	next enter the
 	passphrase you wish to use for the root SSH key.
 	</para>
 
@@ -130,8 +144,8 @@ starting new manual
 
 <listitem>
 	<para>
-	If your Frontend has an nVidia card installed you will need to
-	configure the X11 driver.  Log in as root and switch the
+	If your <constant>frontend</constant> has an nVidia card installed you will need to
+	configure the X11 driver.  Log in as <command>root</command> and switch the
 	runlevel 3.
 <screen>
 # /sbin/init 3
@@ -163,7 +177,7 @@ starting new manual
 </screen>
 
 <para>
-Select 'Tile' as the appliance type and boot the tile node on the bottom
+Select 'Tile' as the appliance type and boot the <constant>tile</constant> node on the bottom
 left (the bottom node in the first column).  
 Once a node has completed the installation and reboot it will start an X11 
 session but may have the incorrect video resolution, this will get
@@ -171,9 +185,9 @@ fixed later on.
 </para>
 
 <para>
-After all the tiles in the first column are installed, exit 'insert-ethers'
-by hitting the 'F8' key.
-Then, restart insert-ethers with the flag:
+After all the tiles in the first column are installed, exit <command>insert-ethers</command>
+by hitting the F8 key.
+Then, restart <command>insert-ethers</command> with the flag:
 </para>
 
 <screen>
@@ -203,17 +217,26 @@ been installed your wall should look like the following.
 <title>Multi-Display Support</title>
 
 <para>
-The Viz Roll supports the construction of walls with either a single LCD display per machine or multiple displays per machine.  Multiple displays can be grouped together as a single X11 display using TwinView with or without Xinerama, or each display can be an independent X11 display.  The choice of whether to group a host's physical displays together or not is controlled by the <computeroutput>rocks sync tile</computeroutput> command.
+The &roll-viz; &roll; supports the construction of walls with either a
+single LCD display per machine or multiple displays per machine.
+Multiple displays can be grouped together as a single X11 display
+using TwinView with or without Xinerama, or each display can be an
+independent X11 display.  The choice of whether to group a host's
+physical displays together or not is controlled by
+the <command>rocks sync tile</command> command.
 </para>
 
 <para>
-The default configuration for Rocks is a single physical display per machine.  If this is your configuration skip to the next section.  If your wall has
-multiple displays per host you will need to create an XML file that describes the physical layout of your wall.  
-The syntax is very simple and the XML itself maps to the 
-dimensions of the wall.  Each <emphasis>col</emphasis> tag describes a vertical
-column of the wall, with the nodes listed top to bottom.  The very first
-<emphasis>col</emphasis> section lists the Tile nodes comprising the far left
-side of the wall, and from there the next section moves to the right.
+The default configuration for &rocks; is a single physical display per
+machine.  If this is your configuration skip to the next section.  If
+your wall has multiple displays per host you will need to create an
+XML file that describes the physical layout of your wall.  The syntax
+is very simple and the XML itself maps to the dimensions of the wall.
+Each <emphasis>col</emphasis> tag describes a vertical column of the
+wall, with the nodes listed top to bottom.  The very first
+<emphasis>col</emphasis> section lists the <constant>tile</constant>
+nodes comprising the far left side of the wall, and from there the
+next section moves to the right.
 </para>
 
 <warning><para>
@@ -284,7 +307,7 @@ connector.  This is a requirement of the SAGE software.
 	</screen>
 
 	<para>
-	This will generate xorg.conf files for each tile node,
+	This will generate <filename>xorg.conf</filename> files for each tile node,
 	copy them to the tile nodes, then restart the X11 server.
 	</para>
 

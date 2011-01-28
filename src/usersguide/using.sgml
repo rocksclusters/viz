@@ -1,10 +1,22 @@
 <!-- 
-$Id: using.sgml,v 1.15 2011/01/18 18:51:54 mjk Exp $
+$Id: using.sgml,v 1.16 2011/01/28 02:17:28 mjk Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.16  2011/01/28 02:17:28  mjk
+Docbook cleanup (using Viz Roll as proto-type)
+- consistent entity naming (no more mixing of '-' and '_')
+- roll compat page only lists specified rolls (version.mk)
+- added note about using all OS cds with non-core rolls (e.g. viz)
+- added entities for roll names, and bools
+- logical styles used instead of direct formatting
+  e.g. constant vs. emphasis
+Works for Viz (needs new devel env installed)
+TODO: Update Base Roll to further standardize (slow)
+TODO: Cleanup all other Rolls (fast)
+
 Revision 1.15  2011/01/18 18:51:54  mjk
 *** empty log message ***
 
@@ -56,10 +68,10 @@ cleanup manual
 
 <para>
 After the layout is configured and the 
-<computeroutput>rocks sync tile</computeroutput> 
+<command>rocks sync tile</command> 
 command is run the resolution of each tile display defaults the value
 of the 
- <computeroutput>viz_tile_resoulation</computeroutput>
+ <varname>viz_tile_resolution</varname>
 attribute.
 You can alter the video resolution by changing this attribute and
 re-syncing the video wall.  For example:
@@ -79,7 +91,7 @@ $ su
 <title>Bezels Height and Width</title>
 
 <para>
-The Viz Roll supports the hiding of pixels behind LCD mullions (bezels).
+The &roll-viz; &roll; supports the hiding of pixels behind LCD mullions (bezels).
 Without bezel hiding all images rendered on the wall will display all pixels, 
 This effect can be distracting for movies and other moving images, but is
 beneficial for static images and text.
@@ -96,13 +108,13 @@ height and width of the viewable area, and the size of the
 non-viewable bezels.  You may also use different unites (e.g. inches)
 but must be consisted accross all measurements.  The viewable portion
 of the monitor is represented by the 
-<computeroutput>viz_tile_width</computeroutput>, and
-<computeroutput>viz_tile_height</computeroutput> attributes.  The
+<varname>viz_tile_width</varname>, and
+<varname>viz_tile_height</varname> attributes.  The
 bezel portion of the monitor is represented by the
-<computeroutput>viz_tile_left_bezel</computeroutput>,
-<computeroutput>viz_tile_right_bezel</computeroutput>,
-<computeroutput>viz_tile_top_bezel</computeroutput>, and
-<computeroutput>viz_tile_bottom_bezel</computeroutput> attributes.
+<varname>viz_tile_left_bezel</varname>,
+<varname>viz_tile_right_bezel</varname>,
+<varname>viz_tile_top_bezel</varname>, and
+<varname>viz_tile_bottom_bezel</varname> attributes.
 </para>
 
 <para>
@@ -129,7 +141,7 @@ $ su
 
 <para>
  When a tile node is first installed, or re-installed, it is
-in <emphasis>init</emphasis> mode when the video resolution is
+in <constant>init</constant> mode when the video resolution is
 automatically selected, and a single display X11 server is started.
 This mode is only for diagnostic purposes to verify the video driver
 functions correctly. 
@@ -145,31 +157,29 @@ video wall.
 Simple mode is the default configuration.  For every
 display attached to a tile a single X11 display is configured, all
 running under the same X11 server.
-You can switch to <emphasis>simple</emphasis> mode with the following
-command (run as root):
+You can switch to <constant>simple</constant> mode with the following
+command (as root):
 </para>
-<screen>
-$ su
-# rocks sync tile
-</screen>
+<para>
+# <command>rocks sync tile</command>
+</para>
 </section>
 
 <section>
 <title>Meta</title>
 <para>
 For walls with multiple (2, or 4) displays per
-tile <emphasis>meta</emphasis> mode is used to aggregate all the
+tile <constant>meta</constant> mode is used to aggregate all the
 attached displays into a single X11 display.  For tiles with 2
 displays this is done using TwinView.  For tiles with 4 displays two
 sets of TwinView displays are created and Xinerama is then used to
 create a single display.
-You can switch to <emphasis>meta</emphasis> mode with the following
+You can switch to <constant>meta</constant> mode with the following
 command (run as root):
 </para>
-<screen>
-$ su
-# rocks sync tile mode=meta
-</screen>
+<para>
+# <command>rocks sync tile mode=meta</command>
+</para>
 <mediaobject>
 	<imageobject>
 	<imagedata fileref="images/wall-twin.png" scale=20>
@@ -183,18 +193,17 @@ $ su
 <section>
 <title>User</title>
 <para>
-User mode allows you to provide your own X11 configuration file rather
-have Rocks manage it.  In <emphasis>user</emphasis> mode you must place
+This mode allows you to provide your own X11 configuration file rather
+have &rocks; manage it.  In <constant>user</constant> mode you must place
 each tiles configuration file in the
-directory <computeroutput>/etc/X11/xorg.conf-user-HOSTNAME</computeroutput>,
-where HOSTNAME is the name of the tile machine (e.g. tile-0-0).
+directory <filename>/etc/X11/xorg.conf-user-<varname>hostname</varname></filename>,
+where <varname>hostname</varname> is the name of the tile machine (e.g. tile-0-0).
 Once all the configuration files have been created switch
-to <emphasis>user</emphasis> mode.
+to <constant>user</constant> mode.
 </para>
-<screen>
-$ su
-# rocks sync tile mode=user
-</screen>
+<para>
+# <command>rocks sync tile mode=user</command>
+</para>
 </section>
 
 </section>
@@ -202,7 +211,7 @@ $ su
 <section>
 <title>Driver</title>
 <para>
-The Viz Roll includes the latest (at time of release) production
+The &roll-viz; &roll; includes the latest (at time of release) production
 nVidia driver.  If your system is connected to the Internet then
 everytime you install a tile node it will automatically download and
 install the latest nVidia driver.  There is no longer any need to
@@ -214,14 +223,15 @@ update the video driver manually.
 <title>Power Control</title>
 <para>
 Automatic power savings is disabled to prevent the wall from turning
-off during use.  You can explicitly turn of the displays with the
-following commands.
+off during use.  You can explicitly turn on and off the displays with the
+following commands (as root):
 </para>
-<screen>
-$ su
-# rocks stop tile
-# rocks start tile
-</screen>
+<para>
+# <command>rocks start tile</command>
+</para>
+<para>
+# <command>rocks stop tile</command>
+</para>
 </section>
 
 </section>
@@ -253,11 +263,11 @@ Chromium is enabled and disabled using the following commands:
 </para>
 
 <para>
-<computeroutput>$ rocks enable chromium</computeroutput>
+$ <command>rocks enable chromium</command>
 </para>
 
 <para>
-<computeroutput>$ rocks disable chromium</computeroutput>
+$ <command>rocks disable chromium</command>
 </para>
 
 </section>
@@ -269,8 +279,8 @@ Chromium is enabled and disabled using the following commands:
 <section><title>Installation</title>
 
 <para>
-Google Earth must be downloaded and installed on the frotend and all
-of the tile nodes.
+Google Earth must be downloaded and installed on the <constant>frotend</constant> and all
+of the <constant>tile</constant> nodes.
 Download 64bit Fedora RPM of Google Earth from earth.google.com and
 save it in your home directory and do the following:
 </para>
@@ -297,8 +307,8 @@ save it in your home directory and do the following:
 <listitem>
 
 	<para>
-	Install the RPM on the frontend, and re-install all the
-	tile nodes.
+	Install the RPM on the <constant>frontend</constant>, and re-install all the
+	<constant>tile</constant> nodes.
 	</para>
 
 	<screen>
@@ -314,9 +324,9 @@ save it in your home directory and do the following:
 <listitem>
 
 	<para>
-	Next as root sync the tile layout to all the nodes so Google
+	Next as root sync the layout to all the nodes so Google
 	Earth can use each display as a slave for the master instance
-	running on the Frontend.
+	running on the <constant>frontend</constant>.
 	</para>
 
 	<screen>
@@ -334,8 +344,9 @@ save it in your home directory and do the following:
 <para>
 Each X11 display needs to run its own instance of Google Earth, this
 is true even for walls with multiple displays per node.  First make
-sure the wall of configured in <emphasis>simple</emphasis> mode, and
-then start Google Earth all the tile nodes and the frontend.
+sure the wall of configured in <constant>simple</constant> mode, and
+then start Google Earth all the <constant>tile</constant> nodes and
+the <constant>frontend</constant>.
 <screen>
 $ rocks start tile googleearth
 $ /opt/google/earth/free/googleearth
@@ -343,8 +354,8 @@ $ /opt/google/earth/free/googleearth
 </para>
 
 <para>
-To exit close the controlling window on the Frontend console, and shut
-down the tile node instances.
+To exit close the controlling window on the <constant>frontend</constant> console, and shut
+down the <constant>tile</constant> node instances.
 <screen>
 $ rocks stop tile googleearth
 </screen>
@@ -359,9 +370,9 @@ $ rocks stop tile googleearth
 <title>CGLX</title>
 
 <para>
-A CGLX Roll is available to simplify the installation of CGLX on a
-Rocks Viz Wall.
-This Roll can be installed during initial cluster build, or later
+A CGLX &roll; is available to simplify the installation of CGLX on a
+&rocks; &TDW;.
+This &roll; can be installed during initial cluster build, or later
 after the cluster is 
 deployed.  
 In both cases adjustments to the multicast routing may be required.
