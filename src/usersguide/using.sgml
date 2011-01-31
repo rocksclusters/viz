@@ -1,10 +1,13 @@
 <!-- 
-$Id: using.sgml,v 1.16 2011/01/28 02:17:28 mjk Exp $
+$Id: using.sgml,v 1.17 2011/01/31 19:18:09 bruno Exp $
 
 @Copyright@
 @Copyright@
 
 $Log: using.sgml,v $
+Revision 1.17  2011/01/31 19:18:09  bruno
+doc touch up
+
 Revision 1.16  2011/01/28 02:17:28  mjk
 Docbook cleanup (using Viz Roll as proto-type)
 - consistent entity naming (no more mixing of '-' and '_')
@@ -69,10 +72,8 @@ cleanup manual
 <para>
 After the layout is configured and the 
 <command>rocks sync tile</command> 
-command is run the resolution of each tile display defaults the value
-of the 
- <varname>viz_tile_resolution</varname>
-attribute.
+command is run the resolution of each tile display defaults to the value
+of the <varname>viz_tile_resolution</varname> attribute.
 You can alter the video resolution by changing this attribute and
 re-syncing the video wall.  For example:
 
@@ -91,13 +92,14 @@ $ su
 <title>Bezels Height and Width</title>
 
 <para>
-The &roll-viz; &roll; supports the hiding of pixels behind LCD mullions (bezels).
-Without bezel hiding all images rendered on the wall will display all pixels, 
+The &roll-viz; &roll; supports the hiding of pixels behind the LCD
+mullions (bezels).
+Without bezel hiding, all images rendered on the wall will display all pixels, 
 This effect can be distracting for movies and other moving images, but is
 beneficial for static images and text.
 Bezel hiding is performed at the visualization middle-ware layer.
-The Viz Roll directly supports bezel hiding for Chromium and Google
-Earth, other middleware packages have their own configuration steps to
+The &roll-viz; &roll; directly supports bezel hiding for Chromium and Google
+Earth while other middleware packages have their own configuration steps to
 accomplish the same thing.
 </para>
 
@@ -105,8 +107,8 @@ accomplish the same thing.
 All of this is controlled with attributes.  It is recommended you
 carefully measure the LCD display in millimeters and record the
 height and width of the viewable area, and the size of the
-non-viewable bezels.  You may also use different unites (e.g. inches)
-but must be consisted accross all measurements.  The viewable portion
+non-viewable bezels.  You may also use different units (e.g., inches)
+but remember to be consistent across all measurements.  The viewable portion
 of the monitor is represented by the 
 <varname>viz_tile_width</varname>, and
 <varname>viz_tile_height</varname> attributes.  The
@@ -118,7 +120,7 @@ bezel portion of the monitor is represented by the
 </para>
 
 <para>
-If the bezel attribute are non-zero then bezel hiding is enabled.  If
+If the bezel attributes are non-zero then bezel hiding is enabled.  If
 you wish to disable this and render all pixels to show the bezels then
 set the attributes to zero.  For example:
 
@@ -140,13 +142,14 @@ $ su
 <title>Init</title>
 
 <para>
- When a tile node is first installed, or re-installed, it is
+When a tile node is first installed, or re-installed, it is
 in <constant>init</constant> mode when the video resolution is
-automatically selected, and a single display X11 server is started.
-This mode is only for diagnostic purposes to verify the video driver
+automatically selected, and a single-display X11 server is started.
+This mode is only for diagnostic purposes to verify that the video driver
 functions correctly. 
-You must place switch to one of the following modes before using the
-video wall.
+Before using the wall, you must switch to one of the following modes:
+<constant>simple</constant>, <constant>meta</constant>, or
+<constant>user</constant>.
 </para>
 
 </section>
@@ -155,7 +158,7 @@ video wall.
 <title>Simple</title>
 <para>
 Simple mode is the default configuration.  For every
-display attached to a tile a single X11 display is configured, all
+display attached to a tile, a single X11 display is configured, all
 running under the same X11 server.
 You can switch to <constant>simple</constant> mode with the following
 command (as root):
@@ -171,7 +174,7 @@ command (as root):
 For walls with multiple (2, or 4) displays per
 tile <constant>meta</constant> mode is used to aggregate all the
 attached displays into a single X11 display.  For tiles with 2
-displays this is done using TwinView.  For tiles with 4 displays two
+displays, this is done using TwinView.  For tiles with 4 displays, two
 sets of TwinView displays are created and Xinerama is then used to
 create a single display.
 You can switch to <constant>meta</constant> mode with the following
@@ -194,11 +197,13 @@ command (run as root):
 <title>User</title>
 <para>
 This mode allows you to provide your own X11 configuration file rather
-have &rocks; manage it.  In <constant>user</constant> mode you must place
-each tiles configuration file in the
-directory <filename>/etc/X11/xorg.conf-user-<varname>hostname</varname></filename>,
-where <varname>hostname</varname> is the name of the tile machine (e.g. tile-0-0).
-Once all the configuration files have been created switch
+have &rocks; manage it.  In <constant>user</constant> mode, you must place
+each tiles' configuration file in the
+directory
+<filename>/etc/X11/xorg.conf-user-<varname>hostname</varname></filename>,
+where <varname>hostname</varname> is the name of the tile machine (e.g.,
+tile-0-0).
+Once all the configuration files have been created, switch
 to <constant>user</constant> mode.
 </para>
 <para>
@@ -211,8 +216,8 @@ to <constant>user</constant> mode.
 <section>
 <title>Driver</title>
 <para>
-The &roll-viz; &roll; includes the latest (at time of release) production
-nVidia driver.  If your system is connected to the Internet then
+The &roll-viz; &roll; includes the latest (at the time of release) production
+nVidia driver.  If your system is connected to the Internet, then
 everytime you install a tile node it will automatically download and
 install the latest nVidia driver.  There is no longer any need to
 update the video driver manually.
@@ -244,19 +249,19 @@ following commands (as root):
 
 <para>
 Chromium is used to display the OpenGL frame of applications on the wall. 
-Applications must be 64-bit and dynamically linked to the libGL.so.
+Applications must be 64-bit and dynamically linked to the libGL.so library.
 Some newer applications may contain code written to a later OpenGL 
-specification than is supported by Chromium, however, most application work
+specification than is supported by Chromium, however, most applications work
 without any source code changes.  
 </para>
   
 <para>
 Enabling and disabling Chromium is done on per use basis and is not a
 global setting for all users. 
-In the default disabled state all OpenGL applications started on the
-frontend of the cluster will display normally in the frotend's X11
+In the default disabled state, all OpenGL applications started on the
+frontend of the cluster will be displayed normally in the frotend's X11
 display.  
-If Chromium is enable the application will draw the non-OpenGL
+If Chromium is enabled the application will draw the non-OpenGL
 components (and window frame) on the frontend display and the OpenGL
 frame will be rendered across all the tiles in the wall.  
 Chromium is enabled and disabled using the following commands:
@@ -279,9 +284,9 @@ $ <command>rocks disable chromium</command>
 <section><title>Installation</title>
 
 <para>
-Google Earth must be downloaded and installed on the <constant>frotend</constant> and all
-of the <constant>tile</constant> nodes.
-Download 64bit Fedora RPM of Google Earth from earth.google.com and
+Google Earth must be downloaded and installed on the
+<constant>frontend</constant> and on all of the <constant>tile</constant> nodes.
+Download the 64-bit Fedora RPM of Google Earth from earth.google.com and
 save it in your home directory and do the following:
 </para>
 
@@ -307,8 +312,8 @@ save it in your home directory and do the following:
 <listitem>
 
 	<para>
-	Install the RPM on the <constant>frontend</constant>, and re-install all the
-	<constant>tile</constant> nodes.
+	Install the RPM on the <constant>frontend</constant>, and re-install
+	all the <constant>tile</constant> nodes.
 	</para>
 
 	<screen>
@@ -344,8 +349,8 @@ save it in your home directory and do the following:
 <para>
 Each X11 display needs to run its own instance of Google Earth, this
 is true even for walls with multiple displays per node.  First make
-sure the wall of configured in <constant>simple</constant> mode, and
-then start Google Earth all the <constant>tile</constant> nodes and
+sure the wall is configured in <constant>simple</constant> mode, and
+then start Google Earth on all the <constant>tile</constant> nodes and
 the <constant>frontend</constant>.
 <screen>
 $ rocks start tile googleearth
@@ -354,8 +359,8 @@ $ /opt/google/earth/free/googleearth
 </para>
 
 <para>
-To exit close the controlling window on the <constant>frontend</constant> console, and shut
-down the <constant>tile</constant> node instances.
+To exit, close the controlling window on the <constant>frontend</constant>
+console, and shut down the <constant>tile</constant> node instances.
 <screen>
 $ rocks stop tile googleearth
 </screen>
@@ -372,10 +377,9 @@ $ rocks stop tile googleearth
 <para>
 A CGLX &roll; is available to simplify the installation of CGLX on a
 &rocks; &TDW;.
-This &roll; can be installed during initial cluster build, or later
-after the cluster is 
-deployed.  
-In both cases adjustments to the multicast routing may be required.
+This &roll; can be installed during the initial cluster build, or later
+after the cluster is deployed.  
+In both cases, adjustments to the multicast routing may be required.
 </para>
 
 </section>
