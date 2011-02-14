@@ -1,5 +1,5 @@
-NAME    = roll-$(ROLL)-usersguide
-RELEASE = 2
+NAME     = roll-$(ROLL)-usersguide
+RELEASE  = 0
 RPM.ARCH = noarch
 
 SUMMARY_COMPATIBLE      = $(VERSION)
