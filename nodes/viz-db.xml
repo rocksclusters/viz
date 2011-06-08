@@ -15,6 +15,9 @@
 
 	<changelog>
 	$Log: viz-db.xml,v $
+	Revision 1.23  2011/06/08 19:51:51  anoop
+	Database security now moved away from node files into scriptable format
+	
 	Revision 1.22  2010/09/07 23:53:26  bruno
 	star power for gb
 	
@@ -102,9 +105,6 @@ CREATE TABLE tiles (
         PRIMARY KEY (ID)
 ) TYPE=MyISAM;
 
-grant select on cluster.tiles to ''@'localhost';
-grant select on cluster.tiles to ''@'%.local';
-
 DROP TABLE IF EXISTS tile_attributes;
 CREATE TABLE tile_attributes (
 	Tile	int(11) NOT NULL default '0',
@@ -112,14 +112,12 @@ CREATE TABLE tile_attributes (
 	Value	text
 ) TYPE=MyISAM;
 
-grant select on cluster.tile_attributes to ''@'localhost';
-grant select on cluster.tile_attributes to ''@'%.local';
-
 </file>
 
-/opt/rocks/bin/mysql --user=root --password='' cluster &lt; /tmp/viz-tables.sql
+/opt/rocks/bin/mysql --defaults-extra-file=/root/.rocks.my.cnf \
+	--user=root cluster &lt; /tmp/viz-tables.sql
 
+/opt/rocks/sbin/rocks-db-perms
 </post>
-
 
 </kickstart>
