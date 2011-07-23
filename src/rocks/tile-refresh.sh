@@ -2,15 +2,15 @@
 #
 # Force the tile nodes to unblank X11.
 #
-# $Id: tile-refresh.sh,v 1.7 2010/09/07 23:53:28 bruno Exp $
+# $Id: tile-refresh.sh,v 1.8 2011/07/23 02:31:38 phil Exp $
 #
 # @Copyright@
 # 
 # 				Rocks(r)
 # 		         www.rocksclusters.org
-# 		         version 5.4 (Maverick)
+# 		         version 5.4.3 (Viper)
 # 
-# Copyright (c) 2000 - 2010 The Regents of the University of California.
+# Copyright (c) 2000 - 2011 The Regents of the University of California.
 # All rights reserved.	
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
 # features or use of this software must display the following acknowledgement: 
 # 
 # 	"This product includes software developed by the Rocks(r)
-# 	Cluster Group at the San Diego Supercomputer Center at the
+# 	Development Team at the San Diego Supercomputer Center at the
 # 	University of California, San Diego and its contributors."
 # 
 # 4. Except as permitted for the purposes of acknowledgment in paragraph 3,
@@ -58,6 +58,9 @@
 # @Copyright@
 #
 # $Log: tile-refresh.sh,v $
+# Revision 1.8  2011/07/23 02:31:38  phil
+# Viper Copyright
+#
 # Revision 1.7  2010/09/07 23:53:28  bruno
 # star power for gb
 #
